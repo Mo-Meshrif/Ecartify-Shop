@@ -15,19 +15,34 @@ dependencies:
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
+  flutter_native_splash: ^2.1.6
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^1.0.0
+
+flutter_native_splash:
+  android: true
+  color: "#ffffff"
+  image: assets/splash.png
+  color_dark: "#000000"
+  image_dark: assets/splash.png
+  ios: true
+  android_gravity: center
+  ios_content_mode: center
+  android_12:
+    image: assets/splash.png
+    icon_background_color: "#ffffff"
+    image_dark: assets/splash.png
+    icon_background_color_dark: "#000000"
 
 flutter:
 
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/
 
 
   # To add custom fonts to your application, add a fonts section here,
