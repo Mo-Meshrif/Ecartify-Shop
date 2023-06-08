@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "184119460900",
+    "project_id": "ecartify-shop",
+    "storage_bucket": "ecartify-shop.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:184119460900:android:da3fff5b9ec3accc6744b1",
+        "android_client_info": {
+          "package_name": "com.ecartify.store"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "184119460900-3miff56l0hmmrnjbrf55hi27uqcggb0e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9TJZRDhk4pBLI-tHER3-u045uAKuUh-0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "184119460900-3miff56l0hmmrnjbrf55hi27uqcggb0e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

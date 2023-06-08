@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_logger/easy_logger.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'app/app.dart';
@@ -10,6 +11,7 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   EasyLocalization.logger.enableLevels = [LevelMessages.warning];
   await EasyLocalization.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(
     EasyLocalization(
       supportedLocales: const [

@@ -1,4 +1,4 @@
-package com.example.ecartify
+package com.ecartify.store
 
 import io.flutter.embedding.android.FlutterActivity
 
