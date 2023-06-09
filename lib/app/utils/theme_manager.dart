@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'color_manager.dart';
+import 'constants_manager.dart';
 
 class ThemeManager {
   static ThemeData lightTheme() => ThemeData.light().copyWith(
@@ -26,6 +27,7 @@ class ThemeManager {
           ),
         ),
         inputDecorationTheme: InputDecorationTheme(
+          errorMaxLines: AppConstants.errorMaxLines,
           border: const OutlineInputBorder(),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
@@ -33,6 +35,9 @@ class ThemeManager {
             ),
           ),
           suffixIconColor: ColorManager.kBlack,
+        ),
+        progressIndicatorTheme: ProgressIndicatorThemeData(
+          color: ColorManager.kBlack,
         ),
       );
 
@@ -59,6 +64,7 @@ class ThemeManager {
           ),
         ),
         inputDecorationTheme: InputDecorationTheme(
+          errorMaxLines: AppConstants.errorMaxLines,
           border: const OutlineInputBorder(),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
@@ -66,6 +72,9 @@ class ThemeManager {
             ),
           ),
           suffixIconColor: ColorManager.kWhite,
+        ),
+        progressIndicatorTheme: ProgressIndicatorThemeData(
+          color: ColorManager.kWhite,
         ),
       );
 }

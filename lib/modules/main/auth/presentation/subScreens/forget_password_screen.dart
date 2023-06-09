@@ -11,30 +11,24 @@ import '../../../../../app/utils/color_manager.dart';
 import '../../../../../app/utils/routes_manager.dart';
 import '../../../../../app/utils/strings_manager.dart';
 import '../../../../../app/utils/values_manager.dart';
-import '../../domain/usecases/signup_use_case.dart';
 import '../controller/auth_bloc.dart';
 import '../widgets/custom_or_divider.dart';
 import '../widgets/hor_social_buttons.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+class ForgetPasswordScreen extends StatefulWidget {
+  const ForgetPasswordScreen({Key? key}) : super(key: key);
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<ForgetPasswordScreen> createState() => _ForgetPasswordScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
-  GlobalKey<FormState> signUpKey = GlobalKey<FormState>();
-  TextEditingController nameController = TextEditingController();
+class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
+  GlobalKey<FormState> forgetPasswordKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  bool obscureText = true;
 
   @override
   void dispose() {
-    nameController.clear();
     emailController.clear();
-    passwordController.clear();
     super.dispose();
   }
 
@@ -47,24 +41,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
             vertical: AppPadding.p10.h,
           ),
           child: Form(
-            key: signUpKey,
+            key: forgetPasswordKey,
             child: Column(
               children: [
                 CustomText(
-                  data: AppStrings.signUp.tr(),
+                  data: AppStrings.forgetPass.tr(),
                   fontSize: 30.sp,
                 ),
                 SizedBox(height: AppSize.s50.h),
-                TextFormField(
-                  controller: nameController,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: InputDecoration(
-                    hintText: AppStrings.username.tr(),
-                  ),
-                  validator: (value) =>
-                      value!.isEmpty ? AppStrings.enterName.tr() : null,
-                ),
-                SizedBox(height: AppSize.s20.h),
                 TextFormField(
                   controller: emailController,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -77,45 +61,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ? AppStrings.notVaildEmail.tr()
                           : null,
                 ),
-                SizedBox(height: AppSize.s20.h),
-                TextFormField(
-                  obscureText: obscureText,
-                  controller: passwordController,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: InputDecoration(
-                    hintText: AppStrings.password.tr(),
-                    suffixIcon: IconButton(
-                      onPressed: () =>
-                          setState(() => obscureText = !obscureText),
-                      icon: Icon(
-                        obscureText ? Icons.visibility_off : Icons.visibility,
-                      ),
-                    ),
-                  ),
-                  validator: (value) => value!.isEmpty
-                      ? AppStrings.enterPassword.tr()
-                      : value.length < 8
-                          ? AppStrings.notVaildPassword.tr()
-                          : null,
-                ),
                 const SizedBox(height: AppSize.s20),
                 CustomElevatedButton(
                   padding: EdgeInsets.symmetric(
                     vertical: AppPadding.p15.h,
                   ),
                   child: CustomText(
-                    data: AppStrings.signUp.tr(),
+                    data: AppStrings.continueProcess.tr(),
                   ),
                   onPressed: () {
-                    if (signUpKey.currentState!.validate()) {
-                      signUpKey.currentState!.save();
+                    if (forgetPasswordKey.currentState!.validate()) {
+                      forgetPasswordKey.currentState!.save();
                       context.read<AuthBloc>().add(
-                            SignUpEvent(
-                              signUpInputs: SignUpInputs(
-                                name: nameController.text,
-                                email: emailController.text,
-                                password: passwordController.text,
-                              ),
+                            ForgetPasswordEvent(
+                              email: emailController.text,
                             ),
                           );
                     }
@@ -132,16 +91,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CustomText(
-                      data: AppStrings.haveAccount.tr(),
+                      data: AppStrings.noAccount.tr(),
                       color: ColorManager.kGrey,
                     ),
                     TextButton(
                       onPressed: () => NavigationHelper.pushNamed(
                         context,
-                        Routes.signInRoute,
+                        Routes.signUpRoute,
                       ),
                       child: CustomText(
-                        data: AppStrings.signIn.tr(),
+                        data: AppStrings.signUp.tr(),
                       ),
                     ),
                   ],

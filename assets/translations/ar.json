@@ -11,5 +11,20 @@
     "Already have an account ?": "لديك حساب ؟",
     "Username": "الاسم",
     "Email": "البريد الالكتروني",
-    "Password": "كلمة السر"
+    "Password": "كلمة السر",
+    "Continue": "متابعة",
+    "Enter your name,please !": "ادخل الاسم الخاص بك",
+    "Enter your email,please !": "ادخل الحساب الخاص بك",
+    "Your email not valid !": "بريدك الإلكتروني غير صالح",
+    "Enter your password,please !": "أدخل كلمة المرور الخاصة بك",
+    "Password must be at least 8": "يجب أن تكون كلمة المرور 8 على الأقل",
+    "Check your account inbox or spam !": "تحقق من بريدك الوارد أو البريد العشوائي",
+    "Email address is invalid.": "عنوان البريد الإلكتروني غير صالح",
+    "User disabled.": "تم حظر المستخدم",
+    "No user found with this email.": "لم يتم العثور على مستخدم بهذا البريد الإلكتروني",
+    "Wrong email/password combination.": "بريد إلكتروني أو كلمة مرور خاطئة",
+    "Email already used. Go to login page.": "البريد الإلكتروني مستخدم بالفعل اذهب إلى صفحة تسجيل الدخول",
+    "Too many requests to log into this account,try later.": "هناك عدد كبير جدًا من الطلبات لتسجيل الدخول إلى هذا الحساب ، حاول لاحقًا",
+    "No internet connection !": "لا يوجد اتصال بالإنترنت",
+    "Operation failed,please try again.": "فشلت العملية يرجى المحاولة مرة أخرى"
 }
