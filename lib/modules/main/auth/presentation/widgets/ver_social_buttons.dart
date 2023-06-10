@@ -1,10 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../app/utils/assets_manager.dart';
 import '../../../../../app/utils/strings_manager.dart';
 import '../../../../../app/utils/values_manager.dart';
+import '../controller/auth_bloc.dart';
 
 class VerticalSocialButtons extends StatelessWidget {
   const VerticalSocialButtons({Key? key}) : super(key: key);
@@ -13,7 +15,7 @@ class VerticalSocialButtons extends StatelessWidget {
   Widget build(BuildContext context) => Column(
         children: [
           ListTile(
-            onTap: () {},
+            onTap: () => context.read<AuthBloc>().add(FacebookLoginEvent()),
             leading: const Icon(
               Icons.facebook,
             ),
@@ -22,7 +24,7 @@ class VerticalSocialButtons extends StatelessWidget {
             ),
           ),
           ListTile(
-            onTap: () {},
+            onTap: () => context.read<AuthBloc>().add(GoogleLoginEvent()),
             leading: Image.asset(
               ImageAssets.google,
               width: AppSize.s25,
@@ -34,7 +36,7 @@ class VerticalSocialButtons extends StatelessWidget {
             ),
           ),
           ListTile(
-            onTap: () {},
+            onTap: () => context.read<AuthBloc>().add(AppleLoginEvent()),
             leading: const Icon(
               Icons.apple,
             ),

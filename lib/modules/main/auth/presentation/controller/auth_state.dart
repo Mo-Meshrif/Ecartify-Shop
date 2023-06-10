@@ -22,3 +22,11 @@ class AuthFailure extends AuthState {
   final String msg;
   const AuthFailure({required this.msg});
 }
+
+class AuthLogoutSuccess extends AuthState {
+  const AuthLogoutSuccess();
+}
+
+class AuthDeleteSuccess extends AuthState {
+  const AuthDeleteSuccess();
+}

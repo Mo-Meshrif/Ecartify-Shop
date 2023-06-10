@@ -22,8 +22,26 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb938808440670126</string>
+				<string>com.googleusercontent.apps.184119460900-e0lthr913442e64d43fhhtda540kg7br</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>FacebookAppID</key>
+	<string>938808440670126</string>
+	<key>FacebookClientToken</key>
+	<string>b43a29a45f5cd5a8be1bd1d83e8393c5</string>
+	<key>FacebookDisplayName</key>
+	<string>Ecartify</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIBackgroundModes</key>

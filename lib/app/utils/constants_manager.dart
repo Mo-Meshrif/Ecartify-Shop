@@ -20,4 +20,9 @@ class AppConstants {
   static const String emailUsed = 'email-already-in-use';
   static const String opNotAllowed = 'operation-not-allowed';
   static const String noConnection = 'NO_INTERNET_CONNECTION';
+  static const String differentCredential =
+      "account-exists-with-different-credential";
+  static const String tryAgain =
+      "we can't sign into your account,try again later";
+  static const String googleScope = 'email';
 }

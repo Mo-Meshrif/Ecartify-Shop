@@ -21,3 +21,19 @@ class ForgetPasswordEvent extends AuthEvent {
   final String email;
   const ForgetPasswordEvent({required this.email});
 }
+
+class FacebookLoginEvent extends AuthEvent {}
+
+class AppleLoginEvent extends AuthEvent {}
+
+class GoogleLoginEvent extends AuthEvent {}
+
+class LogoutEvent extends AuthEvent {
+  final String uid;
+  const LogoutEvent({required this.uid});
+}
+
+class DeleteEvent extends AuthEvent {
+  final AuthUser user;
+  const DeleteEvent({required this.user});
+}

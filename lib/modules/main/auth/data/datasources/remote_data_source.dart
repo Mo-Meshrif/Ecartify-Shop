@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:crypto/crypto.dart';
 
 import '../../../../../app/errors/exception.dart';
 import '../../../../../app/helper/helper_functions.dart';
@@ -13,17 +19,26 @@ abstract class BaseAuthRemoteDataSource {
   Future<UserModel> signIn(LoginInputs userInputs);
   Future<UserModel> signUp(SignUpInputs userInputs);
   Future<bool> forgetPassord(String email);
+  Future<UserModel> facebook();
+  Future<UserModel> google();
+  Future<UserModel> apple();
+  Future<void> logout(String uid);
+  Future<void> delete(UserModel userModel);
 }
 
 class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
   final FirebaseMessaging firebaseMessaging;
   final FirebaseFirestore firebaseFirestore;
   final FirebaseAuth firebaseAuth;
+  final FacebookAuth facebookAuth;
+  final GoogleSignIn googleSignIn;
 
   AuthRemoteDataSource(
     this.firebaseMessaging,
     this.firebaseFirestore,
     this.firebaseAuth,
+    this.facebookAuth,
+    this.googleSignIn,
   );
 
   @override
@@ -77,6 +92,106 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
     }
   }
 
+  @override
+  Future<UserModel> facebook() async {
+    try {
+      final LoginResult loginResult = await facebookAuth.login();
+      final String accessToken = loginResult.accessToken!.token;
+      final OAuthCredential faceCredential =
+          FacebookAuthProvider.credential(accessToken);
+      return _signInWithCredential(faceCredential);
+    } catch (e) {
+      throw ServerExecption(e.toString());
+    }
+  }
+
+  @override
+  Future<UserModel> google() async {
+    try {
+      final GoogleSignInAccount? googleSignInAccount =
+          await googleSignIn.signIn();
+      if (googleSignInAccount != null) {
+        final GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignInAccount.authentication;
+        final OAuthCredential googleCredential = GoogleAuthProvider.credential(
+            idToken: googleSignInAuthentication.idToken,
+            accessToken: googleSignInAuthentication.accessToken);
+        return _signInWithCredential(googleCredential);
+      } else {
+        throw ServerExecption(AppConstants.nullError);
+      }
+    } catch (e) {
+      throw ServerExecption(e.toString());
+    }
+  }
+
+  @override
+  Future<UserModel> apple() async {
+    try {
+      final String rawNonce = generateNonce();
+      final String nonce = _sha256ofString(rawNonce);
+      final AuthorizationCredentialAppleID appleCredential =
+          await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        nonce: nonce,
+      );
+      final OAuthCredential oauthCredential =
+          OAuthProvider("apple.com").credential(
+        idToken: appleCredential.identityToken,
+        rawNonce: rawNonce,
+      );
+      return _signInWithCredential(oauthCredential);
+    } catch (e) {
+      throw ServerExecption(e.toString());
+    }
+  }
+
+  @override
+  Future<void> logout(String uid) async {
+    try {
+      final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await _getUserDataFromFireStore(uid);
+      if (querySnapshot.docs.isNotEmpty) {
+        var doc = querySnapshot.docs.first;
+        Map<String, dynamic> map = doc.data();
+        map['deviceToken'] = '';
+        firebaseFirestore
+            .collection(AppConstants.usersCollection)
+            .doc(doc.id)
+            .update(map);
+      }
+      return await firebaseAuth.signOut();
+    } catch (e) {
+      throw ServerExecption(e.toString());
+    }
+  }
+
+  @override
+  Future<void> delete(UserModel userModel) async {
+    try {
+      final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await _getUserDataFromFireStore(userModel.id);
+      if (querySnapshot.docs.isNotEmpty) {
+        var doc = querySnapshot.docs.first;
+        firebaseFirestore
+            .collection(AppConstants.usersCollection)
+            .doc(doc.id)
+            .delete();
+      }
+      final UserCredential userCredential =
+          await firebaseAuth.signInWithEmailAndPassword(
+        email: userModel.email,
+        password: userModel.password!,
+      );
+      return await userCredential.user!.delete();
+    } catch (e) {
+      throw ServerExecption(e.toString());
+    }
+  }
+
   Future<String> _getDeviceToken() async {
     String? value = await firebaseMessaging.getToken();
     return value ?? AppConstants.emptyVal;
@@ -110,4 +225,64 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
           .collection(AppConstants.usersCollection)
           .where(AppConstants.userIdFeild, isEqualTo: uid)
           .get();
+
+  Future<UserModel> _signInWithCredential(AuthCredential authCredential) async {
+    try {
+      final UserCredential userCredential =
+          await firebaseAuth.signInWithCredential(authCredential);
+      final User? user = userCredential.user;
+      final UserModel userModel = UserModel(
+        id: user == null ? AppConstants.emptyVal : user.uid,
+        name: user == null
+            ? AppConstants.emptyVal
+            : user.displayName ?? AppConstants.emptyVal,
+        email: user == null
+            ? AppConstants.emptyVal
+            : user.email ?? AppConstants.emptyVal,
+        pic: user == null
+            ? AppConstants.emptyVal
+            : user.photoURL ?? AppConstants.emptyVal,
+        deviceToken: await _getDeviceToken(),
+      );
+      return _uploadDataToFireStore(userModel);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == AppConstants.differentCredential) {
+        return _link(e.credential!);
+      } else {
+        throw ServerExecption(e.message.toString());
+      }
+    }
+  }
+
+  Future<UserModel> _link(AuthCredential authCredential) async {
+    final UserCredential? userCredential =
+        await firebaseAuth.currentUser?.linkWithCredential(authCredential);
+    if (userCredential != null) {
+      final User? user = userCredential.user;
+      final UserModel userModel = UserModel(
+        id: user == null ? AppConstants.emptyVal : user.uid,
+        name: user == null
+            ? AppConstants.emptyVal
+            : user.displayName ?? AppConstants.emptyVal,
+        email: user == null
+            ? AppConstants.emptyVal
+            : user.email ?? AppConstants.emptyVal,
+        pic: user == null
+            ? AppConstants.emptyVal
+            : user.photoURL ?? AppConstants.emptyVal,
+        deviceToken: await _getDeviceToken(),
+      );
+      _uploadDataToFireStore(userModel);
+      return userModel;
+    } else {
+      throw ServerExecption(AppConstants.tryAgain);
+    }
+  }
+
+  /// Returns the sha256 hash of [input] in hex notation.
+  String _sha256ofString(String input) {
+    final bytes = utf8.encode(input);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
+  }
 }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ecartify</string>
+    <string name="facebook_app_id">938808440670126</string>
+    <string name="fb_login_protocol_scheme">fb938808440670126</string>
+    <string name="facebook_client_token">b43a29a45f5cd5a8be1bd1d83e8393c5</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+</resources>
