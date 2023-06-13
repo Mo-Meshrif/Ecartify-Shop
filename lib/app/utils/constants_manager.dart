@@ -25,4 +25,6 @@ class AppConstants {
   static const String tryAgain =
       "we can't sign into your account,try again later";
   static const String googleScope = 'email';
+  static const String redirectAndroidUri =
+      'https://play.google.com/store/apps/details?id=com.ecartify.store';
 }

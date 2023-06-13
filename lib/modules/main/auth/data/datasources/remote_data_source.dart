@@ -132,11 +132,12 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
       final String nonce = _sha256ofString(rawNonce);
       final AuthorizationCredentialAppleID appleCredential =
           await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ],
+        scopes: [AppleIDAuthorizationScopes.email],
         nonce: nonce,
+        webAuthenticationOptions: WebAuthenticationOptions(
+          clientId: AppConstants.appName,
+          redirectUri: Uri.parse(AppConstants.redirectAndroidUri),
+        ),
       );
       final OAuthCredential oauthCredential =
           OAuthProvider("apple.com").credential(
@@ -205,6 +206,7 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
       var tempUser = userModel.copyWith(
         name: userModel.name.isEmpty ? doc.data()['name'] : userModel.name,
         pic: doc.data()['pic'],
+        password: doc.data()['pic'],
       );
       firebaseFirestore
           .collection(AppConstants.usersCollection)

@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "184119460900-3miff56l0hmmrnjbrf55hi27uqcggb0e.apps.googleusercontent.com",
+          "client_id": "184119460900-i3p5pstocoptfo7nf412lcrm1gnukvsl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ecartify.store",
+            "certificate_hash": "265902a9428791b7018f994f5f48deb17bbce8bf"
+          }
+        },
+        {
+          "client_id": "184119460900-cvrh7bk4t9lv9evg0n7r121fm7duio1u.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -29,6 +37,13 @@
             {
               "client_id": "184119460900-3miff56l0hmmrnjbrf55hi27uqcggb0e.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "184119460900-e0lthr913442e64d43fhhtda540kg7br.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ecartify.store"
+              }
             }
           ]
         }

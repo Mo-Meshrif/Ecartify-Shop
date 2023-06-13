@@ -38,7 +38,7 @@ class RouteGenerator {
           FlutterNativeSplash.remove();
           AppShared appShared = sl<AppShared>();
           bool authPass = appShared.getVal(AppConstants.authPassKey) ?? false;
-          return !authPass ? const HomeScreen() : const AuthScreen();
+          return authPass ? const HomeScreen() : const AuthScreen();
         },
       );
 }
