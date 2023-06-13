@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../app/common/widgets/custom_elevated_button.dart';
-import '../../../../../app/common/widgets/custom_text.dart';
-import '../../../../../app/helper/helper_functions.dart';
-import '../../../../../app/helper/navigation_helper.dart';
-import '../../../../../app/utils/color_manager.dart';
-import '../../../../../app/utils/routes_manager.dart';
-import '../../../../../app/utils/strings_manager.dart';
-import '../../../../../app/utils/values_manager.dart';
-import '../controller/auth_bloc.dart';
-import '../widgets/custom_or_divider.dart';
-import '../widgets/hor_social_buttons.dart';
+import '../../../../../../app/common/widgets/custom_elevated_button.dart';
+import '../../../../../../app/common/widgets/custom_text.dart';
+import '../../../../../../app/helper/helper_functions.dart';
+import '../../../../../../app/helper/navigation_helper.dart';
+import '../../../../../../app/utils/color_manager.dart';
+import '../../../../../../app/utils/routes_manager.dart';
+import '../../../../../../app/utils/strings_manager.dart';
+import '../../../../../../app/utils/values_manager.dart';
+import '../../controller/auth_bloc.dart';
+import '../../widgets/custom_or_divider.dart';
+import '../../widgets/hor_social_buttons.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({Key? key}) : super(key: key);

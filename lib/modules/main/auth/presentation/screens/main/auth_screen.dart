@@ -5,20 +5,20 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../app/common/widgets/custom_elevated_button.dart';
-import '../../../../../app/common/widgets/custom_text.dart';
-import '../../../../../app/helper/helper_functions.dart';
-import '../../../../../app/helper/navigation_helper.dart';
-import '../../../../../app/helper/shared_helper.dart';
-import '../../../../../app/services/services_locator.dart';
-import '../../../../../app/utils/assets_manager.dart';
-import '../../../../../app/utils/color_manager.dart';
-import '../../../../../app/utils/constants_manager.dart';
-import '../../../../../app/utils/routes_manager.dart';
-import '../../../../../app/utils/strings_manager.dart';
-import '../../../../../app/utils/values_manager.dart';
-import '../widgets/custom_or_divider.dart';
-import '../widgets/ver_social_buttons.dart';
+import '../../../../../../app/common/widgets/custom_elevated_button.dart';
+import '../../../../../../app/common/widgets/custom_text.dart';
+import '../../../../../../app/helper/helper_functions.dart';
+import '../../../../../../app/helper/navigation_helper.dart';
+import '../../../../../../app/helper/shared_helper.dart';
+import '../../../../../../app/services/services_locator.dart';
+import '../../../../../../app/utils/assets_manager.dart';
+import '../../../../../../app/utils/color_manager.dart';
+import '../../../../../../app/utils/constants_manager.dart';
+import '../../../../../../app/utils/routes_manager.dart';
+import '../../../../../../app/utils/strings_manager.dart';
+import '../../../../../../app/utils/values_manager.dart';
+import '../../widgets/custom_or_divider.dart';
+import '../../widgets/ver_social_buttons.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
@@ -45,7 +45,7 @@ class _AuthScreenState extends State<AuthScreen> {
               sl<AppShared>().setVal(AppConstants.userKey, state.user);
               NavigationHelper.pushNamedAndRemoveUntil(
                 context,
-                Routes.homeRoute,
+                Routes.toggleRoute,
                 (route) => false,
               );
             } else if (state is AuthRestSuccess) {

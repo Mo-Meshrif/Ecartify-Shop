@@ -26,5 +26,10 @@
     "Email already used. Go to login page.": "البريد الإلكتروني مستخدم بالفعل اذهب إلى صفحة تسجيل الدخول",
     "Too many requests to log into this account,try later.": "هناك عدد كبير جدًا من الطلبات لتسجيل الدخول إلى هذا الحساب ، حاول لاحقًا",
     "No internet connection !": "لا يوجد اتصال بالإنترنت",
-    "Operation failed,please try again.": "فشلت العملية يرجى المحاولة مرة أخرى"
+    "Operation failed,please try again.": "فشلت العملية يرجى المحاولة مرة أخرى",
+    "Shop": "المتجر",
+    "Explore": "البحث",
+    "Cart": "السلة",
+    "Favourite": "المفضلة",
+    "Profile": "حسابي"
 }

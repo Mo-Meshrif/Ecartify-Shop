@@ -28,4 +28,9 @@ class AppStrings {
       'Too many requests to log into this account,try later.';
   static const String noConnection = 'No internet connection !';
   static const String operationFailed = 'Operation failed,please try again.';
+  static const String shop = 'Shop';
+  static const String explore = 'Explore';
+  static const String cart = 'Cart';
+  static const String favourite = 'Favourite';
+  static const String profile = 'Profile';
 }

@@ -1,36 +1,38 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:ecartify/app/helper/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../app/common/widgets/custom_elevated_button.dart';
-import '../../../../../app/common/widgets/custom_text.dart';
-import '../../../../../app/helper/navigation_helper.dart';
-import '../../../../../app/utils/color_manager.dart';
-import '../../../../../app/utils/routes_manager.dart';
-import '../../../../../app/utils/strings_manager.dart';
-import '../../../../../app/utils/values_manager.dart';
-import '../../domain/usecases/login_use_case.dart';
-import '../controller/auth_bloc.dart';
-import '../widgets/custom_or_divider.dart';
-import '../widgets/hor_social_buttons.dart';
+import '../../../../../../app/common/widgets/custom_elevated_button.dart';
+import '../../../../../../app/common/widgets/custom_text.dart';
+import '../../../../../../app/helper/helper_functions.dart';
+import '../../../../../../app/helper/navigation_helper.dart';
+import '../../../../../../app/utils/color_manager.dart';
+import '../../../../../../app/utils/routes_manager.dart';
+import '../../../../../../app/utils/strings_manager.dart';
+import '../../../../../../app/utils/values_manager.dart';
+import '../../../domain/usecases/signup_use_case.dart';
+import '../../controller/auth_bloc.dart';
+import '../../widgets/custom_or_divider.dart';
+import '../../widgets/hor_social_buttons.dart';
 
-class SignInScreen extends StatefulWidget {
-  const SignInScreen({Key? key}) : super(key: key);
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({Key? key}) : super(key: key);
 
   @override
-  State<SignInScreen> createState() => _SignInScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
-  GlobalKey<FormState> signInKey = GlobalKey<FormState>();
+class _SignUpScreenState extends State<SignUpScreen> {
+  GlobalKey<FormState> signUpKey = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool obscureText = true;
 
   @override
   void dispose() {
+    nameController.clear();
     emailController.clear();
     passwordController.clear();
     super.dispose();
@@ -45,14 +47,24 @@ class _SignInScreenState extends State<SignInScreen> {
             vertical: AppPadding.p10.h,
           ),
           child: Form(
-            key: signInKey,
+            key: signUpKey,
             child: Column(
               children: [
                 CustomText(
-                  data: AppStrings.signIn.tr(),
+                  data: AppStrings.signUp.tr(),
                   fontSize: 30.sp,
                 ),
                 SizedBox(height: AppSize.s50.h),
+                TextFormField(
+                  controller: nameController,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  decoration: InputDecoration(
+                    hintText: AppStrings.username.tr(),
+                  ),
+                  validator: (value) =>
+                      value!.isEmpty ? AppStrings.enterName.tr() : null,
+                ),
+                SizedBox(height: AppSize.s20.h),
                 TextFormField(
                   controller: emailController,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -92,14 +104,15 @@ class _SignInScreenState extends State<SignInScreen> {
                     vertical: AppPadding.p15.h,
                   ),
                   child: CustomText(
-                    data: AppStrings.signIn.tr(),
+                    data: AppStrings.signUp.tr(),
                   ),
                   onPressed: () {
-                    if (signInKey.currentState!.validate()) {
-                      signInKey.currentState!.save();
+                    if (signUpKey.currentState!.validate()) {
+                      signUpKey.currentState!.save();
                       context.read<AuthBloc>().add(
-                            LoginEvent(
-                              loginInputs: LoginInputs(
+                            SignUpEvent(
+                              signUpInputs: SignUpInputs(
+                                name: nameController.text,
                                 email: emailController.text,
                                 password: passwordController.text,
                               ),
@@ -107,18 +120,6 @@ class _SignInScreenState extends State<SignInScreen> {
                           );
                     }
                   },
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: AppPadding.p20),
-                  child: TextButton(
-                    onPressed: () => NavigationHelper.pushNamed(
-                      context,
-                      Routes.forgetPasseordRoute,
-                    ),
-                    child: CustomText(
-                      data: AppStrings.forgetPass.tr(),
-                    ),
-                  ),
                 ),
                 const SizedBox(height: AppSize.s20),
                 CustomOrDivider(
@@ -131,16 +132,16 @@ class _SignInScreenState extends State<SignInScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CustomText(
-                      data: AppStrings.noAccount.tr(),
+                      data: AppStrings.haveAccount.tr(),
                       color: ColorManager.kGrey,
                     ),
                     TextButton(
                       onPressed: () => NavigationHelper.pushNamed(
                         context,
-                        Routes.signUpRoute,
+                        Routes.signInRoute,
                       ),
                       child: CustomText(
-                        data: AppStrings.signUp.tr(),
+                        data: AppStrings.signIn.tr(),
                       ),
                     ),
                   ],

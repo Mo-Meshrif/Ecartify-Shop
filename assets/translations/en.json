@@ -26,5 +26,10 @@
     "Email already used. Go to login page.": "Email already used. Go to login page.",
     "Too many requests to log into this account,try later.": "Too many requests to log into this account,try later.",
     "No internet connection !": "No internet connection !",
-    "Operation failed,please try again.": "Operation failed,please try again."
+    "Operation failed,please try again.": "Operation failed,please try again.",
+    "Shop": "Shop",
+    "Explore": "Explore",
+    "Cart": "Cart",
+    "Favourite": "Favourite",
+    "Profile": "Profile"
 }

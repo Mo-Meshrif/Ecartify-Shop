@@ -39,6 +39,12 @@ class ThemeManager {
         progressIndicatorTheme: ProgressIndicatorThemeData(
           color: ColorManager.kBlack,
         ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          showSelectedLabels: true,
+          showUnselectedLabels: true,
+          selectedItemColor: ColorManager.kBlack,
+          unselectedItemColor: ColorManager.kGrey,
+        ),
       );
 
   static ThemeData darkTheme() => ThemeData.dark().copyWith(
@@ -75,6 +81,12 @@ class ThemeManager {
         ),
         progressIndicatorTheme: ProgressIndicatorThemeData(
           color: ColorManager.kWhite,
+        ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          showSelectedLabels: true,
+          showUnselectedLabels: true,
+          selectedItemColor: ColorManager.kWhite,
+          unselectedItemColor: ColorManager.kGrey,
         ),
       );
 }
