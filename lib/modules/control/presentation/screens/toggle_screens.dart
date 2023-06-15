@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../main/cart/presentation/screens/cart_screen.dart';
 import '../../../main/explore/presentation/screens/explore_screen.dart';
@@ -17,26 +18,36 @@ class ToggleScreens extends StatefulWidget {
 class _ToggleScreenState extends State<ToggleScreens> {
   int currentIndex = 0;
   PageController pageController = PageController();
-
   @override
-  Widget build(BuildContext context) => Scaffold(
-        body: PageView(
-          physics: const NeverScrollableScrollPhysics(),
-          children: const [
-            ShopScreen(),
-            ExploreScreen(),
-            CartScreen(),
-            FavouriteScreen(),
-            ProfileScreen(),
-          ],
-          controller: pageController,
-          onPageChanged: (value) => setState(
-            () => currentIndex = value,
+  void initState() {
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: SystemUiOverlay.values,
+    );
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) => AnnotatedRegion<SystemUiOverlayStyle>(
+        value: Theme.of(context).appBarTheme.systemOverlayStyle!,
+        child: Scaffold(
+          body: PageView(
+            physics: const NeverScrollableScrollPhysics(),
+            children: const [
+              ShopScreen(),
+              ExploreScreen(),
+              CartScreen(),
+              FavouriteScreen(),
+              ProfileScreen(),
+            ],
+            controller: pageController,
+            onPageChanged: (value) => setState(
+              () => currentIndex = value,
+            ),
           ),
-        ),
-        bottomNavigationBar: BottomNavBar(
-          currentIndex: currentIndex,
-          onTap: (val) => pageController.jumpToPage(val),
+          bottomNavigationBar: BottomNavBar(
+            currentIndex: currentIndex,
+            onTap: (val) => pageController.jumpToPage(val),
+          ),
         ),
       );
 }
