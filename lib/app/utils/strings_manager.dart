@@ -33,4 +33,11 @@ class AppStrings {
   static const String cart = 'Cart';
   static const String favourite = 'Favourite';
   static const String profile = 'Profile';
+  static const String goodMorning = 'Good Morning';
+  static const String goodNight = 'Good Night';
+  static const String search = 'Search';
+  static const String exclusiveOffer = 'Exclusive Offer';
+  static const String seeAll = 'See all';
+  static const String bestSelling = 'Best Selling';
+  static const String sold = 'sold';
 }

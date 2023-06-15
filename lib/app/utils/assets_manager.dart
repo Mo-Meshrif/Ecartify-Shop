@@ -13,6 +13,8 @@ class IconAssets {
   static const String favourite = "$iconPath/favourite.svg";
   static const String cart = "$iconPath/cart.svg";
   static const String profile = "$iconPath/profile.svg";
+  static const String bell = "$iconPath/bell.svg";
+  static const String search = "$iconPath/search.svg";
 }
 
 class JsonAssets {}
