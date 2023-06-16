@@ -40,4 +40,9 @@ class AppStrings {
   static const String seeAll = 'See all';
   static const String bestSelling = 'Best Selling';
   static const String sold = 'sold';
+  static const String selectColor = 'Select color';
+  static const String selectSize = 'Select size';
+  static const String review = 'Review';
+  static const String quantity = 'Quantity';
+  static const String addToCart = 'Add to Cart';
 }
