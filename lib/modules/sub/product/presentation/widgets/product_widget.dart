@@ -1,12 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
-import '../../../../../app/common/widgets/custom_text.dart';
-import '../../../../../app/utils/assets_manager.dart';
-import '../../../../../app/utils/color_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../../../../app/common/widgets/custom_text.dart';
+import '../../../../../app/helper/navigation_helper.dart';
+import '../../../../../app/utils/assets_manager.dart';
+import '../../../../../app/utils/color_manager.dart';
+import '../../../../../app/utils/routes_manager.dart';
 import '../../../../../app/utils/strings_manager.dart';
 import '../../../../../app/utils/values_manager.dart';
 
@@ -16,7 +18,11 @@ class ProductWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () => NavigationHelper.pushNamed(
+        context,
+        Routes.productDetailsRoute,
+        arguments: 'aaaa',
+      ),
       borderRadius: BorderRadius.circular(15.r),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,32 +65,37 @@ class ProductWidget extends StatelessWidget {
             data: 'product name',
           ),
           SizedBox(height: AppSize.s5.h),
-          Row(
-            children: [
-              const Icon(
-                Icons.star_half,
-                size: AppSize.s20,
-              ),
-              SizedBox(width: AppSize.s10.w),
-              const CustomText(
-                data: '4.6',
-              ),
-              const VerticalDivider(),
-              Expanded(
-                child: Center(
-                  child: Container(
-                    padding: const EdgeInsets.all(AppPadding.p5),
-                    decoration: BoxDecoration(
-                      color: ColorManager.kGrey.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(AppSize.s10.r),
-                    ),
-                    child: CustomText(
-                      data: '6.983' ' ' + AppStrings.sold.tr(),
+          IntrinsicHeight(
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.star_half,
+                  size: AppSize.s20,
+                ),
+                SizedBox(width: AppSize.s10.w),
+                const CustomText(
+                  data: '4.6',
+                ),
+                SizedBox(width: AppSize.s5.w),
+                VerticalDivider(
+                  color: ColorManager.kGrey.withOpacity(0.3),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(AppPadding.p5),
+                      decoration: BoxDecoration(
+                        color: ColorManager.kGrey.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(AppSize.s10.r),
+                      ),
+                      child: CustomText(
+                        data: '6.983' ' ' + AppStrings.sold.tr(),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           SizedBox(height: AppSize.s5.h),
           const CustomText(
