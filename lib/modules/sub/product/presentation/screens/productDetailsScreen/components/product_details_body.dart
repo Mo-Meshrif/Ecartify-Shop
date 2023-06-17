@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../../app/common/widgets/custom_text.dart';
+import '../../../../../../../app/helper/navigation_helper.dart';
+import '../../../../../../../app/utils/routes_manager.dart';
 import '../../../../../../../app/utils/strings_manager.dart';
 import '../../../../../../../app/utils/values_manager.dart';
 
@@ -112,7 +114,10 @@ class ProductDetailsBody extends StatelessWidget {
                 SizedBox(width: AppSize.s5.w),
                 GestureDetector(
                   behavior: HitTestBehavior.translucent,
-                  onTap: () {},
+                  onTap: () => NavigationHelper.pushNamed(
+                    context,
+                    Routes.productReviewRoute,
+                  ),
                   child: const Icon(
                     Icons.arrow_forward_ios,
                     size: AppSize.s20,

@@ -45,4 +45,11 @@ class AppStrings {
   static const String review = 'Review';
   static const String quantity = 'Quantity';
   static const String addToCart = 'Add to Cart';
+  static const String ratings = 'Ratings';
+  static const String writeReview = 'Write a review';
+  static const String send = 'Send';
+  static const String cancel = 'Cancel';
+  static const String tapStar = 'Tap a star to Rate';
+  static const String title = 'Title';
+  static const String optional = 'Optional';
 }
