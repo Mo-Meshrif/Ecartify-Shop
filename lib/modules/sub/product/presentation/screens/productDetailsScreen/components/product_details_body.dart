@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../../../app/helper/navigation_helper.dart';
+import '../../../../../../../app/utils/constants_manager.dart';
 import '../../../../../../../app/utils/routes_manager.dart';
 import '../../../../../../../app/utils/strings_manager.dart';
 import '../../../../../../../app/utils/values_manager.dart';
@@ -15,6 +16,7 @@ class ProductDetailsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool arabic = context.locale == AppConstants.arabic;
     return SliverToBoxAdapter(
       child: Padding(
         padding: EdgeInsets.symmetric(
@@ -24,6 +26,7 @@ class ProductDetailsBody extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: 10.h),
             const CustomText(
               data: '\$' '1000',
             ),
@@ -50,7 +53,9 @@ class ProductDetailsBody extends StatelessWidget {
                       (index) => Container(
                         width: AppSize.s30,
                         height: AppSize.s30,
-                        margin: EdgeInsets.only(right: AppPadding.p10.w),
+                        margin: arabic
+                            ? EdgeInsets.only(left: AppPadding.p10.w)
+                            : EdgeInsets.only(right: AppPadding.p10.w),
                         decoration: BoxDecoration(
                           color: Colors.red,
                           borderRadius: BorderRadius.circular(AppSize.s10.r),
@@ -77,10 +82,10 @@ class ProductDetailsBody extends StatelessWidget {
                               child: Banner(
                                 message: '',
                                 location: BannerLocation.bottomEnd,
-                                child: _itemSizeWidget(context, 'XL'),
+                                child: _itemSizeWidget(context, arabic, 'XL'),
                               ),
                             )
-                          : _itemSizeWidget(context, 'XL'),
+                          : _itemSizeWidget(context, arabic, 'XL'),
                     ),
                   ),
                 ),
@@ -131,11 +136,14 @@ class ProductDetailsBody extends StatelessWidget {
     );
   }
 
-  Widget _itemSizeWidget(BuildContext context, String data) => Container(
+  Widget _itemSizeWidget(BuildContext context, bool arabic, String data) =>
+      Container(
         width: AppSize.s30,
         height: AppSize.s30,
         alignment: Alignment.center,
-        margin: EdgeInsets.only(right: AppPadding.p10.w),
+        margin: arabic
+            ? EdgeInsets.only(left: AppPadding.p10.w)
+            : EdgeInsets.only(right: AppPadding.p10.w),
         decoration: BoxDecoration(
           border: Border.all(
             color: Theme.of(context).primaryColor,
