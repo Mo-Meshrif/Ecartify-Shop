@@ -17,6 +17,7 @@ class ShopScreen extends StatelessWidget {
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(
               horizontal: AppPadding.p15.w,
+              vertical: AppPadding.p10.h,
             ),
             child: Column(
               children: [

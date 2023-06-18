@@ -42,7 +42,7 @@ class BestSellerProductWidget extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           direction: Axis.vertical,
           horizontalSpace: AppSize.s10.w,
-          verticalSpace: AppSize.s20.h,
+          verticalSpace: AppSize.s10.h,
           children: List.generate(
             4,
             (index) => SizedBox(
