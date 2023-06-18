@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../app/common/widgets/custom_intrinsic_grid_view.dart';
 import '../../../../../app/common/widgets/custom_text.dart';
+import '../../../../../app/helper/navigation_helper.dart';
+import '../../../../../app/utils/routes_manager.dart';
 import '../../../../../app/utils/strings_manager.dart';
 import '../../../../../app/utils/values_manager.dart';
 import '../../../../sub/product/presentation/widgets/product_widget.dart';
@@ -24,7 +26,11 @@ class BestSellerProductWidget extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: () => NavigationHelper.pushNamed(
+                context,
+                Routes.tempProductListRoute,
+                arguments: false,
+              ),
               child: CustomText(
                 data: AppStrings.seeAll.tr(),
               ),

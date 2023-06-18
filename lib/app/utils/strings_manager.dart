@@ -52,4 +52,7 @@ class AppStrings {
   static const String tapStar = 'Tap a star to Rate';
   static const String title = 'Title';
   static const String optional = 'Optional';
+  static const String searchProds = 'Search Products';
+  static const String found = 'Found';
+  static const String results = 'Results';
 }
