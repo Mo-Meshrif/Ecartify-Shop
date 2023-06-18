@@ -17,92 +17,103 @@ class ProductWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => NavigationHelper.pushNamed(
-        context,
-        Routes.productDetailsRoute,
-        arguments: 'aaaa',
+    return Card(
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+          AppSize.s15.r,
+        ),
       ),
-      borderRadius: BorderRadius.circular(15.r),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(AppSize.s15.r),
-            child: Container(
-              color: ColorManager.kGrey.withOpacity(0.3),
-              child: Column(
-                children: [
-                  Align(
-                    alignment: AlignmentDirectional.topEnd,
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: CircleAvatar(
-                        radius: 20.r,
-                        backgroundColor: ColorManager.kBlack,
-                        child: Padding(
-                          padding: EdgeInsets.only(top: AppPadding.p5.h),
-                          child: SvgPicture.asset(
-                            IconAssets.favourite,
-                            fit: BoxFit.fitHeight,
-                            width: AppSize.s20.w,
-                            color: ColorManager.kWhite,
+      child: InkWell(
+        onTap: () => NavigationHelper.pushNamed(
+          context,
+          Routes.productDetailsRoute,
+          arguments: 'aaaa',
+        ),
+        borderRadius: BorderRadius.circular(15.r),
+        child: Padding(
+          padding: const EdgeInsets.all(5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(AppSize.s15.r),
+                child: Container(
+                  color: ColorManager.kGrey.withOpacity(0.3),
+                  child: Column(
+                    children: [
+                      Align(
+                        alignment: AlignmentDirectional.topEnd,
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: CircleAvatar(
+                            radius: 20.r,
+                            backgroundColor: ColorManager.kBlack,
+                            child: Padding(
+                              padding: EdgeInsets.only(top: AppPadding.p5.h),
+                              child: SvgPicture.asset(
+                                IconAssets.favourite,
+                                fit: BoxFit.fitHeight,
+                                width: AppSize.s20.w,
+                                color: ColorManager.kWhite,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      CachedNetworkImage(
+                        imageUrl:
+                            'https://firebasestorage.googleapis.com/v0/b/ecartify-shop.appspot.com/o/beats-headphones.png?alt=media&token=edb67fbd-404f-492f-a519-e0dffbf5a5bc',
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: AppSize.s5.h),
+              const CustomText(
+                data: 'product name',
+              ),
+              SizedBox(height: AppSize.s5.h),
+              IntrinsicHeight(
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.star_half,
+                      size: AppSize.s20,
+                    ),
+                    SizedBox(width: AppSize.s10.w),
+                    const CustomText(
+                      data: '4.6',
+                    ),
+                    SizedBox(width: AppSize.s5.w),
+                    VerticalDivider(
+                      color: ColorManager.kGrey.withOpacity(0.3),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Container(
+                          padding: const EdgeInsets.all(AppPadding.p5),
+                          decoration: BoxDecoration(
+                            color: ColorManager.kGrey.withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(AppSize.s10.r),
+                          ),
+                          child: CustomText(
+                            data: '6.983' ' ' + AppStrings.sold.tr(),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  CachedNetworkImage(
-                    imageUrl:
-                        'https://firebasestorage.googleapis.com/v0/b/ecartify-shop.appspot.com/o/beats-headphones.png?alt=media&token=edb67fbd-404f-492f-a519-e0dffbf5a5bc',
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
+              SizedBox(height: AppSize.s5.h),
+              const CustomText(
+                data: '\$' '1000',
+              ),
+              SizedBox(height: AppSize.s5.h),
+            ],
           ),
-          SizedBox(height: AppSize.s5.h),
-          const CustomText(
-            data: 'product name',
-          ),
-          SizedBox(height: AppSize.s5.h),
-          IntrinsicHeight(
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.star_half,
-                  size: AppSize.s20,
-                ),
-                SizedBox(width: AppSize.s10.w),
-                const CustomText(
-                  data: '4.6',
-                ),
-                SizedBox(width: AppSize.s5.w),
-                VerticalDivider(
-                  color: ColorManager.kGrey.withOpacity(0.3),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Container(
-                      padding: const EdgeInsets.all(AppPadding.p5),
-                      decoration: BoxDecoration(
-                        color: ColorManager.kGrey.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(AppSize.s10.r),
-                      ),
-                      child: CustomText(
-                        data: '6.983' ' ' + AppStrings.sold.tr(),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: AppSize.s5.h),
-          const CustomText(
-            data: '\$' '1000',
-          ),
-          SizedBox(height: AppSize.s5.h),
-        ],
+        ),
       ),
     );
   }

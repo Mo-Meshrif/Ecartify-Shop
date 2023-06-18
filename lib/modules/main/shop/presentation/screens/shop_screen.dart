@@ -16,12 +16,12 @@ class ShopScreen extends StatelessWidget {
         body: SafeArea(
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(
-              horizontal: AppPadding.p25.w,
+              horizontal: AppPadding.p15.w,
             ),
             child: Column(
               children: [
                 const HeaderWidget(),
-                SizedBox(height: AppSize.s10.h),
+                SizedBox(height: AppSize.s5.h),
                 const CustomSearchBarWidget(),
                 SizedBox(height: AppSize.s15.h),
                 const SliderWidget(),

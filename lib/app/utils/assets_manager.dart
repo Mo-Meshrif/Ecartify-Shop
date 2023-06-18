@@ -17,6 +17,7 @@ class IconAssets {
   static const String search = "$iconPath/search.svg";
   static const String add = "$iconPath/add.svg";
   static const String subtrack = "$iconPath/subtrack.svg";
+  static const String scan = "$iconPath/scan.svg";
 }
 
 class JsonAssets {}
