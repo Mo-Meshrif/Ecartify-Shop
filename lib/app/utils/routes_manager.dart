@@ -7,7 +7,7 @@ import '../../modules/main/auth/presentation/screens/sub/sign_in_screen.dart';
 import '../../modules/main/auth/presentation/screens/sub/sign_up_screen.dart';
 import '../../modules/sub/product/domain/usecases/get_products_by_parameter_use_case.dart';
 import '../../modules/sub/product/presentation/screens/productDetailsScreen/product_details_screen.dart';
-import '../../modules/sub/product/presentation/screens/productReviewScreen/product_review_screen.dart';
+import '../../modules/sub/review/presentation/screens/product_review_screen.dart';
 import '../../modules/sub/product/presentation/screens/tempProductListSceen/temp_product_list_screen.dart';
 
 class Routes {

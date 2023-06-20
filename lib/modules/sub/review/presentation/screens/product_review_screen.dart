@@ -2,13 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../../app/common/widgets/custom_elevated_button.dart';
-import '../../../../../../app/common/widgets/custom_text.dart';
-import '../../../../../../app/helper/helper_functions.dart';
-import '../../../../../../app/utils/strings_manager.dart';
-import '../../../../../../app/utils/values_manager.dart';
-import 'components/last_reviews_widget.dart';
-import 'components/rating_slider_widget.dart';
+import '../../../../../app/common/widgets/custom_elevated_button.dart';
+import '../../../../../app/common/widgets/custom_text.dart';
+import '../../../../../app/helper/helper_functions.dart';
+import '../../../../../app/utils/strings_manager.dart';
+import '../../../../../app/utils/values_manager.dart';
+import '../widget/last_reviews_widget.dart';
+import '../widget/rating_slider_widget.dart';
 
 class ProductReviewScreen extends StatelessWidget {
   const ProductReviewScreen({Key? key}) : super(key: key);

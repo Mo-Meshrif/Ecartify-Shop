@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../../../app/utils/color_manager.dart';
-import '../../../../../../../app/utils/values_manager.dart';
+import '../../../../../app/utils/color_manager.dart';
+import '../../../../../app/utils/values_manager.dart';
 
 class RatingSliderWidget extends StatelessWidget {
   final List<double> ratePrecentList;

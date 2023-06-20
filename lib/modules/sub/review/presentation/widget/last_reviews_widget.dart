@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../../../app/common/widgets/custom_text.dart';
-import '../../../../../../../app/utils/color_manager.dart';
-import '../../../../../../../app/utils/values_manager.dart';
+import '../../../../../app/common/widgets/custom_text.dart';
+import '../../../../../app/utils/color_manager.dart';
+import '../../../../../app/utils/values_manager.dart';
 
 class LastReviewsWidget extends StatelessWidget {
   const LastReviewsWidget({Key? key}) : super(key: key);
