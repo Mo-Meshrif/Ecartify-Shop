@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../domain/entities/product.dart';
 import 'components/add_to_cart_widget.dart';
 import 'components/product_details_body.dart';
 import 'components/product_details_header.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
-  final String productId;
-  const ProductDetailsScreen({
-    Key? key,
-    required this.productId,
-  }) : super(key: key);
+  final Product product;
+  const ProductDetailsScreen({Key? key, required this.product})
+      : super(key: key);
 
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
@@ -53,11 +52,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 slivers: [
                   //image ,favourite and share
                   ProductDetailsHeader(
+                    product: widget.product,
                     kExpandedHeight: kExpandedHeight,
                     showTitle: showTitle,
                   ),
                   //product detals body
-                  ProductDetailsBody(showTitle: showTitle)
+                  ProductDetailsBody(
+                    showTitle: showTitle,
+                    product: widget.product,
+                  )
                 ],
               ),
             ),

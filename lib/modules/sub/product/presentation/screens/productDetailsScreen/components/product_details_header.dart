@@ -7,12 +7,17 @@ import '../../../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../../../app/utils/assets_manager.dart';
 import '../../../../../../../app/utils/color_manager.dart';
 import '../../../../../../../app/utils/values_manager.dart';
+import '../../../../domain/entities/product.dart';
 
 class ProductDetailsHeader extends StatelessWidget {
+  final Product product;
   final double kExpandedHeight;
   final bool showTitle;
   const ProductDetailsHeader(
-      {Key? key, required this.kExpandedHeight, required this.showTitle})
+      {Key? key,
+      required this.kExpandedHeight,
+      required this.showTitle,
+      required this.product})
       : super(key: key);
 
   @override
@@ -23,7 +28,7 @@ class ProductDetailsHeader extends StatelessWidget {
       expandedHeight: kExpandedHeight,
       title: showTitle
           ? CustomText(
-              data: 'Product name',
+              data: product.name,
               color: theme.primaryColor,
             )
           : null,
@@ -37,8 +42,7 @@ class ProductDetailsHeader extends StatelessWidget {
                 width: 1.sw,
                 color: ColorManager.kGrey.withOpacity(0.3),
                 child: CachedNetworkImage(
-                  imageUrl:
-                      'https://firebasestorage.googleapis.com/v0/b/ecartify-shop.appspot.com/o/beats-headphones.png?alt=media&token=edb67fbd-404f-492f-a519-e0dffbf5a5bc',
+                  imageUrl: product.image,
                 ),
               ),
             ),

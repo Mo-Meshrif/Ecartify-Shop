@@ -1,13 +1,15 @@
+import '../../modules/sub/product/domain/entities/product.dart';
 import 'package:flutter/material.dart';
 
 import '../../modules/control/presentation/screens/control_screen.dart';
+import '../../modules/control/presentation/screens/toggle_screens.dart';
 import '../../modules/main/auth/presentation/screens/sub/forget_password_screen.dart';
 import '../../modules/main/auth/presentation/screens/sub/sign_in_screen.dart';
 import '../../modules/main/auth/presentation/screens/sub/sign_up_screen.dart';
-import '../../modules/control/presentation/screens/toggle_screens.dart';
+import '../../modules/sub/product/domain/usecases/get_products_by_parameter_use_case.dart';
 import '../../modules/sub/product/presentation/screens/productDetailsScreen/product_details_screen.dart';
 import '../../modules/sub/product/presentation/screens/productReviewScreen/product_review_screen.dart';
-import '../../modules/sub/product/presentation/screens/temp_product_list_screen.dart';
+import '../../modules/sub/product/presentation/screens/tempProductListSceen/temp_product_list_screen.dart';
 
 class Routes {
   static const String signInRoute = "/signIn";
@@ -33,7 +35,7 @@ class RouteGenerator {
       case Routes.productDetailsRoute:
         return MaterialPageRoute(
           builder: (_) => ProductDetailsScreen(
-            productId: settings.arguments as String,
+            product: settings.arguments as Product,
           ),
         );
       case Routes.productReviewRoute:
@@ -41,7 +43,7 @@ class RouteGenerator {
       case Routes.tempProductListRoute:
         return MaterialPageRoute(
           builder: (_) => TempProductListScreen(
-            fromSearch: settings.arguments as bool,
+            productsParmeters: settings.arguments as ProductsParmeters,
           ),
         );
       default:

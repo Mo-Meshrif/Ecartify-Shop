@@ -55,4 +55,7 @@ class AppStrings {
   static const String searchProds = 'Search Products';
   static const String found = 'Found';
   static const String results = 'Results';
+  static const String noRecentSearch = 'There are no recent searches';
+  static const String recent = 'Recent';
+  static const String clearAll = 'Clear All';
 }

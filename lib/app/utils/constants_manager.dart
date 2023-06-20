@@ -27,4 +27,5 @@ class AppConstants {
   static const String googleScope = 'email';
   static const String redirectAndroidUri =
       'https://play.google.com/store/apps/details?id=com.ecartify.store';
+  static const String recentSearchedKey = 'recent-seacrched';
 }

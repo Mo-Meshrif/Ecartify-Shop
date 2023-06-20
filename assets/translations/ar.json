@@ -53,5 +53,8 @@
     "Optional": "اختيارى",
     "Found": "وجد",
     "Results": "نتائج",
-    "Search Products": "البحث عن المنتجات"
+    "Search Products": "البحث عن المنتجات",
+    "There are no recent searches": "لا توجد عمليات بحث حديثة",
+    "Recent": "حديثا",
+    "Clear All": "حذف الكل"
 }

@@ -5,11 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get_storage/get_storage.dart';
+
 import 'app/app.dart';
 import 'app/helper/bloc_observer.dart';
 import 'app/services/services_locator.dart';
 import 'app/utils/constants_manager.dart';
 import 'modules/main/auth/presentation/controller/auth_bloc.dart';
+import 'modules/main/shop/presentation/controller/shop_bloc.dart';
+import 'modules/sub/product/presentation/controller/product_bloc.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +35,12 @@ void main() async {
       child: MultiBlocProvider(
         providers: [
           BlocProvider<AuthBloc>(
+            create: (context) => sl(),
+          ),
+          BlocProvider<ShopBloc>(
+            create: (context) => sl(),
+          ),
+          BlocProvider<ProductBloc>(
             create: (context) => sl(),
           ),
         ],

@@ -18,6 +18,13 @@ import '../../modules/main/auth/domain/usecases/login_use_case.dart';
 import '../../modules/main/auth/domain/usecases/logout_use_case.dart';
 import '../../modules/main/auth/domain/usecases/signup_use_case.dart';
 import '../../modules/main/auth/presentation/controller/auth_bloc.dart';
+import '../../modules/main/shop/presentation/controller/shop_bloc.dart';
+import '../../modules/sub/product/data/datasources/remote_data_source.dart';
+import '../../modules/sub/product/data/repositories/product_repository_impl.dart';
+import '../../modules/sub/product/domain/repositories/base_product_repository.dart';
+import '../../modules/sub/product/domain/usecases/get_product_details_use_case.dart';
+import '../../modules/sub/product/domain/usecases/get_products_by_parameter_use_case.dart';
+import '../../modules/sub/product/presentation/controller/product_bloc.dart';
 import '../helper/shared_helper.dart';
 import '../utils/constants_manager.dart';
 import 'network_services.dart';
@@ -51,9 +58,14 @@ class ServicesLocator {
     sl.registerLazySingleton<BaseAuthRemoteDataSource>(
       () => AuthRemoteDataSource(sl(), sl(), sl(), sl(), sl()),
     );
+    sl.registerLazySingleton<BaseProductRemoteDataSource>(
+      () => ProductRemoteDataSource(sl()),
+    );
     //Repositories
     sl.registerLazySingleton<BaseAuthRepository>(
         () => AuthRepositoryImpl(sl(), sl()));
+    sl.registerLazySingleton<BaseProductRepository>(
+        () => ProductRepositoryImpl(sl(), sl()));
     //UseCases
     sl.registerLazySingleton(() => LoginUseCase(sl()));
     sl.registerLazySingleton(() => SignUpUseCase(sl()));
@@ -63,8 +75,10 @@ class ServicesLocator {
     sl.registerLazySingleton(() => AppleUseCase(sl()));
     sl.registerLazySingleton(() => LogoutUseCase(sl()));
     sl.registerLazySingleton(() => DeleteUseCase(sl()));
+    sl.registerLazySingleton(() => GetCustomProductsUseCase(sl()));
+    sl.registerLazySingleton(() => GetProductDetailsUseCase(sl()));
     //blocs
-    sl.registerFactory(
+    sl.registerLazySingleton(
       () => AuthBloc(
         loginUseCase: sl(),
         signUpUseCase: sl(),
@@ -74,6 +88,17 @@ class ServicesLocator {
         appleUseCase: sl(),
         logoutUseCase: sl(),
         deleteUseCase: sl(),
+      ),
+    );
+    sl.registerLazySingleton(
+      () => ShopBloc(
+        getCustomProductsUseCase: sl(),
+      ),
+    );
+    sl.registerLazySingleton(
+      () => ProductBloc(
+        getCustomProductsUseCase: sl(),
+        getProductDetailsUseCase: sl(),
       ),
     );
   }

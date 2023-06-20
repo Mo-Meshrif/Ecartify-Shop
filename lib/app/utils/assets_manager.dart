@@ -21,4 +21,7 @@ class IconAssets {
   static const String filter = "$iconPath/filter.svg";
 }
 
-class JsonAssets {}
+class JsonAssets {
+  static const String searching = "$jsonPath/searching.json";
+  static const String empty = "$jsonPath/empty.json";
+}

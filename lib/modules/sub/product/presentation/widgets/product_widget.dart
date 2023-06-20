@@ -11,110 +11,139 @@ import '../../../../../app/utils/color_manager.dart';
 import '../../../../../app/utils/routes_manager.dart';
 import '../../../../../app/utils/strings_manager.dart';
 import '../../../../../app/utils/values_manager.dart';
+import '../../domain/entities/product.dart';
 
 class ProductWidget extends StatelessWidget {
-  const ProductWidget({Key? key}) : super(key: key);
+  final Product product;
+  const ProductWidget({
+    Key? key,
+    required this.product,
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-          AppSize.s15.r,
+  Widget build(BuildContext context) => Card(
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            AppSize.s15.r,
+          ),
         ),
-      ),
-      child: InkWell(
-        onTap: () => NavigationHelper.pushNamed(
-          context,
-          Routes.productDetailsRoute,
-          arguments: 'aaaa',
-        ),
-        borderRadius: BorderRadius.circular(15.r),
-        child: Padding(
-          padding: const EdgeInsets.all(5),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(AppSize.s15.r),
-                child: Container(
-                  color: ColorManager.kGrey.withOpacity(0.3),
-                  child: Column(
-                    children: [
-                      Align(
-                        alignment: AlignmentDirectional.topEnd,
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: CircleAvatar(
-                            radius: 20.r,
-                            backgroundColor: ColorManager.kBlack,
-                            child: Padding(
-                              padding: EdgeInsets.only(top: AppPadding.p5.h),
-                              child: SvgPicture.asset(
-                                IconAssets.favourite,
-                                fit: BoxFit.fitHeight,
-                                width: AppSize.s20.w,
-                                color: ColorManager.kWhite,
+        child: InkWell(
+          onTap: () => NavigationHelper.pushNamed(
+            context,
+            Routes.productDetailsRoute,
+            arguments: product,
+          ),
+          borderRadius: BorderRadius.circular(15.r),
+          child: Padding(
+            padding: const EdgeInsets.all(5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(AppSize.s15.r),
+                  child: Container(
+                    color: ColorManager.kGrey.withOpacity(0.3),
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: CachedNetworkImage(
+                            height: AppSize.s205.h,
+                            fit: BoxFit.contain,
+                            imageUrl: product.image,
+                          ),
+                        ),
+                        Align(
+                          alignment: AlignmentDirectional.topEnd,
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                            splashRadius: AppSize.s30.r,
+                            onPressed: () {},
+                            icon: CircleAvatar(
+                              radius: AppSize.s20.r,
+                              backgroundColor: ColorManager.kBlack,
+                              child: Padding(
+                                padding: EdgeInsets.only(top: AppPadding.p5.h),
+                                child: SvgPicture.asset(
+                                  IconAssets.favourite,
+                                  width: AppSize.s20.w,
+                                  color: ColorManager.kWhite,
+                                ),
                               ),
                             ),
                           ),
                         ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: AppSize.s5.h),
+                CustomText(
+                  data: product.name,
+                  maxLines: 2,
+                ),
+                SizedBox(height: AppSize.s5.h),
+                IntrinsicHeight(
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.star_half,
+                        size: AppSize.s20,
                       ),
-                      CachedNetworkImage(
-                        imageUrl:
-                            'https://firebasestorage.googleapis.com/v0/b/ecartify-shop.appspot.com/o/beats-headphones.png?alt=media&token=edb67fbd-404f-492f-a519-e0dffbf5a5bc',
+                      SizedBox(width: AppSize.s10.w),
+                      CustomText(
+                        data: product.avRateValue.toString(),
+                      ),
+                      SizedBox(width: AppSize.s5.w),
+                      VerticalDivider(
+                        color: ColorManager.kGrey.withOpacity(0.3),
+                      ),
+                      Expanded(
+                        child: Center(
+                          child: Container(
+                            padding: const EdgeInsets.all(AppPadding.p5),
+                            decoration: BoxDecoration(
+                              color: ColorManager.kGrey.withOpacity(0.3),
+                              borderRadius:
+                                  BorderRadius.circular(AppSize.s10.r),
+                            ),
+                            child: CustomText(
+                              data: product.soldNum.toString() +
+                                  ' ' +
+                                  AppStrings.sold.tr(),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ),
-              SizedBox(height: AppSize.s5.h),
-              const CustomText(
-                data: 'product name',
-              ),
-              SizedBox(height: AppSize.s5.h),
-              IntrinsicHeight(
-                child: Row(
+                SizedBox(height: AppSize.s5.h),
+                Row(
                   children: [
-                    const Icon(
-                      Icons.star_half,
-                      size: AppSize.s20,
+                    CustomText(
+                      data: '\$' + product.price,
                     ),
-                    SizedBox(width: AppSize.s10.w),
-                    const CustomText(
-                      data: '4.6',
-                    ),
-                    SizedBox(width: AppSize.s5.w),
-                    VerticalDivider(
-                      color: ColorManager.kGrey.withOpacity(0.3),
-                    ),
-                    Expanded(
-                      child: Center(
-                        child: Container(
-                          padding: const EdgeInsets.all(AppPadding.p5),
-                          decoration: BoxDecoration(
-                            color: ColorManager.kGrey.withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(AppSize.s10.r),
+                    Visibility(
+                      visible: product.lastPrice.isNotEmpty,
+                      child: Row(
+                        children: [
+                          SizedBox(width: 10.w),
+                          CustomText(
+                            data: '\$' + product.lastPrice,
+                            color: ColorManager.kRed,
+                            textDecoration: TextDecoration.lineThrough,
+                            decorationColor: Theme.of(context).primaryColor,
                           ),
-                          child: CustomText(
-                            data: '6.983' ' ' + AppStrings.sold.tr(),
-                          ),
-                        ),
+                        ],
                       ),
-                    ),
+                    )
                   ],
                 ),
-              ),
-              SizedBox(height: AppSize.s5.h),
-              const CustomText(
-                data: '\$' '1000',
-              ),
-              SizedBox(height: AppSize.s5.h),
-            ],
+                SizedBox(height: AppSize.s5.h),
+              ],
+            ),
           ),
         ),
-      ),
-    );
-  }
+      );
 }
