@@ -1,4 +1,3 @@
-import '../../modules/sub/product/domain/entities/product.dart';
 import 'package:flutter/material.dart';
 
 import '../../modules/control/presentation/screens/control_screen.dart';
@@ -34,9 +33,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ToggleScreens());
       case Routes.productDetailsRoute:
         return MaterialPageRoute(
-          builder: (_) => ProductDetailsScreen(
-            product: settings.arguments as Product,
-          ),
+          builder: (_) => const ProductDetailsScreen(),
         );
       case Routes.productReviewRoute:
         return MaterialPageRoute(builder: (_) => const ProductReviewScreen());

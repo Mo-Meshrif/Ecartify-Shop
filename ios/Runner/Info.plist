@@ -27,10 +27,13 @@
 			<dict>
 				<key>CFBundleTypeRole</key>
 				<string>Editor</string>
+				<key>CFBundleURLName</key>
+    			<string>ecartify.page.link</string>
 				<key>CFBundleURLSchemes</key>
 				<array>
 					<string>fb938808440670126</string>
 					<string>com.googleusercontent.apps.184119460900-e0lthr913442e64d43fhhtda540kg7br</string>
+					<string>https</string>
 				</array>
 			</dict>
 		</array>

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -12,6 +13,7 @@ import '../../../../../app/utils/routes_manager.dart';
 import '../../../../../app/utils/strings_manager.dart';
 import '../../../../../app/utils/values_manager.dart';
 import '../../domain/entities/product.dart';
+import '../controller/product_bloc.dart';
 
 class ProductWidget extends StatelessWidget {
   final Product product;
@@ -29,11 +31,17 @@ class ProductWidget extends StatelessWidget {
           ),
         ),
         child: InkWell(
-          onTap: () => NavigationHelper.pushNamed(
-            context,
-            Routes.productDetailsRoute,
-            arguments: product,
-          ),
+          onTap: () {
+            context.read<ProductBloc>().add(
+                  UpdateProductDetailsEvent(
+                    product: product,
+                  ),
+                );
+            NavigationHelper.pushNamed(
+              context,
+              Routes.productDetailsRoute,
+            );
+          },
           borderRadius: BorderRadius.circular(15.r),
           child: Padding(
             padding: const EdgeInsets.all(5),

@@ -1,15 +1,20 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../../app/common/widgets/custom_text.dart';
+import '../../../../../../app/helper/enums.dart';
+import '../../../../../../app/utils/strings_manager.dart';
+import '../../../../../../app/utils/values_manager.dart';
 import '../../../domain/entities/product.dart';
+import '../../controller/product_bloc.dart';
 import 'components/add_to_cart_widget.dart';
 import 'components/product_details_body.dart';
 import 'components/product_details_header.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
-  final Product product;
-  const ProductDetailsScreen({Key? key, required this.product})
-      : super(key: key);
+  const ProductDetailsScreen({Key? key}) : super(key: key);
 
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
@@ -43,29 +48,45 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        body: Column(
-          children: [
-            Expanded(
-              child: CustomScrollView(
-                controller: _scrollController,
-                slivers: [
-                  //image ,favourite and share
-                  ProductDetailsHeader(
-                    product: widget.product,
-                    kExpandedHeight: kExpandedHeight,
-                    showTitle: showTitle,
-                  ),
-                  //product detals body
-                  ProductDetailsBody(
-                    showTitle: showTitle,
-                    product: widget.product,
-                  )
-                ],
-              ),
-            ),
-            const AddToCartWidget(),
-          ],
-        ),
+  Widget build(BuildContext context) => BlocBuilder<ProductBloc, ProductState>(
+        builder: (context, state) {
+          Product? product = state.productDetails;
+          return Scaffold(
+            appBar: product == null ? AppBar() : null,
+            body:
+                product == null || state.productDetailsStatus == Status.loading
+                    ? Center(
+                        child: state.productDetailsStatus == Status.loading
+                            ? const CircularProgressIndicator.adaptive()
+                            : CustomText(
+                                data: AppStrings.noDetails.tr(),
+                                fontSize: AppSize.s20.sp,
+                              ),
+                      )
+                    : Column(
+                        children: [
+                          Expanded(
+                            child: CustomScrollView(
+                              controller: _scrollController,
+                              slivers: [
+                                //image ,favourite and share
+                                ProductDetailsHeader(
+                                  product: product,
+                                  kExpandedHeight: kExpandedHeight,
+                                  showTitle: showTitle,
+                                ),
+                                //product detals body
+                                ProductDetailsBody(
+                                  showTitle: showTitle,
+                                  product: product,
+                                )
+                              ],
+                            ),
+                          ),
+                          const AddToCartWidget(),
+                        ],
+                      ),
+          );
+        },
       );
 }

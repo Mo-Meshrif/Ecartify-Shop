@@ -26,6 +26,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       transformer: droppable(),
     );
     on<GetProductDetailsEvent>(_getProductDetails);
+    on<UpdateProductDetailsEvent>(_updateProductDetails);
   }
 
   FutureOr<void> _getCustomProducts(
@@ -80,4 +81,13 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       ),
     );
   }
+
+  FutureOr<void> _updateProductDetails(
+          UpdateProductDetailsEvent event, Emitter<ProductState> emit) async =>
+      emit(
+        state.copyWith(
+          productDetailsStatus: Status.updated,
+          productDetails: event.product,
+        ),
+      );
 }

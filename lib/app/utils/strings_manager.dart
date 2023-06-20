@@ -58,4 +58,5 @@ class AppStrings {
   static const String noRecentSearch = 'There are no recent searches';
   static const String recent = 'Recent';
   static const String clearAll = 'Clear All';
+  static const String noDetails = 'No details !';
 }

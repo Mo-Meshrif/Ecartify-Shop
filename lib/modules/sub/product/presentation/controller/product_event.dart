@@ -18,3 +18,8 @@ class GetProductDetailsEvent extends ProductEvent {
   final ProductDetailsParmeters productDetailsParmeters;
   const GetProductDetailsEvent({required this.productDetailsParmeters});
 }
+
+class UpdateProductDetailsEvent extends ProductEvent {
+  final Product product;
+  const UpdateProductDetailsEvent({required this.product});
+}

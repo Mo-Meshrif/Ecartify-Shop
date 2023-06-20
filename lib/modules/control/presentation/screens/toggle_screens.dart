@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../../app/helper/dynamic_link_helper.dart';
 import '../../../main/cart/presentation/screens/cart_screen.dart';
 import '../../../main/explore/presentation/screens/explore_screen.dart';
 import '../../../main/favourite/presentation/screens/favourite_screen.dart';
@@ -18,14 +19,18 @@ class ToggleScreens extends StatefulWidget {
 class _ToggleScreenState extends State<ToggleScreens> {
   int currentIndex = 0;
   PageController pageController = PageController();
+
   @override
   void initState() {
     SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.manual,
       overlays: SystemUiOverlay.values,
     );
+    DynamicLinkHelper().onBackgroundDynamicLink(context);
+    DynamicLinkHelper().onTerminateDynamicLink(context);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) => AnnotatedRegion<SystemUiOverlayStyle>(
         value: Theme.of(context).appBarTheme.systemOverlayStyle!,
