@@ -8,3 +8,7 @@ abstract class ShopEvent extends Equatable {
 }
 
 class GetBestSellerProductsEvent extends ShopEvent {}
+class UpdateShopProductsEvent extends ShopEvent{
+  final ProductParameters productParameters;
+  const UpdateShopProductsEvent({required this.productParameters});
+}

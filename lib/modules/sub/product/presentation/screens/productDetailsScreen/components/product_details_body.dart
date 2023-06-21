@@ -11,6 +11,7 @@ import '../../../../../../../app/utils/constants_manager.dart';
 import '../../../../../../../app/utils/routes_manager.dart';
 import '../../../../../../../app/utils/strings_manager.dart';
 import '../../../../../../../app/utils/values_manager.dart';
+import '../../../../../../main/auth/domain/entities/user.dart';
 import '../../../../domain/entities/product.dart';
 
 class ProductDetailsBody extends StatefulWidget {
@@ -174,7 +175,15 @@ class _ProductDetailsBodyState extends State<ProductDetailsBody> {
                   ? Padding(
                       padding: EdgeInsets.only(bottom: 20.h),
                       child: CustomElevatedButton(
-                        onPressed: () => HelperFunctions.addReview(context),
+                        onPressed: () {
+                          AuthUser user = HelperFunctions.getSavedUser();
+                          HelperFunctions.addReview(
+                            context,
+                            widget.product,
+                            user,
+                            fromDetails: true,
+                          );
+                        },
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(AppSize.s12.r),
                         ),
@@ -192,29 +201,21 @@ class _ProductDetailsBodyState extends State<ProductDetailsBody> {
                           Expanded(
                             child: CustomText(data: AppStrings.review.tr()),
                           ),
-                          Row(
-                            children: List.generate(
-                              5,
-                              (index) => Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: AppPadding.p5.w,
-                                ),
-                                child: Icon(
-                                  Icons.star,
-                                  color: widget.product.avRateValue >= index + 1
-                                      ? Colors.amber
-                                      : null,
-                                  size: AppSize.s20,
-                                ),
-                              ),
-                            ),
+                          const Icon(
+                            Icons.star_half,
+                            size: AppSize.s20,
                           ),
-                          SizedBox(width: AppSize.s5.w),
+                          SizedBox(width: AppSize.s10.w),
+                          CustomText(
+                            data: widget.product.avRateValue.toStringAsFixed(2),
+                          ),
+                          SizedBox(width: AppSize.s10.w),
                           GestureDetector(
                             behavior: HitTestBehavior.translucent,
                             onTap: () => NavigationHelper.pushNamed(
                               context,
                               Routes.productReviewRoute,
+                              arguments: widget.product,
                             ),
                             child: const Icon(
                               Icons.arrow_forward_ios,

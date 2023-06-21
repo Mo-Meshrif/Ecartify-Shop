@@ -100,7 +100,7 @@ class ProductWidget extends StatelessWidget {
                       ),
                       SizedBox(width: AppSize.s10.w),
                       CustomText(
-                        data: product.avRateValue.toString(),
+                        data: product.avRateValue.toStringAsFixed(2),
                       ),
                       SizedBox(width: AppSize.s5.w),
                       VerticalDivider(

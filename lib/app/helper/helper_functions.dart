@@ -1,18 +1,30 @@
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:dbcrypt/dbcrypt.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../modules/main/auth/domain/entities/user.dart';
+import '../../modules/sub/product/domain/entities/product.dart';
+import '../../modules/sub/product/domain/usecases/update_product_use_case.dart';
+import '../../modules/sub/product/presentation/controller/product_bloc.dart';
+import '../../modules/sub/review/domain/entities/review.dart';
+import '../../modules/sub/review/domain/usecases/add_review_use_case.dart';
+import '../../modules/sub/review/presentation/controller/review_bloc.dart';
 import '../common/models/alert_action_model.dart';
 import '../common/widgets/custom_text.dart';
+import '../services/services_locator.dart';
 import '../utils/constants_manager.dart';
 import '../utils/strings_manager.dart';
 import '../utils/values_manager.dart';
+import 'enums.dart';
 import 'navigation_helper.dart';
+import 'shared_helper.dart';
 
 class HelperFunctions {
   //isEmailValid
@@ -108,98 +120,190 @@ class HelperFunctions {
         ),
       );
 
+  //Rotate value
+  static double rotateVal(BuildContext context, {bool rotate = true}) {
+    if (rotate && context.locale == AppConstants.arabic) {
+      return math.pi;
+    } else {
+      return math.pi * 2;
+    }
+  }
+
+  //getSavedUser
+  static AuthUser getSavedUser() {
+    var savedData = sl<AppShared>().getVal(AppConstants.userKey);
+    return savedData is Map
+        ? AuthUser(
+            id: savedData['id'],
+            name: savedData['name'],
+            email: savedData['email'],
+            password: savedData['password'],
+            pic: savedData['pic'],
+            deviceToken: savedData['deviceToken'],
+          )
+        : savedData;
+  }
+
   //add review sheet
-  static addReview(BuildContext context) => showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(10.r),
-            topRight: Radius.circular(10.r),
-          ),
+  static addReview(BuildContext context, Product product, AuthUser user,
+      {bool fromDetails = false}) {
+    double rateVal = 0.0;
+    String title = '', review = '';
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10.r),
+          topRight: Radius.circular(10.r),
         ),
-        builder: (context) => SizedBox(
-          height: 1.sh * 0.75,
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  TextButton(
-                    onPressed: () => NavigationHelper.pop(context),
-                    child: CustomText(
-                      data: AppStrings.cancel.tr(),
-                      fontSize: 20.sp,
-                    ),
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: CustomText(
-                        data: AppStrings.writeReview.tr(),
-                        fontSize: 25.sp,
+      ),
+      builder: (context) => BlocConsumer<ReviewBloc, ReviewState>(
+        listener: (context, state) {
+          if (state.addreviewStatus == Status.loaded) {
+            NavigationHelper.pop(context);
+            if (fromDetails) {
+              context.read<ProductBloc>().add(
+                    UpdateProductEvent(
+                      productParameters: ProductParameters(
+                        product: product.copyWith(
+                          avRateValue: rateVal,
+                        ),
                       ),
                     ),
+                  );
+            }
+          }
+        },
+        builder: (context, state) => SizedBox(
+          height: 1.sh * 0.75,
+          child: state.addreviewStatus == Status.loading
+              ? const Center(child: CircularProgressIndicator.adaptive())
+              : StatefulBuilder(
+                  builder: (context, setState) => Column(
+                    children: [
+                      Row(
+                        children: [
+                          TextButton(
+                            onPressed: () => NavigationHelper.pop(context),
+                            child: CustomText(
+                              data: AppStrings.cancel.tr(),
+                              fontSize: 20.sp,
+                            ),
+                          ),
+                          Expanded(
+                            child: Center(
+                              child: CustomText(
+                                data: AppStrings.writeReview.tr(),
+                                fontSize: 25.sp,
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () => context.read<ReviewBloc>().add(
+                                  AddReviewEvent(
+                                    addReviewParameters: AddReviewParameters(
+                                      productId: product.id,
+                                      rateVal: rateVal,
+                                      title: title,
+                                      review: review,
+                                      userId: user.id,
+                                      userName: user.name,
+                                    ),
+                                  ),
+                                ),
+                            child: CustomText(
+                              data: AppStrings.send.tr(),
+                              fontSize: 20.sp,
+                            ),
+                          ),
+                        ],
+                      ),
+                      RatingBar.builder(
+                        initialRating: 0,
+                        minRating: 1,
+                        direction: Axis.horizontal,
+                        itemCount: 5,
+                        itemSize: 20,
+                        itemPadding: EdgeInsets.symmetric(horizontal: 8.w),
+                        itemBuilder: (context, _) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        onRatingUpdate: (rating) => setState(
+                          () => rateVal = rating,
+                        ),
+                      ),
+                      SizedBox(height: 5.h),
+                      CustomText(
+                        data: AppStrings.tapStar.tr(),
+                        fontSize: 15.sp,
+                      ),
+                      const Divider(),
+                      TextFormField(
+                        onChanged: (value) => setState(() => title = value),
+                        decoration: InputDecoration(
+                          hintText: AppStrings.title.tr(),
+                          isDense: true,
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 8.w, vertical: 5.h),
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                        ),
+                      ),
+                      const Divider(),
+                      Expanded(
+                        child: TextFormField(
+                          maxLines: null,
+                          expands: true,
+                          keyboardType: TextInputType.multiline,
+                          onChanged: (value) => setState(() => review = value),
+                          decoration: InputDecoration(
+                            hintText: AppStrings.review.tr() +
+                                ' ' +
+                                '(' +
+                                AppStrings.optional.tr() +
+                                ')',
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 8.w, vertical: 5.h),
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  TextButton(
-                    onPressed: () {},
-                    child: CustomText(
-                      data: AppStrings.send.tr(),
-                      fontSize: 20.sp,
-                    ),
-                  ),
-                ],
-              ),
-              RatingBar.builder(
-                initialRating: 0,
-                minRating: 1,
-                direction: Axis.horizontal,
-                itemCount: 5,
-                itemSize: 20,
-                itemPadding: EdgeInsets.symmetric(horizontal: 8.w),
-                itemBuilder: (context, _) => const Icon(
-                  Icons.star,
-                  color: Colors.amber,
                 ),
-                onRatingUpdate: (rating) {
-                  debugPrint(rating.toString());
-                },
-              ),
-              SizedBox(height: 5.h),
-              CustomText(
-                data: AppStrings.tapStar.tr(),
-                fontSize: 15.sp,
-              ),
-              const Divider(),
-              TextFormField(
-                decoration: InputDecoration(
-                  hintText: AppStrings.title.tr(),
-                  isDense: true,
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h),
-                  border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                ),
-              ),
-              const Divider(),
-              Expanded(
-                child: TextFormField(
-                  maxLines: null, // Set this
-                  expands: true, // and this
-                  keyboardType: TextInputType.multiline,
-                  decoration: InputDecoration(
-                    hintText: AppStrings.review.tr() + ' ' + '(' + AppStrings.optional.tr() + ')',
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h),
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                  ),
-                ),
-              ),
-            ],
-          ),
         ),
-      );
+      ),
+    );
+  }
+
+  //Get av rate
+  static String getAvRate(List<Review> reviews) {
+    if (reviews.isEmpty) {
+      return '0.0';
+    } else {
+      double sum = 0.0;
+      for (var i = 0; i < reviews.length; i++) {
+        sum += reviews[i].rateVal;
+      }
+      return (sum / (reviews.length)).toString();
+    }
+  }
+
+  //Get total rate of index
+  static double rateRatioByIndex(List<Review> reviews, int index) {
+    List<Review> tempList =
+        reviews.where((element) => element.rateVal == index).toList();
+    double sum = 0.0;
+    for (var i = 0; i < tempList.length; i++) {
+      sum += tempList[i].rateVal;
+    }
+    return sum == 0.0 ? 0.0 : (sum / (reviews.length * index)) * 100;
+  }
 }

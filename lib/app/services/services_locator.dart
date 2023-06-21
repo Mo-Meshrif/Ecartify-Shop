@@ -24,7 +24,14 @@ import '../../modules/sub/product/data/repositories/product_repository_impl.dart
 import '../../modules/sub/product/domain/repositories/base_product_repository.dart';
 import '../../modules/sub/product/domain/usecases/get_product_details_use_case.dart';
 import '../../modules/sub/product/domain/usecases/get_products_by_parameter_use_case.dart';
+import '../../modules/sub/product/domain/usecases/update_product_use_case.dart';
 import '../../modules/sub/product/presentation/controller/product_bloc.dart';
+import '../../modules/sub/review/data/dataSource/remote_data_source.dart';
+import '../../modules/sub/review/data/repositories/review_repository_impl.dart';
+import '../../modules/sub/review/domain/repositories/base_review_repository.dart';
+import '../../modules/sub/review/domain/usecases/add_review_use_case.dart';
+import '../../modules/sub/review/domain/usecases/get_reviews_use_case.dart';
+import '../../modules/sub/review/presentation/controller/review_bloc.dart';
 import '../helper/shared_helper.dart';
 import '../utils/constants_manager.dart';
 import 'network_services.dart';
@@ -61,11 +68,16 @@ class ServicesLocator {
     sl.registerLazySingleton<BaseProductRemoteDataSource>(
       () => ProductRemoteDataSource(sl()),
     );
+    sl.registerLazySingleton<BaseReviewRemoteDataSource>(
+      () => ReviewRemoteDataSource(sl()),
+    );
     //Repositories
     sl.registerLazySingleton<BaseAuthRepository>(
         () => AuthRepositoryImpl(sl(), sl()));
     sl.registerLazySingleton<BaseProductRepository>(
         () => ProductRepositoryImpl(sl(), sl()));
+    sl.registerLazySingleton<BaseReviewRepository>(
+        () => ReviewRepositoryImpl(sl(), sl()));
     //UseCases
     sl.registerLazySingleton(() => LoginUseCase(sl()));
     sl.registerLazySingleton(() => SignUpUseCase(sl()));
@@ -77,6 +89,9 @@ class ServicesLocator {
     sl.registerLazySingleton(() => DeleteUseCase(sl()));
     sl.registerLazySingleton(() => GetCustomProductsUseCase(sl()));
     sl.registerLazySingleton(() => GetProductDetailsUseCase(sl()));
+    sl.registerLazySingleton(() => UpdateProductUseCase(sl()));
+    sl.registerLazySingleton(() => GetReviewsUseCase(sl()));
+    sl.registerLazySingleton(() => AddReviewUseCase(sl()));
     //blocs
     sl.registerLazySingleton(
       () => AuthBloc(
@@ -99,6 +114,13 @@ class ServicesLocator {
       () => ProductBloc(
         getCustomProductsUseCase: sl(),
         getProductDetailsUseCase: sl(),
+        updateProductUseCase:sl(),
+      ),
+    );
+    sl.registerLazySingleton(
+      () => ReviewBloc(
+        getReviewsUseCase: sl(),
+        addReviewUseCase: sl(),
       ),
     );
   }

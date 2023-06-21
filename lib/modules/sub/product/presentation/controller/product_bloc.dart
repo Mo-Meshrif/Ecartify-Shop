@@ -10,6 +10,7 @@ import '../../../../../app/helper/enums.dart';
 import '../../domain/entities/product.dart';
 import '../../domain/usecases/get_product_details_use_case.dart';
 import '../../domain/usecases/get_products_by_parameter_use_case.dart';
+import '../../domain/usecases/update_product_use_case.dart';
 
 part 'product_event.dart';
 part 'product_state.dart';
@@ -17,9 +18,11 @@ part 'product_state.dart';
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final GetCustomProductsUseCase getCustomProductsUseCase;
   final GetProductDetailsUseCase getProductDetailsUseCase;
+  final UpdateProductUseCase updateProductUseCase;
   ProductBloc({
     required this.getCustomProductsUseCase,
     required this.getProductDetailsUseCase,
+    required this.updateProductUseCase,
   }) : super(const ProductState()) {
     on<GetCustomProductsEvent>(
       _getCustomProducts,
@@ -27,6 +30,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     );
     on<GetProductDetailsEvent>(_getProductDetails);
     on<UpdateProductDetailsEvent>(_updateProductDetails);
+    on<UpdateProductEvent>(_updateProduct);
   }
 
   FutureOr<void> _getCustomProducts(
@@ -90,4 +94,31 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
           productDetails: event.product,
         ),
       );
+
+  FutureOr<void> _updateProduct(
+      UpdateProductEvent event, Emitter<ProductState> emit) async {
+    emit(state.copyWith(
+      updateProductStatus: Status.loading,
+    ));
+    Either<Failure, bool> result =
+        await updateProductUseCase(event.productParameters);
+    result.fold(
+      (failure) => emit(state.copyWith(
+        updateProductStatus: Status.error,
+      )),
+      (_) => emit(
+        state.copyWith(
+          updateProductStatus: Status.loaded,
+          productDetails: state.productDetails == null
+              ? null
+              : event.productParameters.product,
+          customProds: state.customProds
+              .map((e) => e.id == event.productParameters.product.id
+                  ? event.productParameters.product
+                  : e)
+              .toList(),
+        ),
+      ),
+    );
+  }
 }

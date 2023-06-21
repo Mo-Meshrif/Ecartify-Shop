@@ -5,10 +5,11 @@ import '../../modules/control/presentation/screens/toggle_screens.dart';
 import '../../modules/main/auth/presentation/screens/sub/forget_password_screen.dart';
 import '../../modules/main/auth/presentation/screens/sub/sign_in_screen.dart';
 import '../../modules/main/auth/presentation/screens/sub/sign_up_screen.dart';
+import '../../modules/sub/product/domain/entities/product.dart';
 import '../../modules/sub/product/domain/usecases/get_products_by_parameter_use_case.dart';
 import '../../modules/sub/product/presentation/screens/productDetailsScreen/product_details_screen.dart';
-import '../../modules/sub/review/presentation/screens/product_review_screen.dart';
 import '../../modules/sub/product/presentation/screens/tempProductListSceen/temp_product_list_screen.dart';
+import '../../modules/sub/review/presentation/screens/product_review_screen.dart';
 
 class Routes {
   static const String signInRoute = "/signIn";
@@ -36,7 +37,11 @@ class RouteGenerator {
           builder: (_) => const ProductDetailsScreen(),
         );
       case Routes.productReviewRoute:
-        return MaterialPageRoute(builder: (_) => const ProductReviewScreen());
+        return MaterialPageRoute(
+          builder: (_) => ProductReviewScreen(
+            product: settings.arguments as Product,
+          ),
+        );
       case Routes.tempProductListRoute:
         return MaterialPageRoute(
           builder: (_) => TempProductListScreen(

@@ -57,5 +57,6 @@
     "There are no recent searches": "لا توجد عمليات بحث حديثة",
     "Recent": "حديثا",
     "Clear All": "حذف الكل",
-    "No details !": "لا يوجد تفاصيل"
+    "No details !": "لا يوجد تفاصيل",
+    "You have exceeded the allowed limit": "لقد تخطيت الحد المسموح به"
 }

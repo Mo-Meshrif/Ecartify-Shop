@@ -4,6 +4,7 @@ import '../../../../../app/errors/exception.dart';
 import '../../../../../app/helper/enums.dart';
 import '../../domain/usecases/get_product_details_use_case.dart';
 import '../../domain/usecases/get_products_by_parameter_use_case.dart';
+import '../../domain/usecases/update_product_use_case.dart';
 import '../models/product_model.dart';
 
 abstract class BaseProductRemoteDataSource {
@@ -11,6 +12,7 @@ abstract class BaseProductRemoteDataSource {
       ProductsParmeters productsParmeters);
   Future<ProductModel> getProductDetails(
       ProductDetailsParmeters productDetailsParmeters);
+  Future<void> updateProduct(ProductParameters updateProductParameters);
 }
 
 class ProductRemoteDataSource implements BaseProductRemoteDataSource {
@@ -66,6 +68,19 @@ class ProductRemoteDataSource implements BaseProductRemoteDataSource {
             .get();
         return ProductModel.fromSnapshot(querySnapshot.docs.first);
       }
+    } catch (e) {
+      throw ServerExecption(e.toString());
+    }
+  }
+
+  @override
+  Future<void> updateProduct(ProductParameters updateProductParameters) async {
+    try {
+      CollectionReference<Map<String, dynamic>> collection =
+          firebaseFirestore.collection('Products');
+      collection
+          .doc(updateProductParameters.product.id)
+          .update(updateProductParameters.toJson());
     } catch (e) {
       throw ServerExecption(e.toString());
     }

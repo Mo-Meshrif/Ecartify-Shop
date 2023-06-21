@@ -7,7 +7,9 @@ import '../../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../../app/helper/enums.dart';
 import '../../../../../../app/utils/strings_manager.dart';
 import '../../../../../../app/utils/values_manager.dart';
+import '../../../../../main/shop/presentation/controller/shop_bloc.dart';
 import '../../../domain/entities/product.dart';
+import '../../../domain/usecases/update_product_use_case.dart';
 import '../../controller/product_bloc.dart';
 import 'components/add_to_cart_widget.dart';
 import 'components/product_details_body.dart';
@@ -48,7 +50,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<ProductBloc, ProductState>(
+  Widget build(BuildContext context) => BlocConsumer<ProductBloc, ProductState>(
+        listener: (context, state) {
+          if (state.updateProductStatus == Status.loaded) {
+            context.read<ShopBloc>().add(
+                  UpdateShopProductsEvent(
+                    productParameters: ProductParameters(
+                      product: state.productDetails!,
+                    ),
+                  ),
+                );
+          }
+        },
         builder: (context, state) {
           Product? product = state.productDetails;
           return Scaffold(

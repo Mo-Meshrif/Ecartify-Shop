@@ -23,3 +23,8 @@ class UpdateProductDetailsEvent extends ProductEvent {
   final Product product;
   const UpdateProductDetailsEvent({required this.product});
 }
+
+class UpdateProductEvent extends ProductEvent{
+  final ProductParameters productParameters;
+  const UpdateProductEvent({required this.productParameters});
+}

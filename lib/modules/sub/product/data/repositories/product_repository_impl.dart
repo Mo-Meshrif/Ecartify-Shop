@@ -9,6 +9,7 @@ import '../../domain/entities/product.dart';
 import '../../domain/repositories/base_product_repository.dart';
 import '../../domain/usecases/get_product_details_use_case.dart';
 import '../../domain/usecases/get_products_by_parameter_use_case.dart';
+import '../../domain/usecases/update_product_use_case.dart';
 import '../datasources/remote_data_source.dart';
 
 class ProductRepositoryImpl implements BaseProductRepository {
@@ -41,6 +42,22 @@ class ProductRepositoryImpl implements BaseProductRepository {
         final product =
             await baseProductRemoteDataSource.getProductDetails(parmeters);
         return Right(product);
+      } on ServerExecption catch (_) {
+        return Left(ServerFailure(msg: AppStrings.operationFailed.tr()));
+      }
+    } else {
+      return Left(ServerFailure(msg: AppStrings.noConnection.tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateProduct(
+      ProductParameters updateProductParameters) async {
+    if (await networkServices.isConnected()) {
+      try {
+        await baseProductRemoteDataSource
+            .updateProduct(updateProductParameters);
+        return const Right(true);
       } on ServerExecption catch (_) {
         return Left(ServerFailure(msg: AppStrings.operationFailed.tr()));
       }

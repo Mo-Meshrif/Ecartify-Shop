@@ -59,4 +59,5 @@ class AppStrings {
   static const String recent = 'Recent';
   static const String clearAll = 'Clear All';
   static const String noDetails = 'No details !';
+  static const String exceededLimit = 'You have exceeded the allowed limit';
 }

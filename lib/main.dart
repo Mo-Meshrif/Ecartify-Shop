@@ -13,6 +13,7 @@ import 'app/utils/constants_manager.dart';
 import 'modules/main/auth/presentation/controller/auth_bloc.dart';
 import 'modules/main/shop/presentation/controller/shop_bloc.dart';
 import 'modules/sub/product/presentation/controller/product_bloc.dart';
+import 'modules/sub/review/presentation/controller/review_bloc.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -41,6 +42,9 @@ void main() async {
             create: (context) => sl(),
           ),
           BlocProvider<ProductBloc>(
+            create: (context) => sl(),
+          ),
+          BlocProvider<ReviewBloc>(
             create: (context) => sl(),
           ),
         ],

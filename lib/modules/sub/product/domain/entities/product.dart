@@ -23,6 +23,22 @@ class Product extends Equatable {
     required this.dateAdded,
   });
 
+  Product copyWith({double? avRateValue}) => Product(
+        id: id,
+        name: name,
+        image: image,
+        description: description,
+        price: price,
+        lastPrice: lastPrice,
+        barcode: barcode,
+        color: color,
+        size: size,
+        avRateValue: avRateValue ?? this.avRateValue,
+        storeAmount: storeAmount,
+        soldNum: soldNum,
+        dateAdded: dateAdded,
+      );
+
   @override
   List<Object?> get props => [
         id,
