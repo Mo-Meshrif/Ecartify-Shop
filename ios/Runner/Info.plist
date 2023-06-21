@@ -47,6 +47,16 @@
 		<string>Ecartify</string>
 		<key>LSRequiresIPhoneOS</key>
 		<true/>
+		<key>NSCameraUsageDescription</key>
+		<string>App needs to access Camera while scan qr code for product search.</string>
+		<key>NSLocationAlwaysUsageDescription</key>
+		<string>This app needs access your location to locate the receipt and deliver the requests when in the background.</string>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>This app needs access your location to locate the receipt and deliver the requests when open.</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>Allow the app to record using your phone's microphone.</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>Allow access your photo library.</string>
 		<key>UIBackgroundModes</key>
 		<array/>
 		<key>UILaunchStoryboardName</key>

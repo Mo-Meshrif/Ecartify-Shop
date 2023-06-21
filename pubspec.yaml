@@ -37,6 +37,7 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   lottie: ^2.3.1
   share_plus: ^7.0.2
+  mobile_scanner: ^3.2.0
 
 dev_dependencies:
   flutter_native_splash: ^2.1.6

@@ -5,6 +5,7 @@ const String jsonPath = "assets/json";
 class ImageAssets {
   static const String generalWel = "$imagePath/generalWel.png";
   static const String google = "$imagePath/google.png";
+  static const String barcode = "$imagePath/barcode.png";
 }
 
 class IconAssets {
@@ -19,6 +20,7 @@ class IconAssets {
   static const String subtrack = "$iconPath/subtrack.svg";
   static const String scan = "$iconPath/scan.svg";
   static const String filter = "$iconPath/filter.svg";
+  static const String flash = "$iconPath/flash.svg";
 }
 
 class JsonAssets {

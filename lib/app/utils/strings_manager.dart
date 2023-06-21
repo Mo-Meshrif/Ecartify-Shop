@@ -60,4 +60,10 @@ class AppStrings {
   static const String clearAll = 'Clear All';
   static const String noDetails = 'No details !';
   static const String exceededLimit = 'You have exceeded the allowed limit';
+  static const String barcodeTitle = 'Scan product';
+  static const String scan = 'Scan';
+  static const String enterManually = 'Enter manually';
+  static const String barcodeDesc = 'barcodeDesc';
+  static const String typeBarcode = 'type barcode';
+  static const String submit = 'Submit-barcode';
 }

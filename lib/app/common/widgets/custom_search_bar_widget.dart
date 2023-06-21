@@ -78,7 +78,10 @@ class CustomSearchBarWidget extends StatelessWidget {
             ),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () => NavigationHelper.pushNamed(
+              context,
+              Routes.productScannerRoute,
+            ),
             child: SvgPicture.asset(
               IconAssets.scan,
               color: primaryColor,

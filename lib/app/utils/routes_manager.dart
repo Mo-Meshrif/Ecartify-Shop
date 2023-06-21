@@ -8,6 +8,7 @@ import '../../modules/main/auth/presentation/screens/sub/sign_up_screen.dart';
 import '../../modules/sub/product/domain/entities/product.dart';
 import '../../modules/sub/product/domain/usecases/get_products_by_parameter_use_case.dart';
 import '../../modules/sub/product/presentation/screens/productDetailsScreen/product_details_screen.dart';
+import '../../modules/sub/product/presentation/screens/productScannerScreen/product_scanner_screen.dart';
 import '../../modules/sub/product/presentation/screens/tempProductListSceen/temp_product_list_screen.dart';
 import '../../modules/sub/review/presentation/screens/product_review_screen.dart';
 
@@ -19,6 +20,7 @@ class Routes {
   static const String productDetailsRoute = "/productDetails";
   static const String productReviewRoute = "/productReview";
   static const String tempProductListRoute = "/tempProductList";
+  static const String productScannerRoute = "/productScanner";
 }
 
 class RouteGenerator {
@@ -47,6 +49,10 @@ class RouteGenerator {
           builder: (_) => TempProductListScreen(
             productsParmeters: settings.arguments as ProductsParmeters,
           ),
+        );
+      case Routes.productScannerRoute:
+        return MaterialPageRoute(
+          builder: (_) => const ProductScannerScreen(),
         );
       default:
         return MaterialPageRoute(builder: (_) => const ControlScreen());
