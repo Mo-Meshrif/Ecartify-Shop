@@ -1,5 +1,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ecartify.store">
+    <queries>
+      <package android:name="com.google.android.apps.maps" />
+      <!-- If your app checks for SMS support -->
+      <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <data android:scheme="sms" />
+      </intent>
+       <!-- The "https" scheme is only required for integration tests of this package.
+            It shouldn't be needed in most actual apps, or show up in the README! -->
+      <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <data android:scheme="https" />
+      </intent>
+    <!--#docregion android-queries-->
+    </queries>
    <application
         android:label="Ecartify"
         android:name="${applicationName}"

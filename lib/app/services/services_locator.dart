@@ -18,6 +18,10 @@ import '../../modules/main/auth/domain/usecases/login_use_case.dart';
 import '../../modules/main/auth/domain/usecases/logout_use_case.dart';
 import '../../modules/main/auth/domain/usecases/signup_use_case.dart';
 import '../../modules/main/auth/presentation/controller/auth_bloc.dart';
+import '../../modules/main/shop/data/datasources/remote_data_source.dart';
+import '../../modules/main/shop/data/repositories/product_repository_impl.dart';
+import '../../modules/main/shop/domain/repositories/base_shop_repository.dart';
+import '../../modules/main/shop/domain/usecases/get_sliders_banners_use_case.dart';
 import '../../modules/main/shop/presentation/controller/shop_bloc.dart';
 import '../../modules/sub/product/data/datasources/remote_data_source.dart';
 import '../../modules/sub/product/data/repositories/product_repository_impl.dart';
@@ -65,6 +69,9 @@ class ServicesLocator {
     sl.registerLazySingleton<BaseAuthRemoteDataSource>(
       () => AuthRemoteDataSource(sl(), sl(), sl(), sl(), sl()),
     );
+    sl.registerLazySingleton<BaseShopRemoteDataSource>(
+      () => ShopRemoteDataSource(sl()),
+    );
     sl.registerLazySingleton<BaseProductRemoteDataSource>(
       () => ProductRemoteDataSource(sl()),
     );
@@ -74,6 +81,8 @@ class ServicesLocator {
     //Repositories
     sl.registerLazySingleton<BaseAuthRepository>(
         () => AuthRepositoryImpl(sl(), sl()));
+    sl.registerLazySingleton<BaseShopRepository>(
+        () => ShopRepositoryImpl(sl(), sl()));
     sl.registerLazySingleton<BaseProductRepository>(
         () => ProductRepositoryImpl(sl(), sl()));
     sl.registerLazySingleton<BaseReviewRepository>(
@@ -87,6 +96,7 @@ class ServicesLocator {
     sl.registerLazySingleton(() => AppleUseCase(sl()));
     sl.registerLazySingleton(() => LogoutUseCase(sl()));
     sl.registerLazySingleton(() => DeleteUseCase(sl()));
+    sl.registerLazySingleton(() => GetSliderBannersUseCase(sl()));
     sl.registerLazySingleton(() => GetCustomProductsUseCase(sl()));
     sl.registerLazySingleton(() => GetProductDetailsUseCase(sl()));
     sl.registerLazySingleton(() => UpdateProductUseCase(sl()));
@@ -107,6 +117,7 @@ class ServicesLocator {
     );
     sl.registerLazySingleton(
       () => ShopBloc(
+        getSliderBannersUseCase: sl(),
         getCustomProductsUseCase: sl(),
       ),
     );
@@ -114,7 +125,7 @@ class ServicesLocator {
       () => ProductBloc(
         getCustomProductsUseCase: sl(),
         getProductDetailsUseCase: sl(),
-        updateProductUseCase:sl(),
+        updateProductUseCase: sl(),
       ),
     );
     sl.registerLazySingleton(

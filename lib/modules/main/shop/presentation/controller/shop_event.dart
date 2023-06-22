@@ -7,8 +7,11 @@ abstract class ShopEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class GetSliderBannersEvent extends ShopEvent {}
+
 class GetBestSellerProductsEvent extends ShopEvent {}
-class UpdateShopProductsEvent extends ShopEvent{
+
+class UpdateShopProductsEvent extends ShopEvent {
   final ProductParameters productParameters;
   const UpdateShopProductsEvent({required this.productParameters});
 }

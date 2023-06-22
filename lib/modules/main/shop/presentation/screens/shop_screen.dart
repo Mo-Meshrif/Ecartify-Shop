@@ -18,9 +18,11 @@ class ShopScreen extends StatefulWidget {
 }
 
 class _ShopScreenState extends State<ShopScreen> {
+  late ShopBloc shopBloc = context.read<ShopBloc>();
   @override
   void initState() {
-    context.read<ShopBloc>().add(GetBestSellerProductsEvent());
+    shopBloc.add(GetSliderBannersEvent());
+    shopBloc.add(GetBestSellerProductsEvent());
     super.initState();
   }
 
@@ -37,9 +39,8 @@ class _ShopScreenState extends State<ShopScreen> {
                 const HeaderWidget(),
                 SizedBox(height: AppSize.s5.h),
                 const CustomSearchBarWidget(),
-                SizedBox(height: AppSize.s15.h),
                 const SliderWidget(),
-                SizedBox(height: AppSize.s20.h),
+                SizedBox(height: AppSize.s10.h),
                 const OfferProductWidget(),
                 SizedBox(height: AppSize.s10.h),
                 const BestSellerProductWidget()

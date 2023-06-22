@@ -38,6 +38,7 @@ dependencies:
   lottie: ^2.3.1
   share_plus: ^7.0.2
   mobile_scanner: ^3.2.0
+  url_launcher: ^6.1.11
 
 dev_dependencies:
   flutter_native_splash: ^2.1.6
