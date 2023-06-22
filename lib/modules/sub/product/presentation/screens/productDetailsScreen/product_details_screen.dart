@@ -76,28 +76,30 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 fontSize: AppSize.s20.sp,
                               ),
                       )
-                    : Column(
-                        children: [
-                          Expanded(
-                            child: CustomScrollView(
-                              controller: _scrollController,
-                              slivers: [
-                                //image ,favourite and share
-                                ProductDetailsHeader(
-                                  product: product,
-                                  kExpandedHeight: kExpandedHeight,
-                                  showTitle: showTitle,
-                                ),
-                                //product detals body
-                                ProductDetailsBody(
-                                  showTitle: showTitle,
-                                  product: product,
-                                )
-                              ],
-                            ),
+                    : NestedScrollView(
+                        controller: _scrollController,
+                        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                          //image ,favourite and share
+                          ProductDetailsHeader(
+                            product: product,
+                            kExpandedHeight: kExpandedHeight,
+                            showTitle: showTitle,
                           ),
-                          const AddToCartWidget(),
                         ],
+                        body: Column(
+                          children: [
+                            Expanded(
+                              child: SingleChildScrollView(
+                                physics: const NeverScrollableScrollPhysics(),
+                                child: ProductDetailsBody(
+                                  showTitle: showTitle,
+                                  product: product,
+                                ),
+                              ),
+                            ),
+                            const AddToCartWidget(),
+                          ],
+                        ),
                       ),
           );
         },
