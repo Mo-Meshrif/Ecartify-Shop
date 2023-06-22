@@ -23,6 +23,7 @@ import '../utils/constants_manager.dart';
 import '../utils/strings_manager.dart';
 import '../utils/values_manager.dart';
 import 'enums.dart';
+import 'extensions.dart';
 import 'navigation_helper.dart';
 import 'shared_helper.dart';
 
@@ -142,6 +143,18 @@ class HelperFunctions {
             deviceToken: savedData['deviceToken'],
           )
         : savedData;
+  }
+
+  //getLastUserName
+  static String lastUserName() {
+    AuthUser user = getSavedUser();
+    return user.name.split(' ').last;
+  }
+
+  //get welcome string
+  static String welcome() {
+    String mark = DateTime.now().toHourMark();
+    return mark;
   }
 
   //add review sheet
