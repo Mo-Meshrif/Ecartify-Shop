@@ -22,50 +22,53 @@ class OfferProductWidget extends StatelessWidget {
     List<Product> products = [];
     return Visibility(
       visible: products.isNotEmpty,
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: CustomText(
-                  data: AppStrings.exclusiveOffer.tr(),
-                  fontSize: AppSize.s22.sp,
-                ),
-              ),
-              GestureDetector(
-                onTap: () => NavigationHelper.pushNamed(
-                  context,
-                  Routes.tempProductListRoute,
-                  arguments: ProductsParmeters(
-                    productMode: ProductMode.offerProds,
-                    title: AppStrings.exclusiveOffer.tr(),
+      child: Padding(
+        padding: EdgeInsets.only(top: AppPadding.p10.h),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: CustomText(
+                    data: AppStrings.exclusiveOffer.tr(),
+                    fontSize: AppSize.s22.sp,
                   ),
                 ),
-                child: CustomText(
-                  data: AppStrings.seeAll.tr(),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: AppSize.s10.h),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: IntrinsicHeight(
-              child: Row(
-                children: List.generate(
-                  products.length,
-                  (index) => Container(
-                    width: 1.sw / 2.2,
-                    margin: arabic
-                        ? EdgeInsets.only(left: AppPadding.p10.w)
-                        : EdgeInsets.only(right: AppPadding.p10.w),
-                    child: ProductWidget(product: products[index]),
+                GestureDetector(
+                  onTap: () => NavigationHelper.pushNamed(
+                    context,
+                    Routes.tempProductListRoute,
+                    arguments: ProductsParmeters(
+                      productMode: ProductMode.offerProds,
+                      title: AppStrings.exclusiveOffer.tr(),
+                    ),
+                  ),
+                  child: CustomText(
+                    data: AppStrings.seeAll.tr(),
                   ),
                 ),
-              ),
+              ],
             ),
-          )
-        ],
+            SizedBox(height: AppSize.s10.h),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: IntrinsicHeight(
+                child: Row(
+                  children: List.generate(
+                    products.length,
+                    (index) => Container(
+                      width: 1.sw / 2.2,
+                      margin: arabic
+                          ? EdgeInsets.only(left: AppPadding.p10.w)
+                          : EdgeInsets.only(right: AppPadding.p10.w),
+                      child: ProductWidget(product: products[index]),
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

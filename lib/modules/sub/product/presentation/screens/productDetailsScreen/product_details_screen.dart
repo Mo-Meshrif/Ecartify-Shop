@@ -32,8 +32,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     super.initState();
     _scrollController = ScrollController()
       ..addListener(() {
-        setState(() {
-          showTitle = _isSliverAppBarExpanded;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          // executes after build
+          setState(() {
+            showTitle = _isSliverAppBarExpanded;
+          });
         });
       });
   }

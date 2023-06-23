@@ -21,48 +21,51 @@ class BestSellerProductWidget extends StatelessWidget {
   Widget build(BuildContext context) => BlocBuilder<ShopBloc, ShopState>(
         builder: (context, state) => Visibility(
           visible: state.bestSellerProds.isNotEmpty,
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: CustomText(
-                      data: AppStrings.bestSelling.tr(),
-                      fontSize: AppSize.s22.sp,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => NavigationHelper.pushNamed(
-                      context,
-                      Routes.tempProductListRoute,
-                      arguments: ProductsParmeters(
-                        productMode: ProductMode.bestSellerProds,
-                        title: AppStrings.bestSelling.tr(),
+          child: Padding(
+            padding: EdgeInsets.only(top: AppPadding.p10.h),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomText(
+                        data: AppStrings.bestSelling.tr(),
+                        fontSize: AppSize.s22.sp,
                       ),
                     ),
-                    child: CustomText(
-                      data: AppStrings.seeAll.tr(),
+                    GestureDetector(
+                      onTap: () => NavigationHelper.pushNamed(
+                        context,
+                        Routes.tempProductListRoute,
+                        arguments: ProductsParmeters(
+                          productMode: ProductMode.bestSellerProds,
+                          title: AppStrings.bestSelling.tr(),
+                        ),
+                      ),
+                      child: CustomText(
+                        data: AppStrings.seeAll.tr(),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: AppSize.s10.h),
-              CustomIntrinsicGridView(
-                physics: const NeverScrollableScrollPhysics(),
-                direction: Axis.vertical,
-                horizontalSpace: AppSize.s10.w,
-                verticalSpace: AppSize.s10.h,
-                children: List.generate(
-                  state.bestSellerProds.length,
-                  (index) => SizedBox(
-                    width: 1.sw / 2,
-                    child: ProductWidget(
-                      product: state.bestSellerProds[index],
+                  ],
+                ),
+                SizedBox(height: AppSize.s10.h),
+                CustomIntrinsicGridView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  direction: Axis.vertical,
+                  horizontalSpace: AppSize.s10.w,
+                  verticalSpace: AppSize.s10.h,
+                  children: List.generate(
+                    state.bestSellerProds.length,
+                    (index) => SizedBox(
+                      width: 1.sw / 2,
+                      child: ProductWidget(
+                        product: state.bestSellerProds[index],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       );

@@ -16,47 +16,50 @@ class HeaderWidget extends StatelessWidget {
     Color primaryColor = Theme.of(context).primaryColor;
     String name = HelperFunctions.lastUserName();
     String welcome = HelperFunctions.welcome();
-    return Row(
-      children: [
-        Expanded(
-          child: name.isEmpty
-              ? CustomText(
-                  data: welcome.tr(),
-                  fontSize: AppSize.s25.sp,
-                )
-              : ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  leading: CircleAvatar(
-                    radius: AppSize.s30.r,
-                    backgroundColor: primaryColor,
-                    child: CustomText(
-                      data: name[0].toUpperCase(),
-                      color: Theme.of(context).canvasColor,
+    return Padding(
+      padding: EdgeInsets.only(bottom: AppPadding.p5.h),
+      child: Row(
+        children: [
+          Expanded(
+            child: name.isEmpty
+                ? CustomText(
+                    data: welcome.tr(),
+                    fontSize: AppSize.s25.sp,
+                  )
+                : ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: CircleAvatar(
+                      radius: AppSize.s30.r,
+                      backgroundColor: primaryColor,
+                      child: CustomText(
+                        data: name[0].toUpperCase(),
+                        color: Theme.of(context).canvasColor,
+                        fontSize: AppSize.s25.sp,
+                      ),
+                    ),
+                    title: CustomText(
+                      data: welcome.tr(),
+                      fontSize: AppSize.s20.sp,
+                    ),
+                    subtitle: CustomText(
+                      data: name,
                       fontSize: AppSize.s25.sp,
                     ),
                   ),
-                  title: CustomText(
-                    data: welcome.tr(),
-                    fontSize: AppSize.s20.sp,
-                  ),
-                  subtitle: CustomText(
-                    data: name,
-                    fontSize: AppSize.s25.sp,
-                  ),
-                ),
-        ),
-        InkWell(
-          onTap: () {},
-          borderRadius: BorderRadius.circular(AppSize.s10.r),
-          child: CircleAvatar(
-            backgroundColor: Colors.transparent,
-            child: SvgPicture.asset(
-              IconAssets.bell,
-              color: primaryColor,
+          ),
+          InkWell(
+            onTap: () {},
+            borderRadius: BorderRadius.circular(AppSize.s10.r),
+            child: CircleAvatar(
+              backgroundColor: Colors.transparent,
+              child: SvgPicture.asset(
+                IconAssets.bell,
+                color: primaryColor,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

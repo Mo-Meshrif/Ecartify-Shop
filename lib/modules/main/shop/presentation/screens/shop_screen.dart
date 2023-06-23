@@ -35,15 +35,12 @@ class _ShopScreenState extends State<ShopScreen> {
               vertical: AppPadding.p10.h,
             ),
             child: Column(
-              children: [
-                const HeaderWidget(),
-                SizedBox(height: AppSize.s5.h),
-                const CustomSearchBarWidget(),
-                const SliderWidget(),
-                SizedBox(height: AppSize.s10.h),
-                const OfferProductWidget(),
-                SizedBox(height: AppSize.s10.h),
-                const BestSellerProductWidget()
+              children: const [
+                HeaderWidget(),
+                CustomSearchBarWidget(),
+                SliderWidget(),
+                OfferProductWidget(),
+                BestSellerProductWidget()
               ],
             ),
           ),
