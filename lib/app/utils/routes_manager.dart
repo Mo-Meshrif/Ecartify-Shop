@@ -5,6 +5,7 @@ import '../../modules/control/presentation/screens/toggle_screens.dart';
 import '../../modules/main/auth/presentation/screens/sub/forget_password_screen.dart';
 import '../../modules/main/auth/presentation/screens/sub/sign_in_screen.dart';
 import '../../modules/main/auth/presentation/screens/sub/sign_up_screen.dart';
+import '../../modules/sub/notification/presentation/screens/notification_screen.dart';
 import '../../modules/sub/product/domain/entities/product.dart';
 import '../../modules/sub/product/domain/usecases/get_products_by_parameter_use_case.dart';
 import '../../modules/sub/product/presentation/screens/productDetailsScreen/product_details_screen.dart';
@@ -21,6 +22,7 @@ class Routes {
   static const String productReviewRoute = "/productReview";
   static const String tempProductListRoute = "/tempProductList";
   static const String productScannerRoute = "/productScanner";
+  static const String notificationRoute = "/notification";
 }
 
 class RouteGenerator {
@@ -53,6 +55,10 @@ class RouteGenerator {
       case Routes.productScannerRoute:
         return MaterialPageRoute(
           builder: (_) => const ProductScannerScreen(),
+        );
+      case Routes.notificationRoute:
+        return MaterialPageRoute(
+          builder: (_) => const NotificationScreen(),
         );
       default:
         return MaterialPageRoute(builder: (_) => const ControlScreen());

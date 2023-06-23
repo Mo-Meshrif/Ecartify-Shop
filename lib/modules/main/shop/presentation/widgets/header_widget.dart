@@ -5,7 +5,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../app/helper/helper_functions.dart';
+import '../../../../../app/helper/navigation_helper.dart';
 import '../../../../../app/utils/assets_manager.dart';
+import '../../../../../app/utils/routes_manager.dart';
 import '../../../../../app/utils/values_manager.dart';
 
 class HeaderWidget extends StatelessWidget {
@@ -48,7 +50,10 @@ class HeaderWidget extends StatelessWidget {
                   ),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () => NavigationHelper.pushNamed(
+              context,
+              Routes.notificationRoute,
+            ),
             borderRadius: BorderRadius.circular(AppSize.s10.r),
             child: CircleAvatar(
               backgroundColor: Colors.transparent,
