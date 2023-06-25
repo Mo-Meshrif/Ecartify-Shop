@@ -23,6 +23,15 @@ import '../../modules/main/shop/data/repositories/product_repository_impl.dart';
 import '../../modules/main/shop/domain/repositories/base_shop_repository.dart';
 import '../../modules/main/shop/domain/usecases/get_sliders_banners_use_case.dart';
 import '../../modules/main/shop/presentation/controller/shop_bloc.dart';
+import '../../modules/sub/notification/data/datasources/remote_data_source.dart';
+import '../../modules/sub/notification/data/repositories/notification_repository_impl.dart';
+import '../../modules/sub/notification/domain/repositories/base_notification_repository.dart';
+import '../../modules/sub/notification/domain/usecases/delete_notification_use_case.dart';
+import '../../modules/sub/notification/domain/usecases/get_notification_details_use_case.dart';
+import '../../modules/sub/notification/domain/usecases/get_notifications_use_case.dart';
+import '../../modules/sub/notification/domain/usecases/get_un_read_notification_num_use_case.dart';
+import '../../modules/sub/notification/domain/usecases/read_notification_use_case.dart';
+import '../../modules/sub/notification/presentation/controller/notification_bloc.dart';
 import '../../modules/sub/product/data/datasources/remote_data_source.dart';
 import '../../modules/sub/product/data/repositories/product_repository_impl.dart';
 import '../../modules/sub/product/domain/repositories/base_product_repository.dart';
@@ -78,6 +87,9 @@ class ServicesLocator {
     sl.registerLazySingleton<BaseReviewRemoteDataSource>(
       () => ReviewRemoteDataSource(sl()),
     );
+    sl.registerLazySingleton<BaseNotificationRemoteDataSource>(
+      () => NotificationRemoteDataSource(sl()),
+    );
     //Repositories
     sl.registerLazySingleton<BaseAuthRepository>(
         () => AuthRepositoryImpl(sl(), sl()));
@@ -87,6 +99,8 @@ class ServicesLocator {
         () => ProductRepositoryImpl(sl(), sl()));
     sl.registerLazySingleton<BaseReviewRepository>(
         () => ReviewRepositoryImpl(sl(), sl()));
+    sl.registerLazySingleton<BaseNotificationRepository>(
+        () => NotificationRepositoryImpl(sl(), sl()));
     //UseCases
     sl.registerLazySingleton(() => LoginUseCase(sl()));
     sl.registerLazySingleton(() => SignUpUseCase(sl()));
@@ -102,6 +116,11 @@ class ServicesLocator {
     sl.registerLazySingleton(() => UpdateProductUseCase(sl()));
     sl.registerLazySingleton(() => GetReviewsUseCase(sl()));
     sl.registerLazySingleton(() => AddReviewUseCase(sl()));
+    sl.registerLazySingleton(() => GetNotificationsUseCase(sl()));
+    sl.registerLazySingleton(() => GetUnReadNotificationUseCase(sl()));
+    sl.registerLazySingleton(() => DeleteNotificationUseCase(sl()));
+    sl.registerLazySingleton(() => ReadNotificationUseCase(sl()));
+    sl.registerLazySingleton(() => GetNotificationDetailsUseCase(sl()));
     //blocs
     sl.registerLazySingleton(
       () => AuthBloc(
@@ -132,6 +151,15 @@ class ServicesLocator {
       () => ReviewBloc(
         getReviewsUseCase: sl(),
         addReviewUseCase: sl(),
+      ),
+    );
+    sl.registerLazySingleton(
+      () => NotificationBloc(
+        getNotificationsUseCase: sl(),
+        getUnReadNotificationUseCase: sl(),
+        deleteNotificationUseCase: sl(),
+        readNotificationUseCase: sl(),
+        getNotificationDetailsUseCase: sl(),
       ),
     );
   }

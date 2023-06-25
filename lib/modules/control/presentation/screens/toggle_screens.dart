@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../app/helper/dynamic_link_helper.dart';
 import '../../../main/cart/presentation/screens/cart_screen.dart';
@@ -7,6 +8,7 @@ import '../../../main/explore/presentation/screens/explore_screen.dart';
 import '../../../main/favourite/presentation/screens/favourite_screen.dart';
 import '../../../main/profile/presentation/screens/profile_screen.dart';
 import '../../../main/shop/presentation/screens/shop_screen.dart';
+import '../../../sub/notification/presentation/controller/notification_bloc.dart';
 import '../widgets/bottom_nav_bar.dart';
 
 class ToggleScreens extends StatefulWidget {
@@ -26,6 +28,7 @@ class _ToggleScreenState extends State<ToggleScreens> {
       SystemUiMode.manual,
       overlays: SystemUiOverlay.values,
     );
+    context.read<NotificationBloc>().add(GetUnReadNotificationEvent());
     DynamicLinkHelper().onBackgroundDynamicLink(context);
     DynamicLinkHelper().onTerminateDynamicLink(context);
     super.initState();

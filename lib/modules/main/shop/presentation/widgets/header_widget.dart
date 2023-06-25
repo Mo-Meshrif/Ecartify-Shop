@@ -1,14 +1,19 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
+import 'package:badges/badges.dart';
 
 import '../../../../../app/common/widgets/custom_text.dart';
+import '../../../../../app/helper/enums.dart';
 import '../../../../../app/helper/helper_functions.dart';
 import '../../../../../app/helper/navigation_helper.dart';
 import '../../../../../app/utils/assets_manager.dart';
 import '../../../../../app/utils/routes_manager.dart';
 import '../../../../../app/utils/values_manager.dart';
+import '../../../../sub/notification/presentation/controller/notification_bloc.dart';
 
 class HeaderWidget extends StatelessWidget {
   const HeaderWidget({Key? key}) : super(key: key);
@@ -49,17 +54,43 @@ class HeaderWidget extends StatelessWidget {
                     ),
                   ),
           ),
-          InkWell(
-            onTap: () => NavigationHelper.pushNamed(
-              context,
-              Routes.notificationRoute,
-            ),
-            borderRadius: BorderRadius.circular(AppSize.s10.r),
-            child: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              child: SvgPicture.asset(
-                IconAssets.bell,
-                color: primaryColor,
+          BlocConsumer<NotificationBloc, NotificationState>(
+            listener: (context, state) {
+              if (state.unReadNumStatus == Status.loaded ||
+                  state.unReadNumStatus == Status.error) {
+                FlutterAppBadger.isAppBadgeSupported().then(
+                  (value) {
+                    if (value) {
+                      FlutterAppBadger.updateBadgeCount(
+                        int.parse(
+                          state.unReadNum,
+                        ),
+                      );
+                    }
+                  },
+                );
+              }
+            },
+            builder: (context, state) => InkWell(
+              onTap: () => NavigationHelper.pushNamed(
+                context,
+                Routes.notificationRoute,
+              ),
+              borderRadius: BorderRadius.circular(AppSize.s10.r),
+              child: Badge(
+                position: BadgePosition.topEnd(top: -5, end: 5),
+                showBadge: state.unReadNum != '0',
+                badgeContent: CustomText(
+                  data: state.unReadNum,
+                  fontSize: 17.sp,
+                ),
+                child: CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: SvgPicture.asset(
+                    IconAssets.bell,
+                    color: primaryColor,
+                  ),
+                ),
               ),
             ),
           ),

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '/../modules/sub/notification/domain/entities/notification.dart' as not;
 import '../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../app/utils/values_manager.dart';
 
 class NotificationDetailsWidget extends StatelessWidget {
-  const NotificationDetailsWidget({Key? key}) : super(key: key);
+  final not.Notification notification;
+  const NotificationDetailsWidget({
+    Key? key,
+    required this.notification,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,17 +25,15 @@ class NotificationDetailsWidget extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(vertical: AppPadding.p15.h),
             child: CustomText(
-              data: 'Notification title',
-              color: theme.canvasColor,
+              data: notification.title,
             ),
           ),
-          Divider(color: theme.canvasColor),
+          Divider(color: theme.primaryColor),
           SizedBox(height: AppSize.s15.h),
           Expanded(
             child: SingleChildScrollView(
               child: CustomText(
-                data: 'Notification desc',
-                color: theme.canvasColor,
+                data: notification.content,
               ),
             ),
           )

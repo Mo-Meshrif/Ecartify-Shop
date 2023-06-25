@@ -60,9 +60,11 @@
     "No details !": "لا يوجد تفاصيل",
     "You have exceeded the allowed limit": "لقد تخطيت الحد المسموح به",
     "Scan product": "ابحث عن منتج",
-    "Scan":"باركود",
-    "Enter manually":"أدخل يدويًا",
+    "Scan": "باركود",
+    "Enter manually": "أدخل يدويًا",
     "barcodeDesc": "ضع الباركود داخل الإطار للمسح الضوئي. يرجى الحفاظ على ثبات جهازك عند المسح لضمان نتائج دقيقة",
     "type barcode": "اكتب رقم الباركود للمنتج",
-    "Submit-barcode": "ابحث"
+    "Submit-barcode": "ابحث",
+    "Notifications": "الاشعارات",
+    "unread": "غير مقروء"
 }

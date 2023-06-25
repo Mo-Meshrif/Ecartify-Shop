@@ -64,5 +64,7 @@
     "Enter manually": "Enter manually",
     "barcodeDesc": "Place the barcode inside the frame to scan. Please Keep your device steady when scanning to ensure accurate results",
     "type barcode": "Type product barcode number",
-    "Submit-barcode": "Submit"
+    "Submit-barcode": "Submit",
+    "Notifications": "Notifications",
+    "unread": "unread"
 }

@@ -66,4 +66,6 @@ class AppStrings {
   static const String barcodeDesc = 'barcodeDesc';
   static const String typeBarcode = 'type barcode';
   static const String submit = 'Submit-barcode';
+  static const String nots = 'Notifications';
+  static const String unread = 'unread';
 }
