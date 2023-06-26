@@ -1,5 +1,3 @@
-import 'package:ecartify/app/helper/shared_helper.dart';
-import 'package:ecartify/app/services/services_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,6 +6,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../../app/helper/enums.dart';
 import '../../../../../../app/helper/extensions.dart';
+import '../../../../../../app/helper/shared_helper.dart';
+import '../../../../../../app/services/services_locator.dart';
 import '../../../../../../app/utils/assets_manager.dart';
 import '../../../../../../app/utils/constants_manager.dart';
 import '../../../../../../app/utils/values_manager.dart';
@@ -29,11 +29,10 @@ class TempProductListScreen extends StatefulWidget {
 }
 
 class _TempProductListScreenState extends State<TempProductListScreen> {
-  List<Product> customProds = [];
-  List<Product> evenList = [];
-  List<Product> oddList = [];
+  List<Product> tempProds = [];
   List<String> recentSearchedWords = [];
   AppShared appShared = sl<AppShared>();
+  TextEditingController? searchController;
   late ProductsParmeters productsParmeters = widget.productsParmeters;
   @override
   void initState() {
@@ -41,19 +40,54 @@ class _TempProductListScreenState extends State<TempProductListScreen> {
       getPageData();
     } else {
       setState(() {
+        searchController = TextEditingController();
         List temp = appShared.getVal(AppConstants.recentSearchedKey) ?? [];
         recentSearchedWords = List.from(temp);
+      });
+      searchController!.addListener(() {
+        if (searchController!.text.isNotEmpty) {
+          //set cursor position at the end of the value
+          searchController!.selection = TextSelection.collapsed(
+            offset: searchController!.text.length,
+          );
+          setState(
+            () => productsParmeters = ProductsParmeters(
+              start: 0,
+              fromSearch: true,
+              searchKey: searchController!.text.toTitleCase(),
+              lastDateAdded: '2021-02-15T18:42:49.608466Z',
+            ),
+          );
+          getPageData(
+            newParmeters: productsParmeters,
+          );
+        } else {
+          setState(() {
+            productsParmeters = widget.productsParmeters;
+            tempProds = [];
+          });
+        }
       });
     }
     super.initState();
   }
 
-  getPageData({ProductsParmeters? newParmeters}) =>
-      context.read<ProductBloc>().add(
-            GetCustomProductsEvent(
-              productsParmeters: newParmeters ?? widget.productsParmeters,
-            ),
-          );
+  getPageData({ProductsParmeters? newParmeters}) {
+    ProductsParmeters _parmeters = newParmeters ?? widget.productsParmeters;
+    context.read<ProductBloc>().add(
+          _parmeters.fromSearch
+              ? GetSearchedProductsEvent(productsParmeters: _parmeters)
+              : GetCustomProductsEvent(productsParmeters: _parmeters),
+        );
+  }
+
+  @override
+  void dispose() {
+    if (widget.productsParmeters.fromSearch) {
+      searchController!.dispose();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,29 +111,28 @@ class _TempProductListScreenState extends State<TempProductListScreen> {
       ),
       body: BlocConsumer<ProductBloc, ProductState>(
         listener: (context, state) {
-          if (state.customProdStatus == Status.loaded) {
-            customProds = state.customProds;
-            evenList = customProds
-                .where((element) => customProds.indexOf(element).isEven)
-                .toList();
-            oddList = customProds
-                .where((element) => customProds.indexOf(element).isOdd)
-                .toList();
-            if (productsParmeters.fromSearch && customProds.isNotEmpty) {
-              if (productsParmeters.searchKey != null) {
-                List temp =
-                    appShared.getVal(AppConstants.recentSearchedKey) ?? [];
-                recentSearchedWords = List.from(temp);
-                int tempIndex = recentSearchedWords.indexWhere(
-                    (element) => element == productsParmeters.searchKey);
-                if (tempIndex < 0) {
-                  recentSearchedWords.add(productsParmeters.searchKey!);
-                  appShared.setVal(
-                    AppConstants.recentSearchedKey,
-                    recentSearchedWords,
-                  );
-                }
+          if (state.customProdStatus == Status.loaded &&
+              !productsParmeters.fromSearch) {
+            tempProds = state.customProds;
+          }
+          if (state.searchedProdStatus == Status.loaded &&
+              productsParmeters.fromSearch) {
+            tempProds = state.searchedProds;
+            if (productsParmeters.searchKey != null && tempProds.isNotEmpty) {
+              List temp =
+                  appShared.getVal(AppConstants.recentSearchedKey) ?? [];
+              recentSearchedWords = List.from(temp);
+              int tempIndex = recentSearchedWords.indexWhere(
+                  (element) => element == productsParmeters.searchKey);
+              if (tempIndex < 0) {
+                recentSearchedWords.add(productsParmeters.searchKey!);
+                appShared.setVal(
+                  AppConstants.recentSearchedKey,
+                  recentSearchedWords,
+                );
               }
+            } else {
+              tempProds = [];
             }
           }
         },
@@ -116,36 +149,21 @@ class _TempProductListScreenState extends State<TempProductListScreen> {
                   child: Column(
                     children: [
                       TempProductListHeader(
+                        searchController: searchController,
                         enableSearch: widget.productsParmeters.fromSearch,
-                        showFilter: customProds.isNotEmpty,
+                        showFilter: tempProds.isNotEmpty,
                         filterIconColor: theme.primaryColor,
-                        onSearch: (val) => productState(
-                          () {
-                            productsParmeters = ProductsParmeters(
-                              start: 0,
-                              fromSearch: true,
-                              searchKey: val.isEmpty ? null : val.toTitleCase(),
-                              lastDateAdded: '2021-02-15T18:42:49.608466Z',
-                            );
-                            if (val.isNotEmpty) {
-                              getPageData(
-                                newParmeters: productsParmeters,
-                              );
-                            } else {
-                              customProds = [];
-                            }
-                          },
-                        ),
                         filterFun: () {},
                       ),
-                      SizedBox(height: AppSize.s20.h),
+                      SizedBox(height: AppSize.s15.h),
                       TempProductListBody(
-                        customProdStatus: state.customProdStatus,
-                        customProds: customProds,
-                        evenList: evenList,
-                        oddList: oddList,
+                        tempProdStatus: productsParmeters.fromSearch
+                            ? state.searchedProdStatus
+                            : state.customProdStatus,
+                        tempProds: tempProds,
                         productsParmeters: productsParmeters,
                         recentSearchedWords: recentSearchedWords,
+                        onTapRecentVal: (val) => searchController!.text = val,
                       ),
                     ],
                   ),

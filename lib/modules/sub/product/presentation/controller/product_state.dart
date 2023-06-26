@@ -6,6 +6,9 @@ class ProductState extends Equatable {
   final Status customProdStatus;
   final List<Product> customProds;
   final bool isCustomProdMax;
+  final Status searchedProdStatus;
+  final List<Product> searchedProds;
+  final bool isSearchedProdMax;
   final Status updateProductStatus;
 
   const ProductState({
@@ -14,7 +17,10 @@ class ProductState extends Equatable {
     this.customProdStatus = Status.sleep,
     this.customProds = const [],
     this.isCustomProdMax = false,
-    this.updateProductStatus=Status.sleep,
+    this.searchedProdStatus = Status.sleep,
+    this.searchedProds = const [],
+    this.isSearchedProdMax = false,
+    this.updateProductStatus = Status.sleep,
   });
   ProductState copyWith({
     Status? productDetailsStatus,
@@ -22,6 +28,9 @@ class ProductState extends Equatable {
     Status? customProdStatus,
     List<Product>? customProds,
     bool? isCustomProdMax,
+    Status? searchedProdStatus,
+    List<Product>? searchedProds,
+    bool? isSearchedProdMax,
     Status? updateProductStatus,
   }) =>
       ProductState(
@@ -32,7 +41,10 @@ class ProductState extends Equatable {
         customProdStatus: customProdStatus ?? this.customProdStatus,
         customProds: customProds ?? this.customProds,
         isCustomProdMax: isCustomProdMax ?? this.isCustomProdMax,
-        updateProductStatus: updateProductStatus??this.updateProductStatus,
+        searchedProdStatus: searchedProdStatus ?? this.searchedProdStatus,
+        searchedProds: searchedProds ?? this.searchedProds,
+        isSearchedProdMax: isSearchedProdMax ?? this.isSearchedProdMax,
+        updateProductStatus: updateProductStatus ?? this.updateProductStatus,
       );
 
   @override
@@ -42,6 +54,9 @@ class ProductState extends Equatable {
         customProdStatus,
         customProds,
         isCustomProdMax,
+        searchedProdStatus,
+        searchedProds,
+        isSearchedProdMax,
         updateProductStatus,
       ];
 }

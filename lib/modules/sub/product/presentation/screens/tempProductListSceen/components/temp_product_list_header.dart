@@ -9,16 +9,16 @@ import '../../../../../../../app/utils/values_manager.dart';
 
 class TempProductListHeader extends StatelessWidget {
   final bool enableSearch, showFilter;
-  final void Function(String)? onSearch;
+  final TextEditingController? searchController;
   final void Function()? filterFun;
   final Color? filterIconColor;
   const TempProductListHeader({
     Key? key,
     required this.enableSearch,
-    this.onSearch,
     required this.showFilter,
     this.filterIconColor,
     this.filterFun,
+    this.searchController,
   }) : super(key: key);
 
   @override
@@ -27,8 +27,8 @@ class TempProductListHeader extends StatelessWidget {
           children: [
             Expanded(
               child: CustomSearchBarWidget(
+                searchController: searchController,
                 enable: enableSearch,
-                onChanged: onSearch,
               ),
             ),
             Visibility(

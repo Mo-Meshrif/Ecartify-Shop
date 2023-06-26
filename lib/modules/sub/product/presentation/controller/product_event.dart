@@ -13,7 +13,12 @@ class GetCustomProductsEvent extends ProductEvent {
     required this.productsParmeters,
   });
 }
-
+class GetSearchedProductsEvent extends ProductEvent {
+  final ProductsParmeters productsParmeters;
+  const GetSearchedProductsEvent({
+    required this.productsParmeters,
+  });
+}
 class GetProductDetailsEvent extends ProductEvent {
   final ProductDetailsParmeters productDetailsParmeters;
   const GetProductDetailsEvent({required this.productDetailsParmeters});

@@ -11,9 +11,11 @@ import '../../../../../app/utils/values_manager.dart';
 
 class RecentSearchedWords extends StatefulWidget {
   final List<String> recentSearchedWords;
+  final void Function(String) onTapRecentVal;
   const RecentSearchedWords({
     Key? key,
     required this.recentSearchedWords,
+    required this.onTapRecentVal,
   }) : super(key: key);
 
   @override
@@ -74,9 +76,12 @@ class _RecentSearchedWordsState extends State<RecentSearchedWords> {
                         child: Row(
                           children: [
                             Expanded(
-                              child: CustomText(
-                                data: e,
-                                fontSize: AppSize.s20.sp,
+                              child: GestureDetector(
+                                onTap: () => widget.onTapRecentVal(e),
+                                child: CustomText(
+                                  data: e,
+                                  fontSize: AppSize.s20.sp,
+                                ),
                               ),
                             ),
                             GestureDetector(

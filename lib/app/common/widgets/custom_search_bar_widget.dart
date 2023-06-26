@@ -13,11 +13,11 @@ import '../../utils/values_manager.dart';
 
 class CustomSearchBarWidget extends StatelessWidget {
   final bool enable;
-  final void Function(String)? onChanged;
+  final TextEditingController? searchController;
   const CustomSearchBarWidget({
     Key? key,
     this.enable = false,
-    this.onChanged,
+    this.searchController,
   }) : super(key: key);
 
   @override
@@ -58,7 +58,7 @@ class CustomSearchBarWidget extends StatelessWidget {
                     child: TextFormField(
                       enabled: enable,
                       autofocus: enable,
-                      onChanged: onChanged,
+                      controller: searchController,
                       decoration: InputDecoration(
                         isDense: true,
                         contentPadding: EdgeInsets.zero,

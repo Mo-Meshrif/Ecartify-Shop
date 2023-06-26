@@ -24,8 +24,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     required this.getProductDetailsUseCase,
     required this.updateProductUseCase,
   }) : super(const ProductState()) {
-    on<GetCustomProductsEvent>(
-      _getCustomProducts,
+    on<GetCustomProductsEvent>(_getCustomProducts);
+    on<GetSearchedProductsEvent>(
+      _getSearchedProducts,
       transformer: droppable(),
     );
     on<GetProductDetailsEvent>(_getProductDetails);
@@ -57,6 +58,36 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
             customProdStatus: Status.loaded,
             customProds: List.from(state.customProds)..addAll(prods),
             isCustomProdMax: prods.length < 10,
+          ),
+        ),
+      );
+    }
+  }
+
+  FutureOr<void> _getSearchedProducts(
+      GetSearchedProductsEvent event, Emitter<ProductState> emit) async {
+    if (!state.isSearchedProdMax || event.productsParmeters.start == 0) {
+      emit(
+        state.copyWith(
+          searchedProdStatus: event.productsParmeters.start == 0
+              ? Status.initial
+              : Status.loading,
+          searchedProds:
+              event.productsParmeters.start == 0 ? [] : state.searchedProds,
+        ),
+      );
+      Either<Failure, List<Product>> result =
+          await getCustomProductsUseCase(event.productsParmeters);
+      result.fold(
+        (failure) => emit(state.copyWith(
+          searchedProdStatus: Status.error,
+          searchedProds: state.customProds,
+        )),
+        (prods) => emit(
+          state.copyWith(
+            searchedProdStatus: Status.loaded,
+            searchedProds: List.from(state.searchedProds)..addAll(prods),
+            isSearchedProdMax: prods.length < 10,
           ),
         ),
       );

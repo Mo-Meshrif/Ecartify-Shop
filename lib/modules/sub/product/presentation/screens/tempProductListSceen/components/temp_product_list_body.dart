@@ -1,99 +1,57 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../../../../../../app/common/widgets/custom_text.dart';
+import '../../../../../../../app/common/widgets/custom_intrinsic_grid_view.dart';
 import '../../../../../../../app/helper/enums.dart';
 import '../../../../../../../app/utils/assets_manager.dart';
-import '../../../../../../../app/utils/strings_manager.dart';
 import '../../../../../../../app/utils/values_manager.dart';
 import '../../../../domain/entities/product.dart';
 import '../../../../domain/usecases/get_products_by_parameter_use_case.dart';
 import '../../../widgets/product_widget.dart';
 import '../../../widgets/recent_searched_words.dart';
+import '../../../widgets/searched_list_widget.dart';
 
 class TempProductListBody extends StatelessWidget {
-  final List<Product> customProds, evenList, oddList;
-  final Status customProdStatus;
+  final List<Product> tempProds;
+  final Status tempProdStatus;
   final ProductsParmeters productsParmeters;
   final List<String> recentSearchedWords;
+  final void Function(String) onTapRecentVal;
 
   const TempProductListBody({
     Key? key,
-    required this.customProds,
-    required this.evenList,
-    required this.oddList,
-    required this.customProdStatus,
+    required this.tempProds,
+    required this.tempProdStatus,
     required this.productsParmeters,
     required this.recentSearchedWords,
+    required this.onTapRecentVal,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => customProds.isNotEmpty
-      ? IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Visibility(
-                      visible: productsParmeters.fromSearch,
-                      child: Padding(
-                        padding: EdgeInsets.only(bottom: AppPadding.p20.h),
-                        child: CustomText(
-                          data: AppStrings.found.tr() +
-                              '\n' +
-                              '${customProds.length}' +
-                              ' ' +
-                              AppStrings.results.tr(),
-                          fontSize: AppSize.s30.sp,
-                        ),
-                      ),
-                    ),
-                    Column(
-                      children: List.generate(
-                        evenList.length,
-                        (index) => Padding(
-                          padding: EdgeInsets.only(
-                            bottom: productsParmeters.fromSearch
-                                ? AppPadding.p20.h
-                                : AppPadding.p10.h,
-                          ),
-                          child: ProductWidget(
-                            product: evenList[index],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(width: AppSize.s10.w),
-              Expanded(
-                child: Column(
-                  children: List.generate(
-                    oddList.length,
-                    (index) => Padding(
-                      padding: EdgeInsets.only(
-                        bottom: productsParmeters.fromSearch
-                            ? AppPadding.p20.h
-                            : AppPadding.p10.h,
-                      ),
-                      child: ProductWidget(
-                        product: oddList[index],
-                      ),
-                    ),
+  Widget build(BuildContext context) => tempProds.isNotEmpty
+      ? productsParmeters.fromSearch
+          ? SearchedListWidget(
+              productsParmeters: productsParmeters,
+              tempProds: tempProds,
+            )
+          : CustomIntrinsicGridView(
+              physics: const NeverScrollableScrollPhysics(),
+              direction: Axis.vertical,
+              horizontalSpace: AppSize.s10.w,
+              verticalSpace: AppSize.s10.h,
+              children: List.generate(
+                tempProds.length,
+                (index) => SizedBox(
+                  width: 1.sw / 2,
+                  child: ProductWidget(
+                    product: tempProds[index],
                   ),
                 ),
               ),
-            ],
-          ),
-        )
+            )
       : Expanded(
-          child: customProdStatus == Status.initial
+          child: tempProdStatus == Status.initial
               ? Center(
                   child: productsParmeters.fromSearch
                       ? Lottie.asset(JsonAssets.searching)
@@ -103,6 +61,7 @@ class TempProductListBody extends StatelessWidget {
                       productsParmeters.searchKey == null
                   ? RecentSearchedWords(
                       recentSearchedWords: recentSearchedWords,
+                      onTapRecentVal: onTapRecentVal,
                     )
                   : Center(child: Lottie.asset(JsonAssets.empty)),
         );
