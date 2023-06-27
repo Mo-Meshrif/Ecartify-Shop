@@ -24,6 +24,7 @@ class IconAssets {
 }
 
 class JsonAssets {
+  static const String loading = "$jsonPath/loading.json";
   static const String searching = "$jsonPath/searching.json";
   static const String empty = "$jsonPath/empty.json";
 }

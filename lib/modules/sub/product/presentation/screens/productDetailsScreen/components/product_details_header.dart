@@ -1,10 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../../../../../app/common/widgets/custom_text.dart';
+import '../../../../../../../app/common/widgets/image_builder.dart';
 import '../../../../../../../app/helper/dynamic_link_helper.dart';
 import '../../../../../../../app/utils/assets_manager.dart';
 import '../../../../../../../app/utils/color_manager.dart';
@@ -62,7 +62,7 @@ class _ProductDetailsHeaderState extends State<ProductDetailsHeader> {
               child: Container(
                 width: 1.sw,
                 color: ColorManager.kGrey.withOpacity(0.3),
-                child: CachedNetworkImage(
+                child: ImageBuilder(
                   imageUrl: widget.product.image,
                 ),
               ),

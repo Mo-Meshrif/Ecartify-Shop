@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../../app/common/widgets/custom_text.dart';
+import '../../../../../app/common/widgets/image_builder.dart';
 import '../../../../../app/helper/navigation_helper.dart';
 import '../../../../../app/utils/assets_manager.dart';
 import '../../../../../app/utils/color_manager.dart';
@@ -55,7 +55,7 @@ class ProductWidget extends StatelessWidget {
                     child: Stack(
                       children: [
                         Center(
-                          child: CachedNetworkImage(
+                          child: ImageBuilder(
                             height: AppSize.s205.h,
                             fit: BoxFit.contain,
                             imageUrl: product.image,

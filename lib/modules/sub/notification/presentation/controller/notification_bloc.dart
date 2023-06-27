@@ -49,7 +49,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       (failure) => emit(
         state.copyWith(
           notificationStatus: Status.error,
-          notificationList: state.notificationList,
+          notificationList: [],
         ),
       ),
       (notificationList) => emit(

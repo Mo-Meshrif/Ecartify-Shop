@@ -2,9 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../../app/helper/enums.dart';
+import '../../../../../../app/utils/assets_manager.dart';
 import '../../../../../../app/utils/strings_manager.dart';
 import '../../../../../../app/utils/values_manager.dart';
 import '../../../../../main/shop/presentation/controller/shop_bloc.dart';
@@ -67,43 +69,48 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         },
         builder: (context, state) {
           Product? product = state.productDetails;
+          bool nullOrLoading =
+              product == null || state.productDetailsStatus == Status.loading;
           return Scaffold(
-            appBar: product == null ? AppBar() : null,
-            body:
-                product == null || state.productDetailsStatus == Status.loading
-                    ? Center(
-                        child: state.productDetailsStatus == Status.loading
-                            ? const CircularProgressIndicator.adaptive()
-                            : CustomText(
-                                data: AppStrings.noDetails.tr(),
-                                fontSize: AppSize.s20.sp,
-                              ),
-                      )
-                    : NestedScrollView(
-                        controller: _scrollController,
-                        headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                          //image ,favourite and share
-                          ProductDetailsHeader(
-                            product: product,
-                            kExpandedHeight: kExpandedHeight,
-                            showTitle: showTitle,
+            appBar: nullOrLoading ? AppBar() : null,
+            body: nullOrLoading
+                ? Center(
+                    child: state.productDetailsStatus == Status.loading
+                        ? Lottie.asset(
+                            JsonAssets.loading,
+                            height: AppSize.s200,
+                            width: AppSize.s200,
+                          )
+                        : CustomText(
+                            data: AppStrings.noDetails.tr(),
+                            fontSize: AppSize.s20.sp,
                           ),
-                        ],
-                        body: Column(
-                          children: [
-                            Expanded(
-                              child: SingleChildScrollView(
-                                physics: const NeverScrollableScrollPhysics(),
-                                child: ProductDetailsBody(
-                                  showTitle: showTitle,
-                                  product: product,
-                                ),
-                              ),
-                            ),
-                            const AddToCartWidget(),
-                          ],
-                        ),
+                  )
+                : NestedScrollView(
+                    controller: _scrollController,
+                    headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                      //image ,favourite and share
+                      ProductDetailsHeader(
+                        product: product,
+                        kExpandedHeight: kExpandedHeight,
+                        showTitle: showTitle,
                       ),
+                    ],
+                    body: Column(
+                      children: [
+                        Expanded(
+                          child: SingleChildScrollView(
+                            physics: const NeverScrollableScrollPhysics(),
+                            child: ProductDetailsBody(
+                              showTitle: showTitle,
+                              product: product,
+                            ),
+                          ),
+                        ),
+                        const AddToCartWidget(),
+                      ],
+                    ),
+                  ),
           );
         },
       );

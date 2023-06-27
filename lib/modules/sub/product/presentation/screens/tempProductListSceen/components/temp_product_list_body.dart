@@ -11,6 +11,7 @@ import '../../../../domain/usecases/get_products_by_parameter_use_case.dart';
 import '../../../widgets/product_widget.dart';
 import '../../../widgets/recent_searched_words.dart';
 import '../../../widgets/searched_list_widget.dart';
+import '../../../widgets/skeleton_product_widget.dart';
 
 class TempProductListBody extends StatelessWidget {
   final List<Product> tempProds;
@@ -29,40 +30,43 @@ class TempProductListBody extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => tempProds.isNotEmpty
-      ? productsParmeters.fromSearch
-          ? SearchedListWidget(
-              productsParmeters: productsParmeters,
-              tempProds: tempProds,
-            )
-          : CustomIntrinsicGridView(
-              physics: const NeverScrollableScrollPhysics(),
-              direction: Axis.vertical,
-              horizontalSpace: AppSize.s10.w,
-              verticalSpace: AppSize.s10.h,
-              children: List.generate(
-                tempProds.length,
-                (index) => SizedBox(
-                  width: 1.sw / 2,
-                  child: ProductWidget(
-                    product: tempProds[index],
+  Widget build(BuildContext context) {
+    bool isInit = tempProdStatus == Status.initial;
+    return tempProds.isNotEmpty || isInit
+        ? productsParmeters.fromSearch
+            ? isInit
+                ? Expanded(
+                    child: Center(
+                      child: Lottie.asset(JsonAssets.searching),
+                    ),
+                  )
+                : SearchedListWidget(
+                    productsParmeters: productsParmeters,
+                    tempProds: tempProds,
+                  )
+            : CustomIntrinsicGridView(
+                physics: const NeverScrollableScrollPhysics(),
+                direction: Axis.vertical,
+                horizontalSpace: AppSize.s10.w,
+                verticalSpace: AppSize.s10.h,
+                children: List.generate(
+                  isInit ? 10 : tempProds.length,
+                  (index) => SizedBox(
+                    width: 1.sw / 2,
+                    child: isInit
+                        ? const SkeletonProductWidget()
+                        : ProductWidget(product: tempProds[index]),
                   ),
                 ),
-              ),
-            )
-      : Expanded(
-          child: tempProdStatus == Status.initial
-              ? Center(
-                  child: productsParmeters.fromSearch
-                      ? Lottie.asset(JsonAssets.searching)
-                      : const CircularProgressIndicator.adaptive(),
-                )
-              : productsParmeters.fromSearch &&
-                      productsParmeters.searchKey == null
-                  ? RecentSearchedWords(
-                      recentSearchedWords: recentSearchedWords,
-                      onTapRecentVal: onTapRecentVal,
-                    )
-                  : Center(child: Lottie.asset(JsonAssets.empty)),
-        );
+              )
+        : Expanded(
+            child: productsParmeters.fromSearch &&
+                    productsParmeters.searchKey == null
+                ? RecentSearchedWords(
+                    recentSearchedWords: recentSearchedWords,
+                    onTapRecentVal: onTapRecentVal,
+                  )
+                : Center(child: Lottie.asset(JsonAssets.empty)),
+          );
+  }
 }
