@@ -16,10 +16,15 @@ import '../../../../../app/utils/values_manager.dart';
 import '../../../../sub/product/domain/usecases/get_product_details_use_case.dart';
 import '../../../../sub/product/presentation/controller/product_bloc.dart';
 import '../../domain/entities/slider_banner.dart';
-import '../controller/shop_bloc.dart';
 
 class SliderWidget extends StatefulWidget {
-  const SliderWidget({Key? key}) : super(key: key);
+  final Status sliderBanneStatus;
+  final List<SliderBanner> sliderBanners;
+  const SliderWidget({
+    Key? key,
+    required this.sliderBanneStatus,
+    required this.sliderBanners,
+  }) : super(key: key);
 
   @override
   State<SliderWidget> createState() => _SliderWidgetState();
@@ -31,134 +36,130 @@ class _SliderWidgetState extends State<SliderWidget> {
   @override
   Widget build(BuildContext context) {
     Color primaryColor = Theme.of(context).primaryColor;
-    return BlocBuilder<ShopBloc, ShopState>(
-      builder: (context, state) {
-        bool isLoading = state.bestSellerProdStatus == Status.loading ||
-            state.bestSellerProdStatus == Status.sleep;
-        return isLoading
-            ? Padding(
-                padding: EdgeInsets.only(
-                  top: AppPadding.p15.h,
+    bool isLoading = widget.sliderBanneStatus == Status.loading ||
+        widget.sliderBanneStatus == Status.sleep;
+    return isLoading
+        ? Padding(
+            padding: EdgeInsets.only(
+              top: AppPadding.p15.h,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Skeleton(
+                  height: AppSize.s250.h,
+                  borderRadius: BorderRadius.circular(AppSize.s15.r),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Skeleton(
-                      height: AppSize.s250.h,
-                      borderRadius: BorderRadius.circular(AppSize.s15.r),
-                    ),
-                    SizedBox(height: AppSize.s10.h),
-                    Skeleton(
-                      height: AppSize.s5.h,
-                      width: AppSize.s60.w,
-                      borderRadius: BorderRadius.circular(AppSize.s5.r),
-                    ),
-                  ],
+                SizedBox(height: AppSize.s10.h),
+                Skeleton(
+                  height: AppSize.s5.h,
+                  width: AppSize.s60.w,
+                  borderRadius: BorderRadius.circular(AppSize.s5.r),
                 ),
-              )
-            : Visibility(
-                visible: state.sliderBanners.isNotEmpty,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    top: AppPadding.p15.h,
-                  ),
-                  child: Column(
-                    children: [
-                      CarouselSlider(
-                        options: CarouselOptions(
-                          viewportFraction: 1,
-                          enlargeCenterPage: true,
-                          enableInfiniteScroll: false,
-                          initialPage: 0,
-                          autoPlay: true,
-                          onPageChanged: (index, _) => setState(
-                            () => currentPage = index,
-                          ),
-                        ),
-                        items: List.generate(
-                          state.sliderBanners.length,
-                          (index) {
-                            SliderBanner slider = state.sliderBanners[index];
-                            return GestureDetector(
-                              onTap: () async {
-                                if (slider.type == 'inner') {
-                                  if (slider.urlType == 'product') {
-                                    context.read<ProductBloc>().add(
-                                          GetProductDetailsEvent(
-                                            productDetailsParmeters:
-                                                ProductDetailsParmeters(
-                                              productId: slider.url,
-                                            ),
-                                          ),
-                                        );
-                                    NavigationHelper.pushNamed(
-                                      context,
-                                      Routes.productDetailsRoute,
+              ],
+            ),
+          )
+        : Visibility(
+            visible: widget.sliderBanners.isNotEmpty,
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: AppPadding.p15.h,
+              ),
+              child: Column(
+                children: [
+                  CarouselSlider(
+                    options: CarouselOptions(
+                      viewportFraction: 1,
+                      enlargeCenterPage: true,
+                      enableInfiniteScroll: false,
+                      initialPage: 0,
+                      autoPlay: true,
+                      onPageChanged: (index, _) => setState(
+                        () => currentPage = index,
+                      ),
+                    ),
+                    items: List.generate(
+                      widget.sliderBanners.length,
+                      (index) {
+                        SliderBanner slider = widget.sliderBanners[index];
+                        return GestureDetector(
+                          onTap: () async {
+                            if (slider.type == 'inner') {
+                              if (slider.urlType == 'product') {
+                                context.read<ProductBloc>().add(
+                                      GetProductDetailsEvent(
+                                        productDetailsParmeters:
+                                            ProductDetailsParmeters(
+                                          productId: slider.url,
+                                        ),
+                                      ),
                                     );
-                                  }
-                                } else {
-                                  String url = slider.urlType == 'whatsApp'
-                                      ? 'https://wa.me/20' '${slider.url}'
-                                      : slider.url;
-                                  Uri uri = Uri.parse(url);
-                                  if (await canLaunchUrl(uri)) {
-                                    await launchUrl(
-                                      uri,
-                                      mode: Platform.isIOS
-                                          ? LaunchMode.platformDefault
-                                          : LaunchMode
-                                              .externalNonBrowserApplication,
-                                    );
-                                  }
-                                }
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: ColorManager.kGrey.withOpacity(0.3),
-                                  ),
-                                  borderRadius:
-                                      BorderRadius.circular(AppSize.s15.r),
-                                ),
-                                child: ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.circular(AppSize.s15.r),
-                                  child: ImageBuilder(
-                                    imageUrl: slider.image,
-                                    width: 1.sw,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                            );
+                                NavigationHelper.pushNamed(
+                                  context,
+                                  Routes.productDetailsRoute,
+                                );
+                              }
+                            } else {
+                              String url = slider.urlType == 'whatsApp'
+                                  ? 'https://wa.me/20' '${slider.url}'
+                                  : slider.url;
+                              Uri uri = Uri.parse(url);
+                              if (await canLaunchUrl(uri)) {
+                                await launchUrl(
+                                  uri,
+                                  mode: Platform.isIOS
+                                      ? LaunchMode.platformDefault
+                                      : LaunchMode
+                                          .externalNonBrowserApplication,
+                                );
+                              }
+                            }
                           },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: ColorManager.kGrey.withOpacity(0.3),
+                              ),
+                              borderRadius:
+                                  BorderRadius.circular(AppSize.s15.r),
+                            ),
+                            child: ClipRRect(
+                              borderRadius:
+                                  BorderRadius.circular(AppSize.s15.r),
+                              child: ImageBuilder(
+                                imageUrl: slider.image,
+                                width: 1.sw,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(height: AppSize.s10.h),
+                  Row(
+                    children: List.generate(
+                      widget.sliderBanners.length,
+                      (x) => AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        margin: const EdgeInsets.only(
+                          right: AppPadding.p5,
+                        ),
+                        height: 3,
+                        width: AppSize.s60.w,
+                        decoration: BoxDecoration(
+                          color: currentPage >= x
+                              ? primaryColor
+                              : Colors.grey.withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(AppSize.s3),
                         ),
                       ),
-                      SizedBox(height: AppSize.s10.h),
-                      Row(
-                        children: List.generate(
-                          state.sliderBanners.length,
-                          (x) => AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            margin: const EdgeInsets.only(
-                              right: AppPadding.p5,
-                            ),
-                            height: 3,
-                            width: AppSize.s60.w,
-                            decoration: BoxDecoration(
-                              color: currentPage >= x
-                                  ? primaryColor
-                                  : Colors.grey.withOpacity(0.5),
-                              borderRadius: BorderRadius.circular(AppSize.s3),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              );
-      },
-    );
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
   }
 }
