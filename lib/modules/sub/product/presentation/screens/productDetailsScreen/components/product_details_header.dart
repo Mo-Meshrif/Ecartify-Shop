@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../../../../../app/common/widgets/custom_count_down_timer.dart';
 import '../../../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../../../app/common/widgets/image_builder.dart';
 import '../../../../../../../app/helper/dynamic_link_helper.dart';
@@ -28,7 +29,10 @@ class ProductDetailsHeader extends StatefulWidget {
 
 class _ProductDetailsHeaderState extends State<ProductDetailsHeader> {
   String dynamicLink = '';
-
+  late DateTime? date = widget.product.offerEndDate?.add(
+    const Duration(days: 1),
+  );
+  late ThemeData theme = Theme.of(context);
   @override
   void initState() {
     DynamicLinkHelper().createDynamicLink(widget.product).then((value) {
@@ -42,69 +46,84 @@ class _ProductDetailsHeaderState extends State<ProductDetailsHeader> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    return SliverAppBar(
-      pinned: true,
-      expandedHeight: widget.kExpandedHeight,
-      title: widget.showTitle
-          ? CustomText(
-              data: widget.product.name,
-              color: theme.primaryColor,
-            )
-          : null,
-      flexibleSpace: Stack(
-        fit: StackFit.passthrough,
-        clipBehavior: Clip.none,
-        children: [
-          FlexibleSpaceBar(
-            background: SafeArea(
-              child: Container(
-                width: 1.sw,
-                color: ColorManager.kGrey.withOpacity(0.3),
-                child: ImageBuilder(
-                  imageUrl: widget.product.image,
+  Widget build(BuildContext context) => SliverAppBar(
+        pinned: true,
+        expandedHeight: widget.kExpandedHeight,
+        title: widget.showTitle
+            ? CustomText(
+                data: widget.product.name,
+                color: theme.primaryColor,
+              )
+            : null,
+        flexibleSpace: Stack(
+          fit: StackFit.passthrough,
+          clipBehavior: Clip.none,
+          children: [
+            FlexibleSpaceBar(
+              background: SafeArea(
+                child: Container(
+                  width: 1.sw,
+                  color: ColorManager.kGrey.withOpacity(0.3),
+                  child: ImageBuilder(
+                    imageUrl: widget.product.image,
+                  ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            bottom: -AppSize.s20.h,
-            right: AppSize.s20.w,
-            child: Visibility(
-              visible: !widget.showTitle,
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child: CircleAvatar(
-                      backgroundColor: theme.primaryColor,
-                      child: Padding(
-                        padding: EdgeInsets.only(top: AppPadding.p5.h),
-                        child: SvgPicture.asset(
-                          IconAssets.favourite,
-                          color: theme.canvasColor,
+            Positioned(
+              bottom: -AppSize.s20.h,
+              right: AppSize.s20.w,
+              left: AppSize.s20.w,
+              child: Visibility(
+                visible: !widget.showTitle,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Visibility(
+                      visible: date != null,
+                      child: Container(
+                        margin: EdgeInsets.only(top: AppPadding.p10.h),
+                        padding: const EdgeInsets.all(AppSize.s8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(AppSize.s10.r),
+                          color: Theme.of(context).primaryColor,
                         ),
+                        child: CustomCountdownTimer(date: date),
                       ),
                     ),
-                  ),
-                  SizedBox(width: AppSize.s10.w),
-                  GestureDetector(
-                    onTap: () => Share.share(dynamicLink),
-                    child: CircleAvatar(
-                      backgroundColor: theme.primaryColor,
-                      child: Icon(
-                        Icons.share,
-                        color: theme.canvasColor,
-                      ),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {},
+                          child: CircleAvatar(
+                            backgroundColor: theme.primaryColor,
+                            child: Padding(
+                              padding: EdgeInsets.only(top: AppPadding.p5.h),
+                              child: SvgPicture.asset(
+                                IconAssets.favourite,
+                                color: theme.canvasColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: AppSize.s10.w),
+                        GestureDetector(
+                          onTap: () => Share.share(dynamicLink),
+                          child: CircleAvatar(
+                            backgroundColor: theme.primaryColor,
+                            child: Icon(
+                              Icons.share,
+                              color: theme.canvasColor,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
+            )
+          ],
+        ),
+      );
 }

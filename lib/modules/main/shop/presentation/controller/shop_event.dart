@@ -9,6 +9,8 @@ abstract class ShopEvent extends Equatable {
 
 class GetSliderBannersEvent extends ShopEvent {}
 
+class GetOfferProductsEvent extends ShopEvent {}
+
 class GetBestSellerProductsEvent extends ShopEvent {}
 
 class UpdateShopProductsEvent extends ShopEvent {

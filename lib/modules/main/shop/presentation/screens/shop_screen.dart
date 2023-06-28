@@ -22,6 +22,7 @@ class _ShopScreenState extends State<ShopScreen> {
   @override
   void initState() {
     shopBloc.add(GetSliderBannersEvent());
+    shopBloc.add(GetOfferProductsEvent());
     shopBloc.add(GetBestSellerProductsEvent());
     super.initState();
   }

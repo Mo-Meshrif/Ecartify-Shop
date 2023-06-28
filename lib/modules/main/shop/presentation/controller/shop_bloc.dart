@@ -22,6 +22,7 @@ class ShopBloc extends Bloc<ShopEvent, ShopState> {
     required this.getCustomProductsUseCase,
   }) : super(const ShopState()) {
     on<GetSliderBannersEvent>(_getSliderBanners);
+    on<GetOfferProductsEvent>(_getOfferProducts);
     on<GetBestSellerProductsEvent>(_getBestSellerProducts);
     on<UpdateShopProductsEvent>(_updateProduct);
   }
@@ -41,6 +42,30 @@ class ShopBloc extends Bloc<ShopEvent, ShopState> {
         state.copyWith(
           sliderBanneStatus: Status.loaded,
           sliderBanners: sliders,
+        ),
+      ),
+    );
+  }
+
+  FutureOr<void> _getOfferProducts(
+      GetOfferProductsEvent event, Emitter<ShopState> emit) async {
+    emit(state.copyWith(offerProdStatus: Status.loading));
+    var result = await getCustomProductsUseCase(
+      const ProductsParmeters(
+        productMode: ProductMode.offerProds,
+      ),
+    );
+    result.fold(
+      (failure) => emit(
+        state.copyWith(
+          offerProdStatus: Status.error,
+          offerProds: [],
+        ),
+      ),
+      (prods) => emit(
+        state.copyWith(
+          offerProds: prods,
+          offerProdStatus: Status.loaded,
         ),
       ),
     );

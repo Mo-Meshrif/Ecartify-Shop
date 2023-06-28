@@ -32,24 +32,14 @@ class ProductRemoteDataSource implements BaseProductRemoteDataSource {
             .where('name', isGreaterThanOrEqualTo: searchKey)
             .where('name', isLessThan: searchKey + 'z')
             .orderBy('name');
-        // collection.add({
-        //   'name': "MIZUNO MENS TOUR PERFORMANCE 3D LOGO STRETCH FIT GOLF CAP / NEW 2023 MODEL",
-        //   'image': 'https://firebasestorage.googleapis.com/v0/b/ecartify-shop.appspot.com/o/Products%2Fs-l1600a.png?alt=media&token=275f1e74-c355-46a8-889b-47feae3e0efb',
-        //   'description': '',
-        //   'price': '16.99',
-        //   'last_price': '',
-        //   'barcode': '',
-        //   'color':['#000000','#ffffff'],
-        //   'size': [],
-        //   'rate_value': '0',
-        //   'store_amount': '10',
-        //   'sold_num': 3,
-        //   'date_added': Timestamp.now(),
-        // });
       } else if (productsParmeters.productMode == ProductMode.bestSellerProds) {
         query = collection
             .where('sold_num', isGreaterThan: 0)
             .orderBy('sold_num', descending: true);
+      } else if (productsParmeters.productMode == ProductMode.offerProds) {
+        query = collection
+            .where('offer_end_date', isGreaterThanOrEqualTo: Timestamp.now())
+            .orderBy('offer_end_date', descending: true);
       } else {
         query = collection;
       }

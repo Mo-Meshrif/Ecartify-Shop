@@ -5,7 +5,8 @@ class Product extends Equatable {
   final List<String> color, size;
   final double avRateValue;
   final int storeAmount, soldNum;
-  final String dateAdded;
+  final DateTime dateAdded;
+  final DateTime? offerEndDate;
 
   const Product({
     required this.id,
@@ -21,6 +22,7 @@ class Product extends Equatable {
     required this.storeAmount,
     required this.soldNum,
     required this.dateAdded,
+    this.offerEndDate,
   });
 
   Product copyWith({double? avRateValue}) => Product(
@@ -37,6 +39,7 @@ class Product extends Equatable {
         storeAmount: storeAmount,
         soldNum: soldNum,
         dateAdded: dateAdded,
+        offerEndDate: offerEndDate,
       );
 
   @override
@@ -54,5 +57,6 @@ class Product extends Equatable {
         storeAmount,
         soldNum,
         dateAdded,
+        offerEndDate,
       ];
 }

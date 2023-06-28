@@ -18,6 +18,7 @@ import '../../modules/sub/review/domain/usecases/add_review_use_case.dart';
 import '../../modules/sub/review/presentation/controller/review_bloc.dart';
 import '../common/models/alert_action_model.dart';
 import '../common/widgets/custom_text.dart';
+import '../common/widgets/digital_number.dart';
 import '../services/services_locator.dart';
 import '../utils/constants_manager.dart';
 import '../utils/strings_manager.dart';
@@ -318,5 +319,26 @@ class HelperFunctions {
       sum += tempList[i].rateVal;
     }
     return sum == 0.0 ? 0.0 : (sum / (reviews.length * index)) * 100;
+  }
+
+  //convertToDigtial
+ static Widget convertToDigtial(BuildContext context, String num) {
+    bool arabic = context.locale == AppConstants.arabic;
+    var checkNum = int.parse(num) < 10 ? '0$num' : num;
+    var temp = arabic ? checkNum.split('').reversed : checkNum.split('');
+    return Row(
+      children: temp
+          .map(
+            (e) => Padding(
+              padding: const EdgeInsets.only(right: 3),
+              child: DigitalNumber(
+                value: int.parse(e),
+                height: 16,
+                color: Colors.red,
+              ),
+            ),
+          )
+          .toList(),
+    );
   }
 }

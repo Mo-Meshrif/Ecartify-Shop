@@ -16,7 +16,8 @@ class ProductModel extends Product {
     required double avRateValue,
     required int storeAmount,
     required int soldNum,
-    required String dateAdded,
+    required DateTime dateAdded,
+    DateTime? offerEndDate,
   }) : super(
           id: id,
           name: name,
@@ -31,20 +32,29 @@ class ProductModel extends Product {
           storeAmount: storeAmount,
           soldNum: soldNum,
           dateAdded: dateAdded,
+          offerEndDate: offerEndDate,
         );
   factory ProductModel.fromSnapshot(DocumentSnapshot snapshot) => ProductModel(
-      id: snapshot.id,
-      name: snapshot.get('name'),
-      image: snapshot.get('image'),
-      description: snapshot.get('description'),
-      price: snapshot.get('price'),
-      lastPrice: snapshot.get('last_price'),
-      barcode: snapshot.get('barcode'),
-      color: (snapshot.get('color') as List).map((e) => e.toString()).toList(),
-      size: (snapshot.get('size') as List).map((e) => e.toString()).toList(),
-      avRateValue: double.parse(snapshot.get('rate_value') ?? '0.0'),
-      storeAmount: int.parse(snapshot.get('store_amount') ?? '0.0'),
-      soldNum: int.parse(snapshot.get('sold_num').toString()),
-      dateAdded: snapshot.get('date_added').toString(),
-    );
+        id: snapshot.id,
+        name: snapshot.get('name'),
+        image: snapshot.get('image'),
+        description: snapshot.get('description'),
+        price: snapshot.get('price'),
+        lastPrice: snapshot.get('last_price'),
+        barcode: snapshot.get('barcode'),
+        color:
+            (snapshot.get('color') as List).map((e) => e.toString()).toList(),
+        size: (snapshot.get('size') as List).map((e) => e.toString()).toList(),
+        avRateValue: double.parse(snapshot.get('rate_value') ?? '0.0'),
+        storeAmount: int.parse(snapshot.get('store_amount') ?? '0.0'),
+        soldNum: int.parse(snapshot.get('sold_num').toString()),
+        dateAdded: snapshot.get('date_added') is Timestamp
+            ? (snapshot.get('date_added') as Timestamp).toDate()
+            : DateTime.parse(snapshot.get('date_added')),
+        offerEndDate: snapshot.get('offer_end_date') == null
+            ? null
+            : snapshot.get('offer_end_date') is Timestamp
+                ? (snapshot.get('offer_end_date') as Timestamp).toDate()
+                : DateTime.parse(snapshot.get('offer_end_date')),
+      );
 }
