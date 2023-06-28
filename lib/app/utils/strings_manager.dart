@@ -68,4 +68,5 @@ class AppStrings {
   static const String submit = 'Submit-barcode';
   static const String nots = 'Notifications';
   static const String unread = 'unread';
+  static const String findProds = 'Find Products';
 }

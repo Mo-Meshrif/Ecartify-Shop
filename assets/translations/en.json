@@ -66,5 +66,6 @@
     "type barcode": "Type product barcode number",
     "Submit-barcode": "Submit",
     "Notifications": "Notifications",
-    "unread": "unread"
+    "unread": "unread",
+    "Find Products": "Find Products"
 }
