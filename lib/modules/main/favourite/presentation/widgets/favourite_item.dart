@@ -1,20 +1,40 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../app/common/widgets/image_builder.dart';
+import '../../../../../app/helper/helper_functions.dart';
+import '../../../../../app/helper/navigation_helper.dart';
 import '../../../../../app/utils/color_manager.dart';
+import '../../../../../app/utils/routes_manager.dart';
 import '../../../../../app/utils/strings_manager.dart';
 import '../../../../../app/utils/values_manager.dart';
+import '../../../../sub/product/domain/entities/product.dart';
+import '../../../../sub/product/presentation/controller/product_bloc.dart';
 
 class FavouriteItem extends StatelessWidget {
-  const FavouriteItem({Key? key}) : super(key: key);
+  final Product product;
+  const FavouriteItem({
+    Key? key,
+    required this.product,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => InkWell(
         borderRadius: BorderRadius.circular(AppSize.s15.r),
-        onTap: () {},
+        onTap: () {
+          context.read<ProductBloc>().add(
+                UpdateProductDetailsEvent(
+                  product: product,
+                ),
+              );
+          NavigationHelper.pushNamed(
+            context,
+            Routes.productDetailsRoute,
+          );
+        },
         child: Card(
           color: ColorManager.kGrey.withOpacity(0.3),
           margin: EdgeInsets.zero,
@@ -29,8 +49,7 @@ class FavouriteItem extends StatelessWidget {
                   radius: AppSize.s40.r,
                   backgroundColor: Theme.of(context).primaryColor,
                   child: ImageBuilder(
-                    imageUrl:
-                        'https://firebasestorage.googleapis.com/v0/b/ecartify-shop.appspot.com/o/Products%2F940a86.png?alt=media&token=cc80f6a0-f783-4497-b8fb-dc338d5b0097',
+                    imageUrl: product.image,
                     height: AppSize.s60.h,
                   ),
                 ),
@@ -39,8 +58,8 @@ class FavouriteItem extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const CustomText(
-                        data: 'a',
+                      CustomText(
+                        data: product.name,
                         maxLines: 2,
                       ),
                       IntrinsicHeight(
@@ -52,7 +71,7 @@ class FavouriteItem extends StatelessWidget {
                             ),
                             SizedBox(width: AppSize.s10.w),
                             CustomText(
-                              data: 0.0.toStringAsFixed(2),
+                              data: product.avRateValue.toStringAsFixed(2),
                             ),
                             SizedBox(width: AppSize.s5.w),
                             VerticalDivider(
@@ -66,8 +85,9 @@ class FavouriteItem extends StatelessWidget {
                                     BorderRadius.circular(AppSize.s10.r),
                               ),
                               child: CustomText(
-                                data:
-                                    10.toString() + ' ' + AppStrings.sold.tr(),
+                                data: product.soldNum.toString() +
+                                    ' ' +
+                                    AppStrings.sold.tr(),
                               ),
                             ),
                           ],
@@ -76,19 +96,23 @@ class FavouriteItem extends StatelessWidget {
                       SizedBox(height: AppSize.s5.h),
                       Row(
                         children: [
-                          const CustomText(
-                            data: '\$' '100',
+                          CustomText(
+                            data: '\$' + product.price,
                           ),
-                          Row(
-                            children: [
-                              SizedBox(width: AppSize.s10.w),
-                              CustomText(
-                                data: '\$' '200',
-                                color: ColorManager.kRed,
-                                textDecoration: TextDecoration.lineThrough,
-                                decorationColor: Theme.of(context).primaryColor,
-                              ),
-                            ],
+                          Visibility(
+                            visible: product.lastPrice.isNotEmpty,
+                            child: Row(
+                              children: [
+                                SizedBox(width: AppSize.s10.w),
+                                CustomText(
+                                  data: '\$' + product.lastPrice,
+                                  color: ColorManager.kRed,
+                                  textDecoration: TextDecoration.lineThrough,
+                                  decorationColor:
+                                      Theme.of(context).primaryColor,
+                                ),
+                              ],
+                            ),
                           )
                         ],
                       ),
@@ -99,7 +123,10 @@ class FavouriteItem extends StatelessWidget {
                 SizedBox(width: AppSize.s10.w),
                 IconButton(
                   splashRadius: AppSize.s30.r,
-                  onPressed: () {},
+                  onPressed: () => HelperFunctions.handleFavFun(
+                    context,
+                    product,
+                  ),
                   icon: Icon(
                     Icons.delete,
                     color: ColorManager.kRed,

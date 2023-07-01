@@ -96,15 +96,26 @@ class ShopBloc extends Bloc<ShopEvent, ShopState> {
   }
 
   FutureOr<void> _updateProduct(
-          UpdateShopProductsEvent event, Emitter<ShopState> emit) async =>
-      emit(
-        state.copyWith(
-          bestSellerProdStatus: Status.updated,
-          bestSellerProds: state.bestSellerProds
-              .map((e) => e.id == event.productParameters.product.id
-                  ? event.productParameters.product
-                  : e)
-              .toList(),
-        ),
-      );
+      UpdateShopProductsEvent event, Emitter<ShopState> emit) async {
+    emit(state.copyWith(
+      offerProdStatus: Status.updating,
+      bestSellerProdStatus: Status.updating,
+    ));
+    emit(
+      state.copyWith(
+        offerProdStatus: Status.updating,
+        offerProds: state.offerProds
+            .map((e) => e.id == event.productParameters.product.id
+                ? event.productParameters.product
+                : e)
+            .toList(),
+        bestSellerProdStatus: Status.updated,
+        bestSellerProds: state.bestSellerProds
+            .map((e) => e.id == event.productParameters.product.id
+                ? event.productParameters.product
+                : e)
+            .toList(),
+      ),
+    );
+  }
 }

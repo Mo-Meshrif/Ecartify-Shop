@@ -26,6 +26,7 @@ class ProductsParmeters extends Equatable {
   final String lastDateAdded;
   final String catId;
   final String subCatId;
+  final List<String> ids;
 
   const ProductsParmeters({
     this.start = 0,
@@ -35,6 +36,7 @@ class ProductsParmeters extends Equatable {
     this.productMode,
     this.catId = '',
     this.subCatId = '',
+    this.ids = const [],
     this.lastDateAdded = '2021-02-15T18:42:49.608466Z',
   });
   ProductsParmeters copyWith({
@@ -44,6 +46,7 @@ class ProductsParmeters extends Equatable {
     String? lastDateAdded,
     String? catId,
     String? subCatId,
+    List<String>? ids,
   }) =>
       ProductsParmeters(
         start: start ?? this.start,
@@ -52,8 +55,10 @@ class ProductsParmeters extends Equatable {
         productMode: productMode ?? this.productMode,
         catId: catId ?? this.catId,
         subCatId: subCatId ?? this.subCatId,
+        ids: ids ?? this.ids,
         lastDateAdded: lastDateAdded ?? this.lastDateAdded,
       );
+      
   @override
   List<Object?> get props => [
         start,
@@ -62,6 +67,7 @@ class ProductsParmeters extends Equatable {
         productMode,
         catId,
         subCatId,
+        ids,
         lastDateAdded,
       ];
 }

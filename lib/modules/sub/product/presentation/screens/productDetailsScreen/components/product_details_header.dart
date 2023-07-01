@@ -7,6 +7,7 @@ import '../../../../../../../app/common/widgets/custom_count_down_timer.dart';
 import '../../../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../../../app/common/widgets/image_builder.dart';
 import '../../../../../../../app/helper/dynamic_link_helper.dart';
+import '../../../../../../../app/helper/helper_functions.dart';
 import '../../../../../../../app/utils/assets_manager.dart';
 import '../../../../../../../app/utils/color_manager.dart';
 import '../../../../../../../app/utils/values_manager.dart';
@@ -94,14 +95,19 @@ class _ProductDetailsHeaderState extends State<ProductDetailsHeader> {
                     Row(
                       children: [
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () => HelperFunctions.handleFavFun(
+                            context,
+                            widget.product,
+                          ),
                           child: CircleAvatar(
                             backgroundColor: theme.primaryColor,
                             child: Padding(
                               padding: EdgeInsets.only(top: AppPadding.p5.h),
                               child: SvgPicture.asset(
                                 IconAssets.favourite,
-                                color: theme.canvasColor,
+                                color: widget.product.isFavourite
+                                    ? ColorManager.kRed
+                                    : theme.canvasColor,
                               ),
                             ),
                           ),

@@ -24,6 +24,7 @@ import '../../modules/main/explore/domain/repositories/base_explore_repository.d
 import '../../modules/main/explore/domain/usecases/get_categories_use_case.dart';
 import '../../modules/main/explore/domain/usecases/get_sub_categories_use_case.dart';
 import '../../modules/main/explore/presentation/controller/explore_bloc.dart';
+import '../../modules/main/favourite/presentation/controller/favourite_bloc.dart';
 import '../../modules/main/shop/data/datasources/remote_data_source.dart';
 import '../../modules/main/shop/data/repositories/product_repository_impl.dart';
 import '../../modules/main/shop/domain/repositories/base_shop_repository.dart';
@@ -179,6 +180,12 @@ class ServicesLocator {
       () => ExploreBloc(
         getCategoriesUseCase: sl(),
         getSubCategoriesUseCase: sl(),
+      ),
+    );
+    sl.registerLazySingleton(
+      () => FavouriteBloc(
+        appShared: sl(),
+        getCustomProductsUseCase: sl(),
       ),
     );
   }

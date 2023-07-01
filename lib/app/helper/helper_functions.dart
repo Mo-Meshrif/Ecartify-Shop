@@ -10,6 +10,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../modules/main/auth/domain/entities/user.dart';
+import '../../modules/main/favourite/presentation/controller/favourite_bloc.dart';
+import '../../modules/main/shop/presentation/controller/shop_bloc.dart';
 import '../../modules/sub/product/domain/entities/product.dart';
 import '../../modules/sub/product/domain/usecases/update_product_use_case.dart';
 import '../../modules/sub/product/presentation/controller/product_bloc.dart';
@@ -322,7 +324,7 @@ class HelperFunctions {
   }
 
   //convertToDigtial
- static Widget convertToDigtial(BuildContext context, String num) {
+  static Widget convertToDigtial(BuildContext context, String num) {
     bool arabic = context.locale == AppConstants.arabic;
     var checkNum = int.parse(num) < 10 ? '0$num' : num;
     var temp = arabic ? checkNum.split('').reversed : checkNum.split('');
@@ -340,5 +342,43 @@ class HelperFunctions {
           )
           .toList(),
     );
+  }
+
+  //Check isFavourite
+  static bool checkIsFavourite(String id) {
+    List temp = sl<AppShared>().getVal('Fav-key') ?? [];
+    return temp.isEmpty
+        ? false
+        : temp.indexWhere((element) => element == id) > -1;
+  }
+
+  //handle favFun
+  static void handleFavFun(BuildContext context, Product product) {
+    FavouriteBloc favouriteBloc = context.read<FavouriteBloc>();
+    if (product.isFavourite) {
+      favouriteBloc.add(
+        SetUnFavourite(prod: product),
+      );
+    } else {
+      favouriteBloc.add(
+        SetFavourite(prod: product),
+      );
+    }
+    var tempProdPrameters = ProductParameters(
+      isRemote: false,
+      product: product.copyWith(
+        isFavourite: !product.isFavourite,
+      ),
+    );
+    context.read<ShopBloc>().add(
+          UpdateShopProductsEvent(
+            productParameters: tempProdPrameters,
+          ),
+        );
+    context.read<ProductBloc>().add(
+          UpdateProductEvent(
+            productParameters: tempProdPrameters,
+          ),
+        );
   }
 }

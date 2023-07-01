@@ -7,6 +7,7 @@ class Product extends Equatable {
   final int storeAmount, soldNum;
   final DateTime dateAdded;
   final DateTime? offerEndDate;
+  final bool isFavourite;
 
   const Product({
     required this.id,
@@ -23,9 +24,10 @@ class Product extends Equatable {
     required this.soldNum,
     required this.dateAdded,
     this.offerEndDate,
+    required this.isFavourite,
   });
 
-  Product copyWith({double? avRateValue}) => Product(
+  Product copyWith({double? avRateValue, bool? isFavourite}) => Product(
         id: id,
         name: name,
         image: image,
@@ -40,6 +42,7 @@ class Product extends Equatable {
         soldNum: soldNum,
         dateAdded: dateAdded,
         offerEndDate: offerEndDate,
+        isFavourite: isFavourite ?? this.isFavourite,
       );
 
   @override

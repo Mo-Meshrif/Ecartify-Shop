@@ -131,25 +131,51 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     emit(state.copyWith(
       updateProductStatus: Status.loading,
     ));
-    Either<Failure, bool> result =
-        await updateProductUseCase(event.productParameters);
-    result.fold(
-      (failure) => emit(state.copyWith(
-        updateProductStatus: Status.error,
-      )),
-      (_) => emit(
+    if (event.productParameters.isRemote) {
+      Either<Failure, bool> result =
+          await updateProductUseCase(event.productParameters);
+      result.fold(
+        (failure) => emit(state.copyWith(
+          updateProductStatus: Status.error,
+        )),
+        (_) => emit(
+          state.copyWith(
+            updateProductStatus: Status.loaded,
+            productDetails: state.productDetails == null
+                ? null
+                : event.productParameters.product,
+            searchedProds: state.searchedProds
+                .map((e) => e.id == event.productParameters.product.id
+                    ? event.productParameters.product
+                    : e)
+                .toList(),
+            customProds: state.customProds
+                .map((e) => e.id == event.productParameters.product.id
+                    ? event.productParameters.product
+                    : e)
+                .toList(),
+          ),
+        ),
+      );
+    } else {
+      emit(
         state.copyWith(
           updateProductStatus: Status.loaded,
           productDetails: state.productDetails == null
               ? null
               : event.productParameters.product,
+          searchedProds: state.searchedProds
+              .map((e) => e.id == event.productParameters.product.id
+                  ? event.productParameters.product
+                  : e)
+              .toList(),
           customProds: state.customProds
               .map((e) => e.id == event.productParameters.product.id
                   ? event.productParameters.product
                   : e)
               .toList(),
         ),
-      ),
-    );
+      );
+    }
   }
 }

@@ -16,8 +16,12 @@ class UpdateProductUseCase
 }
 
 class ProductParameters {
+  final bool isRemote;
   final Product product;
-  ProductParameters({required this.product});
+  ProductParameters({
+    this.isRemote = true,
+    required this.product,
+  });
   toJson() => {
         'name': product.name,
         'image': product.image,

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../../../../app/helper/helper_functions.dart';
 import '../../domain/entities/product.dart';
 
 class ProductModel extends Product {
@@ -18,6 +19,7 @@ class ProductModel extends Product {
     required int soldNum,
     required DateTime dateAdded,
     DateTime? offerEndDate,
+    required bool isFavourite,
   }) : super(
           id: id,
           name: name,
@@ -33,7 +35,9 @@ class ProductModel extends Product {
           soldNum: soldNum,
           dateAdded: dateAdded,
           offerEndDate: offerEndDate,
+          isFavourite: isFavourite,
         );
+        
   factory ProductModel.fromSnapshot(DocumentSnapshot snapshot) => ProductModel(
         id: snapshot.id,
         name: snapshot.get('name'),
@@ -56,5 +60,6 @@ class ProductModel extends Product {
             : snapshot.get('offer_end_date') is Timestamp
                 ? (snapshot.get('offer_end_date') as Timestamp).toDate()
                 : DateTime.parse(snapshot.get('offer_end_date')),
+        isFavourite: HelperFunctions.checkIsFavourite(snapshot.id),
       );
 }

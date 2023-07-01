@@ -50,6 +50,13 @@ class ProductRemoteDataSource implements BaseProductRemoteDataSource {
           'sub-id',
           isEqualTo: productsParmeters.subCatId,
         );
+      } else if (productsParmeters.ids.isNotEmpty) {
+        QuerySnapshot<Map<String, dynamic>> querySnapshot = await collection
+            .where(FieldPath.documentId, whereIn: productsParmeters.ids)
+            .get();
+        return querySnapshot.docs
+            .map((e) => ProductModel.fromSnapshot(e))
+            .toList();
       } else {
         query = collection;
       }
