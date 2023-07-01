@@ -69,4 +69,5 @@ class AppStrings {
   static const String nots = 'Notifications';
   static const String unread = 'unread';
   static const String findProds = 'Find Products';
+  static const String allToCart = 'Add all to cart';
 }
