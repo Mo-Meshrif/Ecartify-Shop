@@ -40,6 +40,16 @@ class ProductRemoteDataSource implements BaseProductRemoteDataSource {
         query = collection
             .where('offer_end_date', isGreaterThanOrEqualTo: Timestamp.now())
             .orderBy('offer_end_date', descending: true);
+      } else if (productsParmeters.catId.isNotEmpty) {
+        query = collection.where(
+          'cat-id',
+          isEqualTo: productsParmeters.catId,
+        );
+      } else if (productsParmeters.subCatId.isNotEmpty) {
+        query = collection.where(
+          'sub-id',
+          isEqualTo: productsParmeters.subCatId,
+        );
       } else {
         query = collection;
       }

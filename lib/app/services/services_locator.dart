@@ -18,6 +18,12 @@ import '../../modules/main/auth/domain/usecases/login_use_case.dart';
 import '../../modules/main/auth/domain/usecases/logout_use_case.dart';
 import '../../modules/main/auth/domain/usecases/signup_use_case.dart';
 import '../../modules/main/auth/presentation/controller/auth_bloc.dart';
+import '../../modules/main/explore/data/datasources/remote_data_source.dart';
+import '../../modules/main/explore/data/repositories/product_repository_impl.dart';
+import '../../modules/main/explore/domain/repositories/base_explore_repository.dart';
+import '../../modules/main/explore/domain/usecases/get_categories_use_case.dart';
+import '../../modules/main/explore/domain/usecases/get_sub_categories_use_case.dart';
+import '../../modules/main/explore/presentation/controller/explore_bloc.dart';
 import '../../modules/main/shop/data/datasources/remote_data_source.dart';
 import '../../modules/main/shop/data/repositories/product_repository_impl.dart';
 import '../../modules/main/shop/domain/repositories/base_shop_repository.dart';
@@ -90,6 +96,9 @@ class ServicesLocator {
     sl.registerLazySingleton<BaseNotificationRemoteDataSource>(
       () => NotificationRemoteDataSource(sl()),
     );
+    sl.registerLazySingleton<BaseExploreRemoteDataSource>(
+      () => ExploreRemoteDataSource(sl()),
+    );
     //Repositories
     sl.registerLazySingleton<BaseAuthRepository>(
         () => AuthRepositoryImpl(sl(), sl()));
@@ -101,6 +110,8 @@ class ServicesLocator {
         () => ReviewRepositoryImpl(sl(), sl()));
     sl.registerLazySingleton<BaseNotificationRepository>(
         () => NotificationRepositoryImpl(sl(), sl()));
+    sl.registerLazySingleton<BaseExploreRepository>(
+        () => ExploreRepositoryImpl(sl(), sl()));
     //UseCases
     sl.registerLazySingleton(() => LoginUseCase(sl()));
     sl.registerLazySingleton(() => SignUpUseCase(sl()));
@@ -121,6 +132,8 @@ class ServicesLocator {
     sl.registerLazySingleton(() => DeleteNotificationUseCase(sl()));
     sl.registerLazySingleton(() => ReadNotificationUseCase(sl()));
     sl.registerLazySingleton(() => GetNotificationDetailsUseCase(sl()));
+    sl.registerLazySingleton(() => GetCategoriesUseCase(sl()));
+    sl.registerLazySingleton(() => GetSubCategoriesUseCase(sl()));
     //blocs
     sl.registerLazySingleton(
       () => AuthBloc(
@@ -160,6 +173,12 @@ class ServicesLocator {
         deleteNotificationUseCase: sl(),
         readNotificationUseCase: sl(),
         getNotificationDetailsUseCase: sl(),
+      ),
+    );
+    sl.registerLazySingleton(
+      () => ExploreBloc(
+        getCategoriesUseCase: sl(),
+        getSubCategoriesUseCase: sl(),
       ),
     );
   }
