@@ -30,6 +30,7 @@ class OfferProductWidget extends StatelessWidget {
     bool isLoading =
         offerProdStatus == Status.loading || offerProdStatus == Status.sleep;
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         isLoading
             ? Padding(

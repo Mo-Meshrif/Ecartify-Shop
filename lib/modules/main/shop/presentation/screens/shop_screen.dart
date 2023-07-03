@@ -22,7 +22,7 @@ class ShopScreen extends StatefulWidget {
 
 class _ShopScreenState extends State<ShopScreen>
     with AutomaticKeepAliveClientMixin {
-  bool hasData = true, preventUpdatePage = false;
+  bool hasData = true;
   late ShopBloc shopBloc = context.read<ShopBloc>();
   @override
   void initState() {
@@ -38,20 +38,18 @@ class _ShopScreenState extends State<ShopScreen>
     return Scaffold(
       body: BlocConsumer<ShopBloc, ShopState>(
         listener: (context, state) {
-          if (state.sliderBanneStatus == Status.loaded ||
-              state.offerProdStatus == Status.loaded ||
-              state.bestSellerProdStatus == Status.loaded) {
-            if (!preventUpdatePage) {
-              setState(() {
-                preventUpdatePage = true;
-              });
-            } else if (!hasData) {
-              hasData = true;
-            }
-          } else if (state.sliderBanneStatus == Status.error &&
+          bool allError = state.sliderBanneStatus == Status.error &&
               state.offerProdStatus == Status.error &&
-              state.bestSellerProdStatus == Status.error) {
+              state.bestSellerProdStatus == Status.error;
+          bool allLoaded = state.sliderBanneStatus == Status.loaded &&
+              state.offerProdStatus == Status.loaded &&
+              state.bestSellerProdStatus == Status.loaded;
+          bool allEmpty = state.sliderBanners.isEmpty &&
+              state.offerProds.isEmpty &&
+              state.bestSellerProds.isEmpty;
+          if (allError || allEmpty && allLoaded) {
             hasData = false;
+            updateKeepAlive();
           }
         },
         builder: (context, state) => SafeArea(
@@ -102,5 +100,5 @@ class _ShopScreenState extends State<ShopScreen>
   }
 
   @override
-  bool get wantKeepAlive => preventUpdatePage;
+  bool get wantKeepAlive => hasData;
 }

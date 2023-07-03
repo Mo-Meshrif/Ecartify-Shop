@@ -38,7 +38,14 @@ class ProductRemoteDataSource implements BaseProductRemoteDataSource {
             .orderBy('sold_num', descending: true);
       } else if (productsParmeters.productMode == ProductMode.offerProds) {
         query = collection
-            .where('offer_end_date', isGreaterThanOrEqualTo: Timestamp.now())
+            .where(
+              'offer_end_date',
+              isGreaterThanOrEqualTo: Timestamp.fromDate(
+                DateTime.now().subtract(
+                  const Duration(days: 1),
+                ),
+              ),
+            )
             .orderBy('offer_end_date', descending: true);
       } else if (productsParmeters.catId.isNotEmpty) {
         query = collection.where(

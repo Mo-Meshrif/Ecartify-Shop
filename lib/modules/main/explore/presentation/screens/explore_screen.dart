@@ -26,7 +26,7 @@ class ExploreScreen extends StatefulWidget {
 
 class _ExploreScreenState extends State<ExploreScreen>
     with AutomaticKeepAliveClientMixin {
-  bool hasData = true, preventUpdatePage = false;
+  bool hasData = true;
   List<Category> items = [];
   Status status = Status.sleep;
 
@@ -79,19 +79,13 @@ class _ExploreScreenState extends State<ExploreScreen>
                           if (widget.title == null) {
                             items = state.cats;
                             if (state.catStatus == Status.loaded) {
-                              if (items.isNotEmpty) {
-                                if (!preventUpdatePage) {
-                                  setState(() {
-                                    preventUpdatePage = true;
-                                  });
-                                } else if (!hasData) {
-                                  hasData = true;
-                                }
-                              } else {
+                              if (items.isEmpty) {
                                 hasData = false;
+                                updateKeepAlive();
                               }
                             } else if (state.catStatus == Status.error) {
                               hasData = false;
+                              updateKeepAlive();
                             }
                           } else {
                             items = state.subCats;
@@ -149,5 +143,5 @@ class _ExploreScreenState extends State<ExploreScreen>
   }
 
   @override
-  bool get wantKeepAlive => preventUpdatePage;
+  bool get wantKeepAlive => hasData;
 }

@@ -26,9 +26,12 @@ class BestSellerProductWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //to change header language
+    context.locale;
     bool isLoading =
         bestSellerStatus == Status.loading || bestSellerStatus == Status.sleep;
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         isLoading
             ? Padding(

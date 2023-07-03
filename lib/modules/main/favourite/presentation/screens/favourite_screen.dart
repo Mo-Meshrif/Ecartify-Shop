@@ -22,7 +22,7 @@ class FavouriteScreen extends StatefulWidget {
 
 class _FavouriteScreenState extends State<FavouriteScreen>
     with AutomaticKeepAliveClientMixin {
-  bool preventUpdatePage = false;
+  bool hasData = true;
   @override
   void initState() {
     context.read<FavouriteBloc>().add(GetFavouritesEvent());
@@ -41,24 +41,16 @@ class _FavouriteScreenState extends State<FavouriteScreen>
       ),
       body: BlocConsumer<FavouriteBloc, FavouriteState>(
         listener: (context, state) {
-          if (state.favListStatus == Status.loaded) {
-            if (state.favProds.isNotEmpty) {
-              if (!preventUpdatePage) {
-                preventUpdatePage = true;
-                updateKeepAlive();
-              }
-            } else {
-              if (preventUpdatePage) {
-                preventUpdatePage = false;
-                updateKeepAlive();
-              }
+          if (state.favListStatus == Status.loaded ||
+              state.favListStatus == Status.error) {
+            if (state.favProds.isEmpty) {
+              hasData = false;
+              updateKeepAlive();
             }
           } else if (state.setUnFavStatus == Status.loaded) {
             if (state.favProds.isEmpty) {
-              if (preventUpdatePage) {
-                preventUpdatePage = false;
-                updateKeepAlive();
-              }
+              hasData = false;
+              updateKeepAlive();
             }
           }
         },
@@ -116,5 +108,5 @@ class _FavouriteScreenState extends State<FavouriteScreen>
   }
 
   @override
-  bool get wantKeepAlive => preventUpdatePage;
+  bool get wantKeepAlive => hasData;
 }
