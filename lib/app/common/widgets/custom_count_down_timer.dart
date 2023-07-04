@@ -9,10 +9,11 @@ import 'custom_text.dart';
 class CustomCountdownTimer extends StatelessWidget {
   const CustomCountdownTimer({
     Key? key,
-    required this.date,
+    required this.date, this.padding,
   }) : super(key: key);
 
   final DateTime? date;
+  final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) => CountdownTimer(
@@ -21,29 +22,32 @@ class CustomCountdownTimer extends StatelessWidget {
           bool arabic = context.locale == AppConstants.arabic;
           return t == null
               ? const SizedBox()
-              : Row(
-                mainAxisSize: MainAxisSize.min,
-                  children: arabic
-                      ? [
-                          HelperFunctions.convertToDigtial(
-                              context, '${t.sec ?? 0}'),
-                          const CustomText(data: ' :', color: Colors.red),
-                          HelperFunctions.convertToDigtial(
-                              context, '${t.min ?? 0}'),
-                          const CustomText(data: ' :', color: Colors.red),
-                          HelperFunctions.convertToDigtial(context,
-                              '${(t.days == null ? 0 : t.days! * 24) + (t.hours ?? 0)}'),
-                        ]
-                      : [
-                          HelperFunctions.convertToDigtial(context,
-                              '${(t.days == null ? 0 : t.days! * 24) + (t.hours ?? 0)}'),
-                          const CustomText(data: ' :', color: Colors.red),
-                          HelperFunctions.convertToDigtial(
-                              context, '${t.min ?? 0}'),
-                          const CustomText(data: ' : ', color: Colors.red),
-                          HelperFunctions.convertToDigtial(
-                              context, '${t.sec ?? 0}'),
-                        ],
+              : Container(
+                  padding: padding,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: arabic
+                        ? [
+                            HelperFunctions.convertToDigtial(
+                                context, '${t.sec ?? 0}'),
+                            const CustomText(data: ' :', color: Colors.red),
+                            HelperFunctions.convertToDigtial(
+                                context, '${t.min ?? 0}'),
+                            const CustomText(data: ' :', color: Colors.red),
+                            HelperFunctions.convertToDigtial(context,
+                                '${(t.days == null ? 0 : t.days! * 24) + (t.hours ?? 0)}'),
+                          ]
+                        : [
+                            HelperFunctions.convertToDigtial(context,
+                                '${(t.days == null ? 0 : t.days! * 24) + (t.hours ?? 0)}'),
+                            const CustomText(data: ' :', color: Colors.red),
+                            HelperFunctions.convertToDigtial(
+                                context, '${t.min ?? 0}'),
+                            const CustomText(data: ' : ', color: Colors.red),
+                            HelperFunctions.convertToDigtial(
+                                context, '${t.sec ?? 0}'),
+                          ],
+                  ),
                 );
         },
       );

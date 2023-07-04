@@ -84,12 +84,14 @@ class _ProductDetailsHeaderState extends State<ProductDetailsHeader> {
                       visible: date != null,
                       child: Container(
                         margin: EdgeInsets.only(top: AppPadding.p10.h),
-                        padding: const EdgeInsets.all(AppSize.s8),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(AppSize.s10.r),
                           color: Theme.of(context).primaryColor,
                         ),
-                        child: CustomCountdownTimer(date: date),
+                        child: CustomCountdownTimer(
+                          date: date,
+                          padding: const EdgeInsets.all(AppSize.s8),
+                        ),
                       ),
                     ),
                     Row(
