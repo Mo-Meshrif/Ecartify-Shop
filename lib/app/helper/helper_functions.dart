@@ -133,6 +133,15 @@ class HelperFunctions {
     }
   }
 
+  //change language
+  static toggleLanguage(BuildContext context) {
+    if (context.locale == AppConstants.arabic) {
+      context.setLocale(AppConstants.english);
+    } else {
+      context.setLocale(AppConstants.arabic);
+    }
+  }
+  
   //getSavedUser
   static AuthUser getSavedUser() {
     var savedData = sl<AppShared>().getVal(AppConstants.userKey);

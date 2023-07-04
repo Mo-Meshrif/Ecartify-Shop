@@ -6,6 +6,7 @@ class ImageAssets {
   static const String generalWel = "$imagePath/generalWel.png";
   static const String google = "$imagePath/google.png";
   static const String barcode = "$imagePath/barcode.png";
+  static const String translation = "$imagePath/translation.png";
 }
 
 class IconAssets {

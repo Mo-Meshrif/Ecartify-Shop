@@ -5,6 +5,9 @@ import 'color_manager.dart';
 import 'constants_manager.dart';
 
 class ThemeManager {
+  static getTheme(ThemeMode mode) =>
+      mode == ThemeMode.dark ? darkTheme() : lightTheme();
+
   static ThemeData lightTheme() => ThemeData.light().copyWith(
         scaffoldBackgroundColor: ColorManager.lightBackground,
         primaryColor: ColorManager.kBlack,

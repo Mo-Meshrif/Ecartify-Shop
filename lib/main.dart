@@ -10,6 +10,7 @@ import 'app/app.dart';
 import 'app/helper/bloc_observer.dart';
 import 'app/services/services_locator.dart';
 import 'app/utils/constants_manager.dart';
+import 'modules/control/presentation/controller/app_config_bloc.dart';
 import 'modules/main/auth/presentation/controller/auth_bloc.dart';
 import 'modules/main/explore/presentation/controller/explore_bloc.dart';
 import 'modules/main/favourite/presentation/controller/favourite_bloc.dart';
@@ -38,6 +39,12 @@ void main() async {
       useOnlyLangCode: true,
       child: MultiBlocProvider(
         providers: [
+          BlocProvider<AppConfigBloc>(
+            create: (context) => sl()
+              ..add(
+                GetInitialThemeEvent(context),
+              ),
+          ),
           BlocProvider<AuthBloc>(
             create: (context) => sl(),
           ),

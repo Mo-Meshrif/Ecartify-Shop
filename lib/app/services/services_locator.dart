@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../../modules/control/presentation/controller/app_config_bloc.dart';
 import '../../modules/main/auth/data/datasources/remote_data_source.dart';
 import '../../modules/main/auth/data/repositories/auth_repository_impl.dart';
 import '../../modules/main/auth/domain/repositories/base_auth_repository.dart';
@@ -136,6 +137,11 @@ class ServicesLocator {
     sl.registerLazySingleton(() => GetCategoriesUseCase(sl()));
     sl.registerLazySingleton(() => GetSubCategoriesUseCase(sl()));
     //blocs
+    sl.registerLazySingleton(
+      () => AppConfigBloc(
+        appShared: sl(),
+      ),
+    );
     sl.registerLazySingleton(
       () => AuthBloc(
         loginUseCase: sl(),
