@@ -70,4 +70,11 @@ class AppStrings {
   static const String unread = 'unread';
   static const String findProds = 'Find Products';
   static const String allToCart = 'Add all to cart';
+  static const String orders = 'Orders';
+  static const String deliceryAddress = 'Delivery Address';
+  static const String payment = 'Payment Methods';
+  static const String privacy = 'Privacy';
+  static const String help = 'Help';
+  static const String about = 'About';
+  static const String logout = 'Log Out';
 }

@@ -68,5 +68,12 @@
     "Notifications": "الاشعارات",
     "unread": "غير مقروء",
     "Find Products": "البحث عن المنتجات",
-    "Add all to cart": "اضافة الكل الى السلة"
+    "Add all to cart": "اضافة الكل الى السلة",
+    "Orders": "الطلبات",
+    "Delivery Address": "عناوين الشحن",
+    "Payment Methods": "وسائل الدفع",
+    "Privacy": "الخصوصية",
+    "Help": "مساعدة",
+    "About": "حول",
+    "Log Out": "تسجيل خروج"
 }
