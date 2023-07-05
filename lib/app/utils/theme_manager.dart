@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'color_manager.dart';
 import 'constants_manager.dart';
+import 'values_manager.dart';
 
 class ThemeManager {
   static getTheme(ThemeMode mode) =>
@@ -16,6 +18,12 @@ class ThemeManager {
           systemOverlayStyle: SystemUiOverlayStyle.dark,
           iconTheme: IconThemeData(color: ColorManager.kBlack),
           backgroundColor: ColorManager.lightBackground,
+          titleTextStyle: TextStyle(
+            color: ColorManager.kBlack,
+            fontSize: AppSize.s25.sp,
+            fontWeight: FontWeight.bold,
+          ),
+          actionsIconTheme: IconThemeData(color: ColorManager.kBlack),
           elevation: 0,
         ),
         listTileTheme: ListTileThemeData(
@@ -62,6 +70,12 @@ class ThemeManager {
           systemOverlayStyle: SystemUiOverlayStyle.light,
           iconTheme: IconThemeData(color: ColorManager.kWhite),
           backgroundColor: ColorManager.darkBackground,
+          titleTextStyle: TextStyle(
+            color: ColorManager.kWhite,
+            fontSize: AppSize.s25.sp,
+            fontWeight: FontWeight.bold,
+          ),
+          actionsIconTheme: IconThemeData(color: ColorManager.kWhite),
           elevation: 0,
         ),
         listTileTheme: ListTileThemeData(

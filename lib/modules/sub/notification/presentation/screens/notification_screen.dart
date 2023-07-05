@@ -38,7 +38,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
         appBar: AppBar(
           title: CustomText(
             data: AppStrings.nots.tr(),
-            color: Theme.of(context).primaryColor,
           ),
         ),
         body: BlocConsumer<NotificationBloc, NotificationState>(

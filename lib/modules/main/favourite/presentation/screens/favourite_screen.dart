@@ -36,7 +36,6 @@ class _FavouriteScreenState extends State<FavouriteScreen>
       appBar: AppBar(
         title: CustomText(
           data: AppStrings.favourite.tr(),
-          color: Theme.of(context).primaryColor,
         ),
       ),
       body: BlocConsumer<FavouriteBloc, FavouriteState>(

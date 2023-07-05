@@ -46,7 +46,6 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
         appBar: AppBar(
           title: CustomText(
             data: AppStrings.review.tr(),
-            color: Theme.of(context).primaryColor,
           ),
         ),
         body: BlocConsumer<ReviewBloc, ReviewState>(

@@ -53,7 +53,6 @@ class _ProductDetailsHeaderState extends State<ProductDetailsHeader> {
         title: widget.showTitle
             ? CustomText(
                 data: widget.product.name,
-                color: theme.primaryColor,
               )
             : null,
         flexibleSpace: Stack(

@@ -59,7 +59,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         appBar: AppBar(
           title: CustomText(
             data: AppStrings.profile.tr(),
-            color: Theme.of(context).primaryColor,
           ),
           centerTitle: false,
           actions: [

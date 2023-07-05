@@ -96,7 +96,6 @@ class _TempProductListScreenState extends State<TempProductListScreen> {
       appBar: AppBar(
         title: CustomText(
           data: widget.productsParmeters.title,
-          color: theme.primaryColor,
         ),
         actions: [
           IconButton(

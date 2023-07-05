@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../modules/sub/product/domain/usecases/get_products_by_parameter_use_case.dart';
+import '../../helper/helper_functions.dart';
 import '../../helper/navigation_helper.dart';
 import '../../utils/assets_manager.dart';
 import '../../utils/color_manager.dart';
@@ -49,9 +50,18 @@ class CustomSearchBarWidget extends StatelessWidget {
                       ),
               child: Row(
                 children: [
-                  SvgPicture.asset(
-                    IconAssets.search,
-                    color: primaryColor,
+                  Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.rotationY(
+                      HelperFunctions.rotateVal(
+                        context,
+                        rotate: true,
+                      ),
+                    ),
+                    child: SvgPicture.asset(
+                      IconAssets.search,
+                      color: primaryColor,
+                    ),
                   ),
                   SizedBox(width: AppPadding.p10.w),
                   Expanded(

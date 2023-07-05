@@ -31,7 +31,6 @@ class _ProductScannerScreenState extends State<ProductScannerScreen> {
       appBar: AppBar(
         title: CustomText(
           data: AppStrings.barcodeTitle.tr(),
-          color: theme.primaryColor,
         ),
         actions: [
           Visibility(
