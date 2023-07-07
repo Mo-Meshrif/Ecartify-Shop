@@ -31,6 +31,8 @@ class _FavouriteScreenState extends State<FavouriteScreen>
 
   @override
   Widget build(BuildContext context) {
+    //to change favouriteScreen language
+    context.locale;
     super.build(context);
     return Scaffold(
       appBar: AppBar(
