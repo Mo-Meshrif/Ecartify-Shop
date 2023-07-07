@@ -16,6 +16,15 @@ class DeleteNotificationEvent extends NotificationEvent {
   const DeleteNotificationEvent({required this.id});
 }
 
+class HandleNotificationClick extends NotificationEvent {
+  final material.BuildContext context;
+  final Notification notification;
+  const HandleNotificationClick({
+    required this.context,
+    required this.notification,
+  });
+}
+
 class ReadNotificationEvent extends NotificationEvent {
   final UpdateNotification updateNotification;
   const ReadNotificationEvent({required this.updateNotification});

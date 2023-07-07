@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -68,6 +69,9 @@ class ServicesLocator {
     //Firebase messaging
     final firebaseMessaging = FirebaseMessaging.instance;
     sl.registerLazySingleton<FirebaseMessaging>(() => firebaseMessaging);
+    //AwesomeNotifications
+    final awesomeNotifications = AwesomeNotifications();
+    sl.registerLazySingleton<AwesomeNotifications>(() => awesomeNotifications);
     //Firebase auth
     final firebaseAuth = FirebaseAuth.instance;
     sl.registerLazySingleton<FirebaseAuth>(() => firebaseAuth);

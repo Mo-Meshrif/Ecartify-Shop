@@ -1,15 +1,16 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:badges/badges.dart';
 
 import '../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../app/helper/enums.dart';
 import '../../../../../app/helper/helper_functions.dart';
 import '../../../../../app/helper/navigation_helper.dart';
+import '../../../../../app/services/services_locator.dart';
 import '../../../../../app/utils/assets_manager.dart';
 import '../../../../../app/utils/routes_manager.dart';
 import '../../../../../app/utils/values_manager.dart';
@@ -58,16 +59,8 @@ class HeaderWidget extends StatelessWidget {
             listener: (context, state) {
               if (state.unReadNumStatus == Status.loaded ||
                   state.unReadNumStatus == Status.error) {
-                FlutterAppBadger.isAppBadgeSupported().then(
-                  (value) {
-                    if (value) {
-                      FlutterAppBadger.updateBadgeCount(
-                        int.parse(
-                          state.unReadNum,
-                        ),
-                      );
-                    }
-                  },
+                sl<AwesomeNotifications>().setGlobalBadgeCounter(
+                  int.parse(state.unReadNum),
                 );
               }
             },

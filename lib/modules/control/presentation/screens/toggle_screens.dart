@@ -1,8 +1,11 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../app/helper/dynamic_link_helper.dart';
+import '../../../../app/services/services_locator.dart';
 import '../../../main/cart/presentation/screens/cart_screen.dart';
 import '../../../main/explore/presentation/screens/explore_screen.dart';
 import '../../../main/favourite/presentation/screens/favourite_screen.dart';
@@ -10,6 +13,11 @@ import '../../../main/profile/presentation/screens/profile_screen.dart';
 import '../../../main/shop/presentation/screens/shop_screen.dart';
 import '../../../sub/notification/presentation/controller/notification_bloc.dart';
 import '../widgets/bottom_nav_bar.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage event) async =>
+    sl<AwesomeNotifications>().createNotificationFromJsonData(
+      event.data,
+    );
 
 class ToggleScreens extends StatefulWidget {
   const ToggleScreens({Key? key}) : super(key: key);
@@ -27,6 +35,14 @@ class _ToggleScreenState extends State<ToggleScreens> {
     SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.manual,
       overlays: SystemUiOverlay.values,
+    );
+    FirebaseMessaging.onMessage.listen(
+      (event) => sl<AwesomeNotifications>().createNotificationFromJsonData(
+        event.data,
+      ),
+    );
+    FirebaseMessaging.onBackgroundMessage(
+      _firebaseMessagingBackgroundHandler,
     );
     context.read<NotificationBloc>().add(GetUnReadNotificationEvent());
     DynamicLinkHelper().onBackgroundDynamicLink(context);
