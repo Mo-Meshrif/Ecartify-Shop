@@ -31,9 +31,8 @@ class TempProductListHeader extends StatelessWidget {
                 enable: enableSearch,
               ),
             ),
-            Visibility(
-              visible: showFilter,
-              child: Row(
+            AnimatedCrossFade(
+              firstChild: Row(
                 children: [
                   SizedBox(width: AppSize.s10.w),
                   GestureDetector(
@@ -58,7 +57,14 @@ class TempProductListHeader extends StatelessWidget {
                   ),
                 ],
               ),
-            )
+              secondChild: const SizedBox(),
+              crossFadeState: showFilter
+                  ? CrossFadeState.showFirst
+                  : CrossFadeState.showSecond,
+              duration: Duration(
+                milliseconds: AppSize.s100.toInt(),
+              ),
+            ),
           ],
         ),
       );

@@ -14,3 +14,9 @@ enum ProductMode {
   offerProds,
   other,
 }
+
+enum ProductSort {
+  notDetermined,
+  lh,
+  hl,
+}

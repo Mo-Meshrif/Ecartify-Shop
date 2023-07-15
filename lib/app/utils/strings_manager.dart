@@ -77,4 +77,13 @@ class AppStrings {
   static const String help = 'Help';
   static const String about = 'About';
   static const String logout = 'Log Out';
+  static const String filters = 'Filters';
+  static const String categories = 'Categories';
+  static const String priceRange = 'Price Range';
+  static const String sortBy = 'Sort by';
+  static const String priceHigh = 'Price High';
+  static const String priceLow = 'Price Low';
+  static const String rating = 'Rating';
+  static const String rest = 'Rest';
+  static const String apply = 'Apply';
 }

@@ -75,5 +75,14 @@
     "Privacy": "الخصوصية",
     "Help": "مساعدة",
     "About": "حول",
-    "Log Out": "تسجيل خروج"
+    "Log Out": "تسجيل خروج",
+    "Filters": "فلتر",
+    "Categories": "الأقسام",
+    "Price Range": "نطاق السعر",
+    "Sort by": "ترتيب حسب",
+    "Price High": "أعلى سعر",
+    "Price Low": "أقل سعر",
+    "Rating": "تقييم",
+    "Rest": "اعاده تعيين",
+    "Apply": "تطبيق"
 }

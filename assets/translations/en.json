@@ -75,5 +75,14 @@
     "Privacy": "Privacy",
     "Help": "Help",
     "About": "About",
-    "Log Out": "Log Out"
+    "Log Out": "Log Out",
+    "Filters": "Filters",
+    "Categories": "Categories",
+    "Price Range": "Price Range",
+    "Sort by": "Sort by",
+    "Price High": "Price High",
+    "Price Low": "Price Low",
+    "Rating": "Rating",
+    "Rest": "Rest",
+    "Apply": "Apply"
 }

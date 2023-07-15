@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class Product extends Equatable {
-  final String id, name, image, description, price, lastPrice, barcode;
+  final String id, name, image, description, price, lastPrice, barcode,catName;
   final List<String> color, size;
   final double avRateValue;
   final int storeAmount, soldNum;
@@ -17,6 +17,7 @@ class Product extends Equatable {
     required this.price,
     required this.lastPrice,
     required this.barcode,
+    required this.catName,
     required this.color,
     required this.size,
     required this.avRateValue,
@@ -35,6 +36,7 @@ class Product extends Equatable {
         price: price,
         lastPrice: lastPrice,
         barcode: barcode,
+        catName: catName,
         color: color,
         size: size,
         avRateValue: avRateValue ?? this.avRateValue,
@@ -54,6 +56,7 @@ class Product extends Equatable {
         price,
         lastPrice,
         barcode,
+        catName,
         color,
         size,
         avRateValue,

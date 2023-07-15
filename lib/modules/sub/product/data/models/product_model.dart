@@ -12,6 +12,7 @@ class ProductModel extends Product {
     required String price,
     required String lastPrice,
     required String barcode,
+    required String catName,
     required List<String> color,
     required List<String> size,
     required double avRateValue,
@@ -28,6 +29,7 @@ class ProductModel extends Product {
           price: price,
           lastPrice: lastPrice,
           barcode: barcode,
+          catName: catName,
           color: color,
           size: size,
           avRateValue: avRateValue,
@@ -46,6 +48,7 @@ class ProductModel extends Product {
         price: snapshot.get('price'),
         lastPrice: snapshot.get('last_price'),
         barcode: snapshot.get('barcode'),
+        catName: snapshot.get('cat-name'),
         color:
             (snapshot.get('color') as List).map((e) => e.toString()).toList(),
         size: (snapshot.get('size') as List).map((e) => e.toString()).toList(),
