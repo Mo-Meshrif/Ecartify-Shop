@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../../../../app/common/widgets/custom_refresh_wrapper.dart';
 import '../../../../../app/common/widgets/custom_search_bar_widget.dart';
 import '../../../../../app/helper/enums.dart';
 import '../../../../../app/utils/assets_manager.dart';
@@ -23,13 +24,18 @@ class ShopScreen extends StatefulWidget {
 class _ShopScreenState extends State<ShopScreen>
     with AutomaticKeepAliveClientMixin {
   bool hasData = true;
+  ScrollController scrollController = ScrollController();
   late ShopBloc shopBloc = context.read<ShopBloc>();
   @override
   void initState() {
+    getPageContent();
+    super.initState();
+  }
+
+  getPageContent() {
     shopBloc.add(GetSliderBannersEvent());
     shopBloc.add(GetOfferProductsEvent());
     shopBloc.add(GetBestSellerProductsEvent());
-    super.initState();
   }
 
   @override
@@ -53,47 +59,55 @@ class _ShopScreenState extends State<ShopScreen>
           }
         },
         builder: (context, state) => SafeArea(
-          child: CustomScrollView(
-            slivers: [
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: AppPadding.p15.w,
-                    vertical: AppPadding.p10.h,
-                  ),
-                  child: Column(
-                    children: [
-                      const HeaderWidget(),
-                      const CustomSearchBarWidget(),
-                      hasData
-                          ? Column(
-                              children: [
-                                SliderWidget(
-                                  sliderBanneStatus: state.sliderBanneStatus,
-                                  sliderBanners: state.sliderBanners,
-                                ),
-                                OfferProductWidget(
-                                  offerProdStatus: state.offerProdStatus,
-                                  offerProds: state.offerProds,
-                                ),
-                                BestSellerProductWidget(
-                                  bestSellerStatus: state.bestSellerProdStatus,
-                                  bestSellerProds: state.bestSellerProds,
-                                )
-                              ],
-                            )
-                          : Expanded(
-                              child: Center(
-                                child: Lottie.asset(JsonAssets.empty),
-                              ),
-                            ),
+          child: CustomRefreshWrapper(
+              scrollController: scrollController,
+              refreshData: getPageContent,
+              builder: (context, properties) => CustomScrollView(
+                    controller: properties.scrollController,
+                    slivers: [
+                      SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: AppPadding.p15.w,
+                            vertical: AppPadding.p10.h,
+                          ),
+                          child: Column(
+                            children: [
+                              const HeaderWidget(),
+                              const CustomSearchBarWidget(),
+                              hasData
+                                  ? Column(
+                                      children: [
+                                        SliderWidget(
+                                          sliderBanneStatus:
+                                              state.sliderBanneStatus,
+                                          sliderBanners: state.sliderBanners,
+                                        ),
+                                        OfferProductWidget(
+                                          offerProdStatus:
+                                              state.offerProdStatus,
+                                          offerProds: state.offerProds,
+                                        ),
+                                        BestSellerProductWidget(
+                                          bestSellerStatus:
+                                              state.bestSellerProdStatus,
+                                          bestSellerProds:
+                                              state.bestSellerProds,
+                                        )
+                                      ],
+                                    )
+                                  : Expanded(
+                                      child: Center(
+                                        child: Lottie.asset(JsonAssets.empty),
+                                      ),
+                                    ),
+                            ],
+                          ),
+                        ),
+                      )
                     ],
-                  ),
-                ),
-              )
-            ],
-          ),
+                  )),
         ),
       ),
     );

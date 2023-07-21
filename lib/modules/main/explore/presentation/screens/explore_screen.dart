@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../../../../app/common/widgets/custom_intrinsic_grid_view.dart';
+import '../../../../../app/common/widgets/custom_refresh_wrapper.dart';
 import '../../../../../app/common/widgets/custom_search_bar_widget.dart';
 import '../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../app/helper/enums.dart';
@@ -26,16 +27,21 @@ class ExploreScreen extends StatefulWidget {
 
 class _ExploreScreenState extends State<ExploreScreen>
     with AutomaticKeepAliveClientMixin {
+  ScrollController scrollController = ScrollController();
   bool hasData = true;
   List<Category> items = [];
   Status status = Status.sleep;
 
   @override
   void initState() {
+    getPageContent();
+    super.initState();
+  }
+
+  getPageContent() {
     if (widget.title == null) {
       context.read<ExploreBloc>().add(GetCategoriesEvent());
     }
-    super.initState();
   }
 
   @override
@@ -61,83 +67,89 @@ class _ExploreScreenState extends State<ExploreScreen>
         ],
       ),
       body: BlocBuilder<ExploreBloc, ExploreState>(
-        builder: (context, state) => CustomScrollView(
-          slivers: [
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppPadding.p15.w,
-                  vertical: AppPadding.p5.h,
-                ),
-                child: Column(
-                  children: [
-                    const CustomSearchBarWidget(),
-                    Expanded(
-                      child: BlocConsumer<ExploreBloc, ExploreState>(
-                        listener: (context, state) {
-                          if (widget.title == null) {
-                            items = state.cats;
-                            if (state.catStatus == Status.loaded) {
-                              if (items.isEmpty) {
-                                hasData = false;
-                                updateKeepAlive();
-                              }
-                            } else if (state.catStatus == Status.error) {
-                              hasData = false;
-                              updateKeepAlive();
-                            }
-                          } else {
-                            items = state.subCats;
-                          }
-                        },
-                        builder: (context, state) {
-                          status = widget.title == null
-                              ? state.catStatus
-                              : state.subCatStatus;
-                          return status == Status.loading
-                              ? Center(
-                                  child: Lottie.asset(
-                                    JsonAssets.loading,
-                                    height: AppSize.s200,
-                                    width: AppSize.s200,
-                                  ),
-                                )
-                              : items.isEmpty
-                                  ? Center(
-                                      child: Lottie.asset(JsonAssets.empty),
-                                    )
-                                  : Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: AppPadding.p10.h,
-                                      ),
-                                      child: CustomIntrinsicGridView(
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        direction: Axis.vertical,
-                                        horizontalSpace: AppSize.s10.w,
-                                        verticalSpace: AppSize.s10.h,
-                                        children: List.generate(
-                                          items.length,
-                                          (index) => SizedBox(
-                                            width: 1.sw / 2,
-                                            child: CategoryWidget(
-                                              isParent: widget.title == null,
-                                              category: items[index],
-                                            ),
+        builder: (context, state) => CustomRefreshWrapper(
+            scrollController: scrollController,
+            refreshData: widget.title != null ? null : getPageContent,
+            builder: (context, properties) => CustomScrollView(
+                  slivers: [
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: AppPadding.p15.w,
+                          vertical: AppPadding.p5.h,
+                        ),
+                        child: Column(
+                          children: [
+                            const CustomSearchBarWidget(),
+                            Expanded(
+                              child: BlocConsumer<ExploreBloc, ExploreState>(
+                                listener: (context, state) {
+                                  if (widget.title == null) {
+                                    items = state.cats;
+                                    if (state.catStatus == Status.loaded) {
+                                      if (items.isEmpty) {
+                                        hasData = false;
+                                        updateKeepAlive();
+                                      }
+                                    } else if (state.catStatus ==
+                                        Status.error) {
+                                      hasData = false;
+                                      updateKeepAlive();
+                                    }
+                                  } else {
+                                    items = state.subCats;
+                                  }
+                                },
+                                builder: (context, state) {
+                                  status = widget.title == null
+                                      ? state.catStatus
+                                      : state.subCatStatus;
+                                  return status == Status.loading
+                                      ? Center(
+                                          child: Lottie.asset(
+                                            JsonAssets.loading,
+                                            height: AppSize.s200,
+                                            width: AppSize.s200,
                                           ),
-                                        ),
-                                      ),
-                                    );
-                        },
+                                        )
+                                      : items.isEmpty
+                                          ? Center(
+                                              child: Lottie.asset(
+                                                  JsonAssets.empty),
+                                            )
+                                          : Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                vertical: AppPadding.p10.h,
+                                              ),
+                                              child: CustomIntrinsicGridView(
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                direction: Axis.vertical,
+                                                horizontalSpace: AppSize.s10.w,
+                                                verticalSpace: AppSize.s10.h,
+                                                children: List.generate(
+                                                  items.length,
+                                                  (index) => SizedBox(
+                                                    width: 1.sw / 2,
+                                                    child: CategoryWidget(
+                                                      isParent:
+                                                          widget.title == null,
+                                                      category: items[index],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
-                ),
-              ),
-            ),
-          ],
-        ),
+                )),
       ),
     );
   }

@@ -417,6 +417,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.7.0"
+  flutter_scroll_to_top:
+    dependency: "direct main"
+    description:
+      name: flutter_scroll_to_top
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.3.0"
   flutter_secure_storage:
     dependency: transitive
     description:
@@ -770,6 +777,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.27.7"
+  scroll_edge_listener:
+    dependency: "direct main"
+    description:
+      name: scroll_edge_listener
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1"
   share_plus:
     dependency: "direct main"
     description:

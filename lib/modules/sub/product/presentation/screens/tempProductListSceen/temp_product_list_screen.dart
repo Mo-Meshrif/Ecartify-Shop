@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../../../app/common/models/filter_parameters.dart';
+import '../../../../../../app/common/widgets/custom_refresh_wrapper.dart';
 import '../../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../../app/helper/enums.dart';
 import '../../../../../../app/helper/extensions.dart';
@@ -32,6 +33,7 @@ class TempProductListScreen extends StatefulWidget {
 }
 
 class _TempProductListScreenState extends State<TempProductListScreen> {
+  ScrollController scrollController = ScrollController();
   FilterParameters? filterParameters;
   List<Product> tempProds = [], filteredProds = [];
   List<String> recentSearchedWords = [];
@@ -74,7 +76,7 @@ class _TempProductListScreenState extends State<TempProductListScreen> {
         if (filterParameters != null) {
           setState(() {
             filterParameters = null;
-            filteredProds=[];
+            filteredProds = [];
           });
         }
       });
@@ -146,63 +148,80 @@ class _TempProductListScreenState extends State<TempProductListScreen> {
           }
         },
         builder: (context, state) => StatefulBuilder(
-          builder: (context, productState) => CustomScrollView(
-            slivers: [
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: AppPadding.p10.h,
-                    horizontal: AppPadding.p15.w,
-                  ),
-                  child: Column(
-                    children: [
-                      TempProductListHeader(
-                        searchController: searchController,
-                        enableSearch: widget.productsParmeters.fromSearch,
-                        showFilter: tempProds.length > 1,
-                        filterIconColor: filterParameters != null
-                            ? ColorManager.kGreen
-                            : theme.primaryColor,
-                        filterFun: () => showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10.r),
-                              topRight: Radius.circular(10.r),
-                            ),
+          builder: (context, productState) => CustomRefreshWrapper(
+              scrollController: scrollController,
+              refreshData: widget.productsParmeters.fromSearch ||
+                      filterParameters != null
+                  ? null
+                  : getPageData,
+              onListen: filterParameters != null || tempProds.isEmpty
+                  ? null
+                  : () => getPageData(
+                        newParmeters: productsParmeters.copyWith(
+                          start: tempProds.length,
+                          lastDateAdded: tempProds.last.dateAdded.toString(),
+                        ),
+                      ),
+              builder: (context, properties) => CustomScrollView(
+                    slivers: [
+                      SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: AppPadding.p10.h,
+                            horizontal: AppPadding.p15.w,
                           ),
-                          builder: (context) => ProductFilterWidget(
-                            prods: tempProds,
-                            filterParameters: filterParameters,
-                            onApply: (newProds, newParameters) => setState(
-                              () {
-                                filterParameters = newParameters;
-                                filteredProds = newProds;
-                              },
-                            ),
+                          child: Column(
+                            children: [
+                              TempProductListHeader(
+                                searchController: searchController,
+                                enableSearch:
+                                    widget.productsParmeters.fromSearch,
+                                showFilter: tempProds.length > 1,
+                                filterIconColor: filterParameters != null
+                                    ? ColorManager.kGreen
+                                    : theme.primaryColor,
+                                filterFun: () => showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10.r),
+                                      topRight: Radius.circular(10.r),
+                                    ),
+                                  ),
+                                  builder: (context) => ProductFilterWidget(
+                                    prods: tempProds,
+                                    filterParameters: filterParameters,
+                                    onApply: (newProds, newParameters) =>
+                                        setState(
+                                      () {
+                                        filterParameters = newParameters;
+                                        filteredProds = newProds;
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: AppSize.s15.h),
+                              TempProductListBody(
+                                tempProdStatus: productsParmeters.fromSearch
+                                    ? state.searchedProdStatus
+                                    : state.customProdStatus,
+                                tempProds: filterParameters != null
+                                    ? filteredProds
+                                    : tempProds,
+                                productsParmeters: productsParmeters,
+                                recentSearchedWords: recentSearchedWords,
+                                onTapRecentVal: (val) =>
+                                    searchController!.text = val,
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                      SizedBox(height: AppSize.s15.h),
-                      TempProductListBody(
-                        tempProdStatus: productsParmeters.fromSearch
-                            ? state.searchedProdStatus
-                            : state.customProdStatus,
-                        tempProds: filterParameters != null
-                            ? filteredProds
-                            : tempProds,
-                        productsParmeters: productsParmeters,
-                        recentSearchedWords: recentSearchedWords,
-                        onTapRecentVal: (val) => searchController!.text = val,
-                      ),
                     ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+                  )),
         ),
       ),
     );
