@@ -64,6 +64,7 @@ class AddToCartWidget extends StatelessWidget {
                         children: [
                           IconButton(
                             onPressed: () {},
+                            splashRadius: AppSize.s25.r,
                             icon: SvgPicture.asset(
                               IconAssets.add,
                               color: theme.canvasColor,
@@ -71,6 +72,7 @@ class AddToCartWidget extends StatelessWidget {
                           ),
                           IconButton(
                             onPressed: () {},
+                            splashRadius: AppSize.s25.r,
                             icon: SvgPicture.asset(
                               IconAssets.subtrack,
                               color: theme.canvasColor,

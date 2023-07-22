@@ -110,7 +110,7 @@ class ProductWidget extends StatelessWidget {
                       ),
                       SizedBox(width: AppSize.s5.w),
                       VerticalDivider(
-                        color: ColorManager.kGrey.withOpacity(0.3),
+                        color: Theme.of(context).primaryColor,
                       ),
                       Expanded(
                         child: Center(

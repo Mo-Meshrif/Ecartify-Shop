@@ -86,4 +86,6 @@ class AppStrings {
   static const String rating = 'Rating';
   static const String rest = 'Rest';
   static const String apply = 'Apply';
+  static const String totalPrice = 'Total price';
+  static const String checkout = 'Checkout';
 }

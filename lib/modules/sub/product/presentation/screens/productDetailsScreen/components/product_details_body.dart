@@ -2,8 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../../../app/common/widgets/color_selector_widget.dart';
 import '../../../../../../../app/common/widgets/custom_elevated_button.dart';
 import '../../../../../../../app/common/widgets/custom_text.dart';
+import '../../../../../../../app/common/widgets/size_selector_widget.dart';
 import '../../../../../../../app/helper/helper_functions.dart';
 import '../../../../../../../app/helper/navigation_helper.dart';
 import '../../../../../../../app/utils/color_manager.dart';
@@ -29,7 +31,7 @@ class ProductDetailsBody extends StatefulWidget {
 
 class _ProductDetailsBodyState extends State<ProductDetailsBody> {
   late bool arabic = context.locale == AppConstants.arabic;
-  int selectedColorIndex = 0, selectedSizeIndex = 0;
+  String? selectedColor, selectedSize;
   @override
   Widget build(BuildContext context) => Padding(
         padding: EdgeInsets.symmetric(
@@ -80,43 +82,10 @@ class _ProductDetailsBodyState extends State<ProductDetailsBody> {
                   CustomText(data: AppStrings.selectColor.tr()),
                   Padding(
                     padding: EdgeInsets.only(top: AppPadding.p5.h),
-                    child: Row(
-                      children: List.generate(
-                        widget.product.color.length,
-                        (index) {
-                          String color = widget.product.color[index].replaceAll(
-                            '#',
-                            '0xff',
-                          );
-                          var convertedColor = Color(int.parse(color));
-                          return GestureDetector(
-                            onTap: () => setState(
-                              () => selectedColorIndex = index,
-                            ),
-                            child: Container(
-                              width: AppSize.s30,
-                              height: AppSize.s30,
-                              margin: arabic
-                                  ? EdgeInsets.only(left: AppPadding.p10.w)
-                                  : EdgeInsets.only(right: AppPadding.p10.w),
-                              decoration: BoxDecoration(
-                                color: convertedColor,
-                                borderRadius: BorderRadius.circular(
-                                  AppSize.s10.r,
-                                ),
-                              ),
-                              child: index == selectedColorIndex
-                                  ? Icon(
-                                      Icons.check,
-                                      color: convertedColor.computeLuminance() >
-                                              0.5
-                                          ? ColorManager.kBlack
-                                          : ColorManager.kWhite,
-                                    )
-                                  : null,
-                            ),
-                          );
-                        },
+                    child: ColorSelectorWidget(
+                      colorList: widget.product.color,
+                      getSelectedColor: (color) => setState(
+                        () => selectedColor = color,
                       ),
                     ),
                   ),
@@ -132,31 +101,10 @@ class _ProductDetailsBodyState extends State<ProductDetailsBody> {
                   CustomText(data: AppStrings.selectSize.tr()),
                   Padding(
                     padding: EdgeInsets.only(top: AppPadding.p15.h),
-                    child: Row(
-                      children: List.generate(
-                        widget.product.size.length,
-                        (index) => GestureDetector(
-                          onTap: () => setState(
-                            () => selectedSizeIndex = index,
-                          ),
-                          child: index == selectedSizeIndex
-                              ? ClipRect(
-                                  child: Banner(
-                                    message: '',
-                                    location: BannerLocation.bottomEnd,
-                                    child: _itemSizeWidget(
-                                      context,
-                                      arabic,
-                                      widget.product.size[index],
-                                    ),
-                                  ),
-                                )
-                              : _itemSizeWidget(
-                                  context,
-                                  arabic,
-                                  widget.product.size[index],
-                                ),
-                        ),
+                    child: SizeSelectorWidget(
+                      sizeList: widget.product.size,
+                      getSelectedSize: (size) => setState(
+                        () => selectedSize = size,
                       ),
                     ),
                   ),
@@ -217,23 +165,5 @@ class _ProductDetailsBodyState extends State<ProductDetailsBody> {
                   ),
           ],
         ),
-      );
-  Widget _itemSizeWidget(BuildContext context, bool arabic, String data) =>
-      Container(
-        width: AppSize.s30,
-        height: AppSize.s30,
-        alignment: Alignment.center,
-        margin: arabic
-            ? EdgeInsets.only(left: AppPadding.p10.w)
-            : EdgeInsets.only(right: AppPadding.p10.w),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Theme.of(context).primaryColor,
-          ),
-          borderRadius: BorderRadius.circular(
-            AppSize.s10.r,
-          ),
-        ),
-        child: CustomText(data: data),
       );
 }
