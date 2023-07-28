@@ -45,6 +45,7 @@ dependencies:
   shimmer: ^3.0.0
   flutter_countdown_timer: ^4.1.0
   awesome_notifications: ^0.6.21
+  sqflite: ^2.2.8+4
 
 dev_dependencies:
   flutter_native_splash: ^2.1.6

@@ -86,5 +86,10 @@
     "Rest": "اعاده تعيين",
     "Apply": "تطبيق",
     "Total price": "السعر الكلي",
-    "Checkout": "الدفع"
+    "Checkout": "الدفع",
+    "Colors": "الألوان",
+    "Sizes": "الأحجام",
+    "Product quantity": "كمية المنتج",
+    "The quantity of the product number :": "كمية المنتج رقم :",
+    "must be equal to or smaller than": "يجب أن تكون مساوية أو أصغر من"
 }

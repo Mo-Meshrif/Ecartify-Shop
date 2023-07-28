@@ -10,6 +10,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../modules/main/auth/domain/entities/user.dart';
+import '../../modules/main/cart/domain/entities/cart_item.dart';
 import '../../modules/main/favourite/presentation/controller/favourite_bloc.dart';
 import '../../modules/main/shop/presentation/controller/shop_bloc.dart';
 import '../../modules/sub/product/domain/entities/product.dart';
@@ -141,7 +142,7 @@ class HelperFunctions {
       context.setLocale(AppConstants.arabic);
     }
   }
-  
+
   //getSavedUser
   static AuthUser getSavedUser() {
     var savedData = sl<AppShared>().getVal(AppConstants.userKey);
@@ -389,5 +390,30 @@ class HelperFunctions {
             productParameters: tempProdPrameters,
           ),
         );
+  }
+
+  //refactor cartItem length
+  static int refactorCartItemLength(List<CartItem> items) {
+    int count = 0;
+    for (var item in items) {
+      for (var element in item.statistics) {
+        count += int.parse(element.quantity);
+      }
+    }
+    return count;
+  }
+
+  //getTotalPriceOfCart
+  static double getTotalPriceOfCart(List<CartItem> items) {
+    double total = 0.0;
+    for (var item in items) {
+      if (item.product != null) {
+        for (var element in item.statistics) {
+          total +=
+              int.parse(element.quantity) * double.parse(item.product!.price);
+        }
+      }
+    }
+    return total;
   }
 }

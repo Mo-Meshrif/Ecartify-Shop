@@ -86,5 +86,10 @@
     "Rest": "Rest",
     "Apply": "Apply",
     "Total price": "Total price",
-    "Checkout": "Checkout"
+    "Checkout": "Checkout",
+    "Colors": "Colors",
+    "Sizes": "Sizes",
+    "Product quantity": "Product quantity",
+    "The quantity of the product number :": "The quantity of the product number :",
+    "must be equal to or smaller than": "must be equal to or smaller than"
 }

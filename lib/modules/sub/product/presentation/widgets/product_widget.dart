@@ -8,11 +8,13 @@ import '../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../app/common/widgets/image_builder.dart';
 import '../../../../../app/helper/helper_functions.dart';
 import '../../../../../app/helper/navigation_helper.dart';
+import '../../../../../app/services/services_locator.dart';
 import '../../../../../app/utils/assets_manager.dart';
 import '../../../../../app/utils/color_manager.dart';
 import '../../../../../app/utils/routes_manager.dart';
 import '../../../../../app/utils/strings_manager.dart';
 import '../../../../../app/utils/values_manager.dart';
+import '../../../../main/cart/presentation/controller/cart_bloc.dart';
 import '../../domain/entities/product.dart';
 import '../controller/product_bloc.dart';
 
@@ -62,30 +64,64 @@ class ProductWidget extends StatelessWidget {
                             imageUrl: product.image,
                           ),
                         ),
-                        Align(
-                          alignment: AlignmentDirectional.topEnd,
-                          child: IconButton(
-                            padding: EdgeInsets.zero,
-                            splashRadius: AppSize.s30.r,
-                            onPressed: () => HelperFunctions.handleFavFun(
-                              context,
-                              product,
-                            ),
-                            icon: CircleAvatar(
-                              radius: AppSize.s20.r,
-                              backgroundColor: ColorManager.kBlack,
-                              child: Padding(
-                                padding: EdgeInsets.only(top: AppPadding.p5.h),
-                                child: SvgPicture.asset(
-                                  IconAssets.favourite,
-                                  width: AppSize.s20.w,
-                                  color: product.isFavourite
-                                      ? ColorManager.kRed
-                                      : ColorManager.kWhite,
-                                ),
-                              ),
-                            ),
-                          ),
+                        BlocBuilder<CartBloc, CartState>(
+                          builder: (context, state) {
+                            int index = state.cartItems.indexWhere(
+                              (e) => e.prodId == product.id,
+                            );
+                            return Align(
+                              alignment: AlignmentDirectional.topEnd,
+                              child: index > -1
+                                  ? IconButton(
+                                      padding: EdgeInsets.zero,
+                                      splashRadius: AppSize.s30.r,
+                                      onPressed: () => sl<CartBloc>().add(
+                                        DeleteItemEvent(
+                                          prodId: product.id,
+                                        ),
+                                      ),
+                                      icon: CircleAvatar(
+                                        radius: AppSize.s20.r,
+                                        backgroundColor: ColorManager.kBlack,
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                            top: AppPadding.p5.h,
+                                          ),
+                                          child: SvgPicture.asset(
+                                            IconAssets.cart,
+                                            width: AppSize.s20.w,
+                                            color: ColorManager.kRed,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : IconButton(
+                                      padding: EdgeInsets.zero,
+                                      splashRadius: AppSize.s30.r,
+                                      onPressed: () =>
+                                          HelperFunctions.handleFavFun(
+                                        context,
+                                        product,
+                                      ),
+                                      icon: CircleAvatar(
+                                        radius: AppSize.s20.r,
+                                        backgroundColor: ColorManager.kBlack,
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                            top: AppPadding.p5.h,
+                                          ),
+                                          child: SvgPicture.asset(
+                                            IconAssets.favourite,
+                                            width: AppSize.s20.w,
+                                            color: product.isFavourite
+                                                ? ColorManager.kRed
+                                                : ColorManager.kWhite,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                            );
+                          },
                         ),
                       ],
                     ),

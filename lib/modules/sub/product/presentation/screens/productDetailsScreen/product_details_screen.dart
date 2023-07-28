@@ -26,6 +26,7 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   late ScrollController _scrollController;
+  String selectedColor = '', selectedSize = '';
   bool showTitle = false;
   double kExpandedHeight = 400.h;
 
@@ -96,19 +97,37 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         showTitle: showTitle,
                       ),
                     ],
-                    body: Column(
-                      children: [
-                        Expanded(
-                          child: SingleChildScrollView(
-                            physics: const NeverScrollableScrollPhysics(),
-                            child: ProductDetailsBody(
-                              showTitle: showTitle,
-                              product: product,
+                    body: StatefulBuilder(
+                      builder: (context, innerState) => Column(
+                        children: [
+                          Expanded(
+                            child: SingleChildScrollView(
+                              physics: const NeverScrollableScrollPhysics(),
+                              child: ProductDetailsBody(
+                                showTitle: showTitle,
+                                product: product,
+                                getSelectedColor: (color) => innerState(
+                                  () => selectedColor = color,
+                                ),
+                                getSelectedSize: (size) => innerState(
+                                  () => selectedSize = size,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                        const AddToCartWidget(),
-                      ],
+                          AddToCartWidget(
+                            product: product,
+                            selectedColor: product.color.isNotEmpty &&
+                                    selectedColor.isEmpty
+                                ? product.color.first
+                                : selectedColor,
+                            selectedSize:
+                                product.size.isNotEmpty && selectedSize.isEmpty
+                                    ? product.size.first
+                                    : selectedSize,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
           );

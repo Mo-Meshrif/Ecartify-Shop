@@ -9,29 +9,24 @@ import '../../../../../../../app/common/widgets/size_selector_widget.dart';
 import '../../../../../../../app/helper/helper_functions.dart';
 import '../../../../../../../app/helper/navigation_helper.dart';
 import '../../../../../../../app/utils/color_manager.dart';
-import '../../../../../../../app/utils/constants_manager.dart';
 import '../../../../../../../app/utils/routes_manager.dart';
 import '../../../../../../../app/utils/strings_manager.dart';
 import '../../../../../../../app/utils/values_manager.dart';
 import '../../../../../../main/auth/domain/entities/user.dart';
 import '../../../../domain/entities/product.dart';
 
-class ProductDetailsBody extends StatefulWidget {
+class ProductDetailsBody extends StatelessWidget {
   final Product product;
   final bool showTitle;
+  final void Function(String) getSelectedColor, getSelectedSize;
   const ProductDetailsBody({
     Key? key,
     required this.showTitle,
     required this.product,
+    required this.getSelectedColor,
+    required this.getSelectedSize,
   }) : super(key: key);
 
-  @override
-  State<ProductDetailsBody> createState() => _ProductDetailsBodyState();
-}
-
-class _ProductDetailsBodyState extends State<ProductDetailsBody> {
-  late bool arabic = context.locale == AppConstants.arabic;
-  String? selectedColor, selectedSize;
   @override
   Widget build(BuildContext context) => Padding(
         padding: EdgeInsets.symmetric(
@@ -45,15 +40,15 @@ class _ProductDetailsBodyState extends State<ProductDetailsBody> {
             Row(
               children: [
                 CustomText(
-                  data: '\$' + widget.product.price,
+                  data: '\$' + product.price,
                 ),
                 Visibility(
-                  visible: widget.product.lastPrice.isNotEmpty,
+                  visible: product.lastPrice.isNotEmpty,
                   child: Row(
                     children: [
                       SizedBox(width: AppSize.s10.w),
                       CustomText(
-                        data: '\$' + widget.product.lastPrice,
+                        data: '\$' + product.lastPrice,
                         color: ColorManager.kRed,
                         textDecoration: TextDecoration.lineThrough,
                         decorationColor: Theme.of(context).primaryColor,
@@ -64,17 +59,17 @@ class _ProductDetailsBodyState extends State<ProductDetailsBody> {
               ],
             ),
             Visibility(
-              visible: !widget.showTitle,
+              visible: !showTitle,
               child: Padding(
                 padding: EdgeInsets.only(top: AppPadding.p5.h),
                 child: CustomText(
-                  data: widget.product.name,
+                  data: product.name,
                   fontSize: AppSize.s22.sp,
                 ),
               ),
             ),
             Visibility(
-              visible: widget.product.color.isNotEmpty,
+              visible: product.color.isNotEmpty,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -83,17 +78,15 @@ class _ProductDetailsBodyState extends State<ProductDetailsBody> {
                   Padding(
                     padding: EdgeInsets.only(top: AppPadding.p5.h),
                     child: ColorSelectorWidget(
-                      colorList: widget.product.color,
-                      getSelectedColor: (color) => setState(
-                        () => selectedColor = color,
-                      ),
+                      colorList: product.color,
+                      getSelectedColor: getSelectedColor,
                     ),
                   ),
                 ],
               ),
             ),
             Visibility(
-              visible: widget.product.size.isNotEmpty,
+              visible: product.size.isNotEmpty,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -102,10 +95,8 @@ class _ProductDetailsBodyState extends State<ProductDetailsBody> {
                   Padding(
                     padding: EdgeInsets.only(top: AppPadding.p15.h),
                     child: SizeSelectorWidget(
-                      sizeList: widget.product.size,
-                      getSelectedSize: (size) => setState(
-                        () => selectedSize = size,
-                      ),
+                      sizeList: product.size,
+                      getSelectedSize: getSelectedSize,
                     ),
                   ),
                 ],
@@ -113,16 +104,16 @@ class _ProductDetailsBodyState extends State<ProductDetailsBody> {
             ),
             const Divider(),
             CustomText(
-              data: widget.product.description,
+              data: product.description,
             ),
             const Divider(),
-            widget.product.avRateValue == 0
+            product.avRateValue == 0
                 ? CustomElevatedButton(
                     onPressed: () {
                       AuthUser user = HelperFunctions.getSavedUser();
                       HelperFunctions.addReview(
                         context,
-                        widget.product,
+                        product,
                         user,
                         fromDetails: true,
                       );
@@ -146,7 +137,7 @@ class _ProductDetailsBodyState extends State<ProductDetailsBody> {
                       ),
                       SizedBox(width: AppSize.s10.w),
                       CustomText(
-                        data: widget.product.avRateValue.toStringAsFixed(2),
+                        data: product.avRateValue.toStringAsFixed(2),
                       ),
                       SizedBox(width: AppSize.s10.w),
                       GestureDetector(
@@ -154,7 +145,7 @@ class _ProductDetailsBodyState extends State<ProductDetailsBody> {
                         onTap: () => NavigationHelper.pushNamed(
                           context,
                           Routes.productReviewRoute,
-                          arguments: widget.product,
+                          arguments: product,
                         ),
                         child: const Icon(
                           Icons.arrow_forward_ios,

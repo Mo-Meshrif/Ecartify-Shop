@@ -1,4 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:ecartify/app/services/services_locator.dart';
+import 'package:ecartify/modules/main/cart/domain/entities/cart_item_statistics.dart';
+import 'package:ecartify/modules/main/cart/presentation/controller/cart_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +10,7 @@ import 'package:lottie/lottie.dart';
 import '../../../../../app/common/widgets/custom_elevated_button.dart';
 import '../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../app/helper/enums.dart';
+import '../../../../../app/helper/helper_functions.dart';
 import '../../../../../app/utils/assets_manager.dart';
 import '../../../../../app/utils/strings_manager.dart';
 import '../../../../../app/utils/values_manager.dart';
@@ -91,7 +95,32 @@ class _FavouriteScreenState extends State<FavouriteScreen>
                       ),
                       SizedBox(height: AppSize.s10.h),
                       CustomElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          for (var prod in state.favProds) {
+                            if (prod.storeAmount >= 1) {
+                              String color =
+                                  prod.color.isEmpty ? '' : prod.color[0];
+                              String size =
+                                  prod.size.isEmpty ? '' : prod.size[0];
+                              HelperFunctions.handleFavFun(
+                                context,
+                                prod,
+                              );
+                              sl<CartBloc>().add(
+                                AddItemToCartEvent(
+                                  prodIsInCart: false,
+                                  product: prod,
+                                  statistics: CartItemStatistics(
+                                    prodId: prod.id,
+                                    color: color,
+                                    size: size,
+                                    quantity: '1',
+                                  ),
+                                ),
+                              );
+                            }
+                          }
+                        },
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero,
                         ),

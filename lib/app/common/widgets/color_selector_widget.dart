@@ -1,18 +1,18 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../utils/color_manager.dart';
-import '../../utils/constants_manager.dart';
 import '../../utils/values_manager.dart';
 
 class ColorSelectorWidget extends StatefulWidget {
   final List<String> colorList;
+  final String? selectedColor;
   final void Function(String color) getSelectedColor;
   const ColorSelectorWidget({
     Key? key,
     required this.colorList,
     required this.getSelectedColor,
+    this.selectedColor,
   }) : super(key: key);
 
   @override
@@ -20,51 +20,50 @@ class ColorSelectorWidget extends StatefulWidget {
 }
 
 class _ColorSelectorWidgetState extends State<ColorSelectorWidget> {
-  late bool arabic = context.locale == AppConstants.arabic;
   int selectedColorIndex = 0;
   @override
-  Widget build(BuildContext context) => SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: List.generate(
-            widget.colorList.length,
-            (index) {
-              String color = widget.colorList[index].replaceAll(
-                '#',
-                '0xff',
-              );
-              var convertedColor = Color(int.parse(color));
-              return GestureDetector(
-                onTap: () {
-                  setState(
-                    () => selectedColorIndex = index,
-                  );
-                  widget.getSelectedColor(widget.colorList[index]);
-                },
-                child: Container(
-                  width: AppSize.s30,
-                  height: AppSize.s30,
-                  margin: arabic
-                      ? EdgeInsets.only(left: AppPadding.p10.w)
-                      : EdgeInsets.only(right: AppPadding.p10.w),
-                  decoration: BoxDecoration(
-                    color: convertedColor,
-                    borderRadius: BorderRadius.circular(
-                      AppSize.s10.r,
-                    ),
+  Widget build(BuildContext context) => SizedBox(
+        height: AppSize.s30,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          itemCount: widget.colorList.length,
+          itemBuilder: (context, index) {
+            String color = widget.colorList[index].replaceAll(
+              '#',
+              '0xff',
+            );
+            var convertedColor = Color(int.parse(color));
+            bool isMark = widget.selectedColor != null
+                ? widget.selectedColor == widget.colorList[index]
+                : index == selectedColorIndex;
+            return GestureDetector(
+              onTap: () {
+                setState(
+                  () => selectedColorIndex = index,
+                );
+                widget.getSelectedColor(widget.colorList[index]);
+              },
+              child: Container(
+                width: AppSize.s30,
+                decoration: BoxDecoration(
+                  color: convertedColor,
+                  borderRadius: BorderRadius.circular(
+                    AppSize.s10.r,
                   ),
-                  child: index == selectedColorIndex
-                      ? Icon(
-                          Icons.check,
-                          color: convertedColor.computeLuminance() > 0.5
-                              ? ColorManager.kBlack
-                              : ColorManager.kWhite,
-                        )
-                      : null,
                 ),
-              );
-            },
+                child: isMark
+                    ? Icon(
+                        Icons.check,
+                        color: convertedColor.computeLuminance() > 0.5
+                            ? ColorManager.kBlack
+                            : ColorManager.kWhite,
+                      )
+                    : null,
+              ),
+            );
+          },
+          separatorBuilder: (context, index) => SizedBox(
+            width: AppSize.s10.w,
           ),
         ),
       );

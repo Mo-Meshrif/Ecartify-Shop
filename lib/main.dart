@@ -12,6 +12,7 @@ import 'app/services/services_locator.dart';
 import 'app/utils/constants_manager.dart';
 import 'modules/control/presentation/controller/app_config_bloc.dart';
 import 'modules/main/auth/presentation/controller/auth_bloc.dart';
+import 'modules/main/cart/presentation/controller/cart_bloc.dart';
 import 'modules/main/explore/presentation/controller/explore_bloc.dart';
 import 'modules/main/favourite/presentation/controller/favourite_bloc.dart';
 import 'modules/main/shop/presentation/controller/shop_bloc.dart';
@@ -61,6 +62,9 @@ void main() async {
             create: (context) => sl(),
           ),
           BlocProvider<ExploreBloc>(
+            create: (context) => sl(),
+          ),
+          BlocProvider<CartBloc>(
             create: (context) => sl(),
           ),
           BlocProvider<FavouriteBloc>(

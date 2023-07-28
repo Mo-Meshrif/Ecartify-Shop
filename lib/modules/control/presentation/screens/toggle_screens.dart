@@ -1,11 +1,11 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../app/helper/dynamic_link_helper.dart';
 import '../../../../app/services/services_locator.dart';
+import '../../../main/cart/presentation/controller/cart_bloc.dart';
 import '../../../main/cart/presentation/screens/cart_screen.dart';
 import '../../../main/explore/presentation/screens/explore_screen.dart';
 import '../../../main/favourite/presentation/screens/favourite_screen.dart';
@@ -44,7 +44,8 @@ class _ToggleScreenState extends State<ToggleScreens> {
     FirebaseMessaging.onBackgroundMessage(
       _firebaseMessagingBackgroundHandler,
     );
-    context.read<NotificationBloc>().add(GetUnReadNotificationEvent());
+    sl<NotificationBloc>().add(GetUnReadNotificationEvent());
+    sl<CartBloc>().add(const GetCartItems());
     DynamicLinkHelper().onBackgroundDynamicLink(context);
     DynamicLinkHelper().onTerminateDynamicLink(context);
     super.initState();

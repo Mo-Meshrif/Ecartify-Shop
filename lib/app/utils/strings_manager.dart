@@ -88,4 +88,9 @@ class AppStrings {
   static const String apply = 'Apply';
   static const String totalPrice = 'Total price';
   static const String checkout = 'Checkout';
+  static const String colors = 'Colors';
+  static const String sizes = 'Sizes';
+  static const String productQuantity = 'Product quantity';
+  static const String productQuantityNo = 'The quantity of the product number :';
+  static const String quantityCondition = 'must be equal to or smaller than';
 }
