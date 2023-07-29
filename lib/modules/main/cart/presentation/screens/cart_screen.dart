@@ -81,6 +81,7 @@ class _CartScreenState extends State<CartScreen> {
                             ),
                             itemCount: state.cartItems.length,
                             itemBuilder: (context, index) => CartItemWidget(
+                              key: Key(state.cartItems[index].prodId),
                               cartItem: state.cartItems[index],
                             ),
                             separatorBuilder: (context, index) => SizedBox(
