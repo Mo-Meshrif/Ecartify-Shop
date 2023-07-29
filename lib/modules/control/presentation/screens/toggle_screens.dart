@@ -8,6 +8,7 @@ import '../../../../app/services/services_locator.dart';
 import '../../../main/cart/presentation/controller/cart_bloc.dart';
 import '../../../main/cart/presentation/screens/cart_screen.dart';
 import '../../../main/explore/presentation/screens/explore_screen.dart';
+import '../../../main/favourite/presentation/controller/favourite_bloc.dart';
 import '../../../main/favourite/presentation/screens/favourite_screen.dart';
 import '../../../main/profile/presentation/screens/profile_screen.dart';
 import '../../../main/shop/presentation/screens/shop_screen.dart';
@@ -46,6 +47,7 @@ class _ToggleScreenState extends State<ToggleScreens> {
     );
     sl<NotificationBloc>().add(GetUnReadNotificationEvent());
     sl<CartBloc>().add(const GetCartItems());
+    sl<FavouriteBloc>().add(const GetFavouritesEvent());
     DynamicLinkHelper().onBackgroundDynamicLink(context);
     DynamicLinkHelper().onTerminateDynamicLink(context);
     super.initState();

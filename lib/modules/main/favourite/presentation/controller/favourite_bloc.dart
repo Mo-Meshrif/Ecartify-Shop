@@ -35,11 +35,12 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
   FutureOr<void> _getFavourites(
       GetFavouritesEvent event, Emitter<FavouriteState> emit) async {
     emit(state.copyWith(favListStatus: Status.loading));
-    List sharedList = _getFavIds();
-    if (sharedList.isEmpty) {
+    List<String> sharedList = _getFavIds();
+    if (sharedList.isEmpty || !event.isInit) {
       emit(
         state.copyWith(
-          favListStatus: Status.error,
+          favListStatus: Status.loaded,
+          favProdsNumber: sharedList.length,
           favProds: [],
         ),
       );
@@ -53,12 +54,14 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
         (_) => emit(
           state.copyWith(
             favListStatus: Status.error,
+            favProdsNumber: sharedList.length,
             favProds: [],
           ),
         ),
         (prods) => emit(
           state.copyWith(
             favListStatus: Status.loaded,
+            favProdsNumber: sharedList.length,
             favProds: prods,
           ),
         ),
@@ -67,7 +70,7 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
   }
 
   FutureOr<void> _setFavourite(
-      SetFavourite event, Emitter<FavouriteState> emit) {
+      SetFavourite event, Emitter<FavouriteState> emit) async {
     try {
       emit(
         state.copyWith(
@@ -76,11 +79,13 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
           favListStatus: Status.updated,
         ),
       );
-      List sharedList = _getFavIds();
-      appShared.setVal('Fav-key', sharedList..insert(0, event.prod.id));
+      List<String> sharedList = _getFavIds();
+      List<String> templist = sharedList..insert(0, event.prod.id);
+      appShared.setVal('Fav-key', templist);
       emit(
         state.copyWith(
           setFavStatus: Status.loaded,
+          favProdsNumber: templist.length,
           favProds: state.favProds..insert(0, event.prod),
         ),
       );
@@ -90,7 +95,7 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
   }
 
   FutureOr<void> _setUnFavourite(
-      SetUnFavourite event, Emitter<FavouriteState> emit) {
+      SetUnFavourite event, Emitter<FavouriteState> emit) async {
     try {
       emit(
         state.copyWith(
@@ -99,11 +104,13 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
           favListStatus: Status.updated,
         ),
       );
-      List sharedList = _getFavIds();
-      appShared.setVal('Fav-key', sharedList..remove(event.prod.id));
+      List<String> sharedList = _getFavIds();
+      List<String> templist = sharedList..remove(event.prod.id);
+      appShared.setVal('Fav-key', templist);
       emit(
         state.copyWith(
           setUnFavStatus: Status.loaded,
+          favProdsNumber: templist.length,
           favProds: state.favProds.isEmpty ? [] : state.favProds
             ..removeWhere(
               (element) => element.id == event.prod.id,
@@ -115,5 +122,7 @@ class FavouriteBloc extends Bloc<FavouriteEvent, FavouriteState> {
     }
   }
 
-  List _getFavIds() => appShared.getVal('Fav-key') ?? [];
+  List<String> _getFavIds() => List<String>.from(
+        appShared.getVal('Fav-key') ?? [],
+      );
 }
