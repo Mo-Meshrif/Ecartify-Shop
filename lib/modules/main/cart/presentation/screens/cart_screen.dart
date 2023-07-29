@@ -17,7 +17,8 @@ import '../controller/cart_bloc.dart';
 import '../widgets/cart_item_widget.dart';
 
 class CartScreen extends StatefulWidget {
-  const CartScreen({Key? key}) : super(key: key);
+  final bool hasTitle;
+  const CartScreen({Key? key, this.hasTitle = false}) : super(key: key);
 
   @override
   State<CartScreen> createState() => _CartScreenState();
@@ -40,6 +41,13 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+        appBar: widget.hasTitle
+            ? AppBar(
+                title: CustomText(
+                  data: AppStrings.cart.tr(),
+                ),
+              )
+            : null,
         body: BlocConsumer<CartBloc, CartState>(
           listener: (context, state) {
             if (state.cartStatus == Status.loading) {
@@ -52,7 +60,10 @@ class _CartScreenState extends State<CartScreen> {
             }
           },
           builder: (context, state) => SafeArea(
-            child: loading || state.cartItems.isEmpty
+            top: !widget.hasTitle,
+            child: loading ||
+                    state.cartItems.isEmpty ||
+                    state.cartStatus == Status.error
                 ? Center(
                     child: loading
                         ? Lottie.asset(

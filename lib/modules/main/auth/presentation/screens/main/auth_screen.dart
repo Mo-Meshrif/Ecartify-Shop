@@ -45,7 +45,7 @@ class _AuthScreenState extends State<AuthScreen> {
               sl<AppShared>().setVal(AppConstants.userKey, state.user);
               NavigationHelper.pushNamedAndRemoveUntil(
                 context,
-                Routes.toggleRoute,
+                Routes.controlRoute,
                 (route) => false,
               );
             } else if (state is AuthRestSuccess) {

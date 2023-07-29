@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,12 +9,15 @@ import '../../../../../../app/common/widgets/custom_refresh_wrapper.dart';
 import '../../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../../app/helper/enums.dart';
 import '../../../../../../app/helper/extensions.dart';
+import '../../../../../../app/helper/navigation_helper.dart';
 import '../../../../../../app/helper/shared_helper.dart';
 import '../../../../../../app/services/services_locator.dart';
 import '../../../../../../app/utils/assets_manager.dart';
 import '../../../../../../app/utils/color_manager.dart';
 import '../../../../../../app/utils/constants_manager.dart';
 import '../../../../../../app/utils/values_manager.dart';
+import '../../../../../main/cart/presentation/controller/cart_bloc.dart';
+import '../../../../../main/cart/presentation/screens/cart_screen.dart';
 import '../../../domain/entities/product.dart';
 import '../../../domain/usecases/get_products_by_parameter_use_case.dart';
 import '../../controller/product_bloc.dart';
@@ -110,12 +114,31 @@ class _TempProductListScreenState extends State<TempProductListScreen> {
           data: widget.productsParmeters.title,
         ),
         actions: [
-          IconButton(
-            onPressed: () {},
-            splashRadius: AppSize.s30.r,
-            icon: SvgPicture.asset(
-              IconAssets.cart,
-              color: theme.primaryColor,
+          BlocBuilder<CartBloc, CartState>(
+            builder: (context, state) => IconButton(
+              onPressed: () => NavigationHelper.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CartScreen(
+                    hasTitle: true,
+                  ),
+                ),
+              ),
+              splashRadius: AppSize.s30.r,
+              icon: Badge(
+                position: BadgePosition.topEnd(top: -15, end: -5),
+                showBadge: state.cartItemsNumber > 0,
+                badgeContent: CustomText(
+                  data: state.cartItemsNumber > 9
+                      ? '9+'
+                      : '${state.cartItemsNumber}',
+                  fontSize: state.cartItemsNumber > 9 ? 14.sp : 17.sp,
+                ),
+                child: SvgPicture.asset(
+                  IconAssets.cart,
+                  color: theme.primaryColor,
+                ),
+              ),
             ),
           ),
         ],

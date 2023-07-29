@@ -10,12 +10,10 @@ import '../../../../../app/utils/constants_manager.dart';
 import '../../../../../app/utils/strings_manager.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/usecases/apple_use_case.dart';
-import '../../domain/usecases/delete_use_case.dart';
 import '../../domain/usecases/facebook_use_case.dart';
 import '../../domain/usecases/forget_passwod_use_case.dart';
 import '../../domain/usecases/google_use_case.dart';
 import '../../domain/usecases/login_use_case.dart';
-import '../../domain/usecases/logout_use_case.dart';
 import '../../domain/usecases/signup_use_case.dart';
 
 part 'auth_event.dart';
@@ -28,8 +26,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final FacebookUseCase facebookUseCase;
   final GoogleUseCase googleUseCase;
   final AppleUseCase appleUseCase;
-  final LogoutUseCase logoutUseCase;
-  final DeleteUseCase deleteUseCase;
   AuthBloc({
     required this.loginUseCase,
     required this.signUpUseCase,
@@ -37,8 +33,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.facebookUseCase,
     required this.googleUseCase,
     required this.appleUseCase,
-    required this.logoutUseCase,
-    required this.deleteUseCase,
   }) : super(AuthInitial()) {
     on<LoginEvent>(_login);
     on<SignUpEvent>(_signUp);
@@ -46,8 +40,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<FacebookLoginEvent>(_facebookLogin);
     on<GoogleLoginEvent>(_googleLogin);
     on<AppleLoginEvent>(_appleLogin);
-    on<LogoutEvent>(_logout);
-    on<DeleteEvent>(_delete);
   }
 
   FutureOr<void> _login(LoginEvent event, Emitter<AuthState> emit) async {
@@ -111,24 +103,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     authResult.fold(
       (failure) => emit(AuthFailure(msg: _handleAuthExceptions(failure.msg))),
       (user) => emit(AuthSuccess(user: user)),
-    );
-  }
-
-  FutureOr<void> _logout(LogoutEvent event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
-    final Either<Failure, dynamic> result = await logoutUseCase(event.uid);
-    result.fold(
-      (failure) => emit(AuthFailure(msg: _handleAuthExceptions(failure.msg))),
-      (_) => emit(const AuthLogoutSuccess()),
-    );
-  }
-
-  FutureOr<void> _delete(DeleteEvent event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
-    final Either<Failure, dynamic> result = await deleteUseCase(event.user);
-    result.fold(
-      (failure) => emit(AuthFailure(msg: _handleAuthExceptions(failure.msg))),
-      (_) => emit(const AuthDeleteSuccess()),
     );
   }
 

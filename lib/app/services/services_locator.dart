@@ -35,6 +35,12 @@ import '../../modules/main/explore/domain/usecases/get_categories_use_case.dart'
 import '../../modules/main/explore/domain/usecases/get_sub_categories_use_case.dart';
 import '../../modules/main/explore/presentation/controller/explore_bloc.dart';
 import '../../modules/main/favourite/presentation/controller/favourite_bloc.dart';
+import '../../modules/main/profile/data/datasources/local_data_source.dart';
+import '../../modules/main/profile/data/datasources/remote_data_source.dart';
+import '../../modules/main/profile/data/repositories/profile_repository_impl.dart';
+import '../../modules/main/profile/domain/repositories/base_profile_repository.dart';
+import '../../modules/main/profile/domain/usecases/get_user_data_use_case.dart';
+import '../../modules/main/profile/presentation/controller/profile_bloc.dart';
 import '../../modules/main/shop/data/datasources/remote_data_source.dart';
 import '../../modules/main/shop/data/repositories/product_repository_impl.dart';
 import '../../modules/main/shop/domain/repositories/base_shop_repository.dart';
@@ -116,6 +122,12 @@ class ServicesLocator {
     sl.registerLazySingleton<BaseCartLocalDataSource>(
       () => CartLocalDataSource.db,
     );
+    sl.registerLazySingleton<BaseProfileRemoteDataSource>(
+      () => ProfileRemoteDataSource(sl()),
+    );
+    sl.registerLazySingleton<BaseProfileLocalDataSource>(
+      () => ProfileLocalDataSource(sl()),
+    );
     //Repositories
     sl.registerLazySingleton<BaseAuthRepository>(
         () => AuthRepositoryImpl(sl(), sl()));
@@ -131,6 +143,8 @@ class ServicesLocator {
         () => ExploreRepositoryImpl(sl(), sl()));
     sl.registerLazySingleton<BaseCartRepository>(
         () => CartRepositoryImpl(sl()));
+    sl.registerLazySingleton<BaseProfileRepository>(
+        () => ProfileRepositoryImpl(sl(), sl(), sl()));
     //UseCases
     sl.registerLazySingleton(() => LoginUseCase(sl()));
     sl.registerLazySingleton(() => SignUpUseCase(sl()));
@@ -157,6 +171,7 @@ class ServicesLocator {
     sl.registerLazySingleton(() => AddItemToCartUseCase(sl()));
     sl.registerLazySingleton(() => ChangeQuantityUseCase(sl()));
     sl.registerLazySingleton(() => DeleteItemUseCase(sl()));
+    sl.registerLazySingleton(() => GetUserDataUseCase(sl()));
     //blocs
     sl.registerLazySingleton(
       () => AppConfigBloc(
@@ -171,8 +186,6 @@ class ServicesLocator {
         facebookUseCase: sl(),
         googleUseCase: sl(),
         appleUseCase: sl(),
-        logoutUseCase: sl(),
-        deleteUseCase: sl(),
       ),
     );
     sl.registerLazySingleton(
@@ -222,6 +235,13 @@ class ServicesLocator {
       () => FavouriteBloc(
         appShared: sl(),
         getCustomProductsUseCase: sl(),
+      ),
+    );
+    sl.registerLazySingleton(
+      () => ProfileBloc(
+        getUserDataUseCase: sl(),
+        logoutUseCase: sl(),
+        deleteUseCase: sl(),
       ),
     );
   }

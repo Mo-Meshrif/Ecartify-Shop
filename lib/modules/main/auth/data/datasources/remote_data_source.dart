@@ -153,15 +153,14 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
   @override
   Future<void> logout(String uid) async {
     try {
-      final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+      final DocumentSnapshot<Map<String, dynamic>> querySnapshot =
           await _getUserDataFromFireStore(uid);
-      if (querySnapshot.docs.isNotEmpty) {
-        var doc = querySnapshot.docs.first;
-        Map<String, dynamic> map = doc.data();
+      if (querySnapshot.exists) {
+        Map<String, dynamic> map = querySnapshot.data()!;
         map['deviceToken'] = '';
         firebaseFirestore
             .collection(AppConstants.usersCollection)
-            .doc(doc.id)
+            .doc(querySnapshot.id)
             .update(map);
       }
       return await firebaseAuth.signOut();
@@ -173,13 +172,12 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
   @override
   Future<void> delete(UserModel userModel) async {
     try {
-      final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+      final DocumentSnapshot<Map<String, dynamic>> querySnapshot =
           await _getUserDataFromFireStore(userModel.id);
-      if (querySnapshot.docs.isNotEmpty) {
-        var doc = querySnapshot.docs.first;
+      if (querySnapshot.exists) {
         firebaseFirestore
             .collection(AppConstants.usersCollection)
-            .doc(doc.id)
+            .doc(querySnapshot.id)
             .delete();
       }
       final UserCredential userCredential =
@@ -199,34 +197,40 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
   }
 
   Future<UserModel> _uploadDataToFireStore(UserModel userModel) async {
-    final QuerySnapshot<Map<String, dynamic>> querySnapshot =
+    final DocumentSnapshot<Map<String, dynamic>> querySnapshot =
         await _getUserDataFromFireStore(userModel.id);
-    if (querySnapshot.docs.isNotEmpty) {
-      var doc = querySnapshot.docs.first;
-      var tempUser = userModel.copyWith(
-        name: userModel.name.isEmpty ? doc.data()['name'] : userModel.name,
-        pic: doc.data()['pic'],
-        password: doc.data()['pic'],
-      );
-      firebaseFirestore
-          .collection(AppConstants.usersCollection)
-          .doc(doc.id)
-          .update(tempUser.toJson());
-      return tempUser;
+    if (querySnapshot.exists) {
+      Map<String, dynamic>? doc = querySnapshot.data();
+      if (doc != null) {
+        var tempUser = userModel.copyWith(
+          name: userModel.name.isEmpty ? doc['name'] : userModel.name,
+          pic: doc['pic'],
+          password: doc['pic'],
+        );
+        firebaseFirestore
+            .collection(AppConstants.usersCollection)
+            .doc(querySnapshot.id)
+            .update(tempUser.toJson());
+        return tempUser;
+      } else {
+        firebaseFirestore
+            .collection(AppConstants.usersCollection)
+            .doc(userModel.id)
+            .set(userModel.toJson());
+        return userModel;
+      }
     } else {
       firebaseFirestore
           .collection(AppConstants.usersCollection)
-          .add(userModel.toJson());
+          .doc(userModel.id)
+          .set(userModel.toJson());
       return userModel;
     }
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> _getUserDataFromFireStore(
+  Future<DocumentSnapshot<Map<String, dynamic>>> _getUserDataFromFireStore(
           String uid) =>
-      firebaseFirestore
-          .collection(AppConstants.usersCollection)
-          .where(AppConstants.userIdFeild, isEqualTo: uid)
-          .get();
+      firebaseFirestore.collection(AppConstants.usersCollection).doc(uid).get();
 
   Future<UserModel> _signInWithCredential(AuthCredential authCredential) async {
     try {
