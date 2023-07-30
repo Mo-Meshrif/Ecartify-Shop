@@ -235,7 +235,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => Scaffold(
-                                            appBar: AppBar(),
+                                            appBar: AppBar(
+                                              title: CustomText(
+                                                data: AppStrings.about.tr(),
+                                              ),
+                                            ),
                                             body: const AboutWidget(),
                                           ),
                                         ),

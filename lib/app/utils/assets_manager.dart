@@ -7,6 +7,7 @@ class ImageAssets {
   static const String google = "$imagePath/google.png";
   static const String barcode = "$imagePath/barcode.png";
   static const String translation = "$imagePath/translation.png";
+  static const String logo = "$imagePath/logo.png";
 }
 
 class IconAssets {

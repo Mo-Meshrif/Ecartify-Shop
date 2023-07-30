@@ -93,4 +93,5 @@ class AppStrings {
   static const String productQuantity = 'Product quantity';
   static const String productQuantityNo = 'The quantity of the product number :';
   static const String quantityCondition = 'must be equal to or smaller than';
+  static const String aboutText="AboutText";
 }
