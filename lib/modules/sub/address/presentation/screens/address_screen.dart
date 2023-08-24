@@ -4,10 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../app/common/widgets/custom_elevated_button.dart';
 import '../../../../../app/common/widgets/custom_text.dart';
+import '../../../../../app/helper/navigation_helper.dart';
 import '../../../../../app/utils/strings_manager.dart';
 import '../../../../../app/utils/values_manager.dart';
 import '../../domain/entities/address.dart';
 import '../widgets/address_item.dart';
+import 'add_edit_address_screen.dart';
 
 class AddressScreen extends StatelessWidget {
   const AddressScreen({Key? key}) : super(key: key);
@@ -52,7 +54,12 @@ class AddressScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: AppPadding.p20.h),
                 child: CustomElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => NavigationHelper.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AddEditAddressScreen(),
+                    ),
+                  ),
                   padding: EdgeInsets.symmetric(vertical: AppPadding.p20.h),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(AppSize.s10.r),

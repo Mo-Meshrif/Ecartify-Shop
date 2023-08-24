@@ -1,3 +1,4 @@
+import 'package:ecartify/app/helper/navigation_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,6 +8,7 @@ import '../../../../../app/utils/assets_manager.dart';
 import '../../../../../app/utils/color_manager.dart';
 import '../../../../../app/utils/values_manager.dart';
 import '../../domain/entities/address.dart';
+import '../screens/add_edit_address_screen.dart';
 
 class AddressItem extends StatelessWidget {
   final Address address;
@@ -19,7 +21,14 @@ class AddressItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppSize.s10.r),
         ),
         child: ListTile(
-          onTap: () {},
+          onTap: () => NavigationHelper.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddEditAddressScreen(
+                address: address,
+              ),
+            ),
+          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppSize.s10.r),
           ),

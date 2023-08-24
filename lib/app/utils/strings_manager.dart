@@ -97,4 +97,8 @@ class AppStrings {
   static const String aboutText = "AboutText";
   static const String defaultText = "Default";
   static const String addNewAddress = "Add New Address";
+  static const String addressDetails = "Address Details";
+  static const String nameAddress = "Name Address";
+  static const String makeDefualt = "Make this as the default address";
+  static const String editAddress = "Edit address";
 }
