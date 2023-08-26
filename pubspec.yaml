@@ -46,6 +46,9 @@ dependencies:
   flutter_countdown_timer: ^4.1.0
   awesome_notifications: ^0.6.21
   sqflite: ^2.2.8+4
+  google_maps_flutter: ^2.3.0
+  custom_map_markers: ^0.0.2+1
+  geolocator: ^10.0.0
 
 dev_dependencies:
   flutter_native_splash: ^2.1.6

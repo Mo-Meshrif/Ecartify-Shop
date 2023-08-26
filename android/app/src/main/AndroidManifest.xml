@@ -81,6 +81,10 @@
                 android:value="@string/default_notification_channel_id"/>
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
    	    <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
+        <!-- GoogleMaps API KEY for testing -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCvwWt2UBTqq2Iew6IbQ0VdsEGz2Wporz8" />
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
