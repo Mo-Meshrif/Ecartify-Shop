@@ -99,5 +99,7 @@
     "Address Details": "Address Details",
     "Name Address": "Name Address",
     "Make this as the default address": "Make this as the default address",
-    "Edit address": "Edit address"
+    "Edit address": "Edit address",
+    "Enter your address name,please": "Enter your address name,please !",
+    "Enter your address details,please": "Enter your address details,please !"
 }

@@ -103,4 +103,6 @@ class AppStrings {
   static const String nameAddress = "Name Address";
   static const String makeDefualt = "Make this as the default address";
   static const String editAddress = "Edit address";
+  static const String enterAddressName = 'Enter your address name,please';
+  static const String enterAddressDetails = 'Enter your address details,please';
 }

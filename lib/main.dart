@@ -17,6 +17,7 @@ import 'modules/main/explore/presentation/controller/explore_bloc.dart';
 import 'modules/main/favourite/presentation/controller/favourite_bloc.dart';
 import 'modules/main/profile/presentation/controller/profile_bloc.dart';
 import 'modules/main/shop/presentation/controller/shop_bloc.dart';
+import 'modules/sub/address/presentation/controller/address_bloc.dart';
 import 'modules/sub/notification/presentation/controller/notification_bloc.dart';
 import 'modules/sub/product/presentation/controller/product_bloc.dart';
 import 'modules/sub/review/presentation/controller/review_bloc.dart';
@@ -72,6 +73,9 @@ void main() async {
             create: (context) => sl(),
           ),
           BlocProvider<ProfileBloc>(
+            create: (context) => sl(),
+          ),
+          BlocProvider<AddressBloc>(
             create: (context) => sl(),
           ),
         ],

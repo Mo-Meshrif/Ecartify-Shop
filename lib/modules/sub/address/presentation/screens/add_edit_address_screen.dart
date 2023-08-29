@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lottie/lottie.dart' as lottie;
 
@@ -12,11 +13,13 @@ import '../../../../../app/common/widgets/custom_sliding_up_pannel.dart';
 import '../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../app/helper/helper_functions.dart';
 import '../../../../../app/helper/navigation_helper.dart';
+import '../../../../../app/services/services_locator.dart';
 import '../../../../../app/utils/assets_manager.dart';
 import '../../../../../app/utils/strings_manager.dart';
 import '../../../../../app/utils/values_manager.dart';
 import '../../../../main/auth/domain/entities/user.dart';
 import '../../domain/entities/address.dart';
+import '../controller/address_bloc.dart';
 import '../widgets/address_bottom_widget.dart';
 import '../widgets/custom_marker_widget.dart';
 
@@ -35,6 +38,7 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
   Set<Marker> _markers = {};
   late Completer<GoogleMapController> _controller;
   CameraPosition? _currentPosition;
+  late TextEditingController _addressName, _addressDetails;
 
   @override
   void initState() {
@@ -42,19 +46,34 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
       (permission) {
         if (permission == LocationPermission.always ||
             permission == LocationPermission.whileInUse) {
-          Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-              .then(
-            (value) {
-              _loading = false;
-              _controller = Completer<GoogleMapController>();
-              updateLocation(
-                LatLng(
-                  value.latitude,
-                  value.longitude,
-                ),
-              );
-            },
-          );
+          _controller = Completer<GoogleMapController>();
+          _addressName = TextEditingController();
+          _addressDetails = TextEditingController();
+          if (widget.address != null) {
+            _loading = false;
+            _addressName.text = widget.address!.name;
+            updateLocation(
+              LatLng(
+                widget.address!.lat,
+                widget.address!.lon,
+              ),
+              oldAddress: widget.address!,
+            );
+          } else {
+            Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high,
+            ).then(
+              (value) {
+                _loading = false;
+                updateLocation(
+                  LatLng(
+                    value.latitude,
+                    value.longitude,
+                  ),
+                );
+              },
+            );
+          }
         } else {
           setState(() {
             _loading = false;
@@ -84,20 +103,52 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
     }
   }
 
-  updateLocation(LatLng latLng) => setState(
-        () {
-          _currentPosition = CameraPosition(
-            zoom: 14.4746,
-            target: latLng,
-          );
-          _markers = {
-            Marker(
-              markerId: const MarkerId('loc'),
-              position: _currentPosition!.target,
-            ),
-          };
-        },
-      );
+  updateLocation(LatLng latLng, {Address? oldAddress}) async {
+    setState(
+      () {
+        _currentPosition = CameraPosition(
+          zoom: 14.4746,
+          target: latLng,
+        );
+        _markers = {
+          Marker(
+            markerId: const MarkerId('loc'),
+            position: _currentPosition!.target,
+          ),
+        };
+        if (oldAddress != null) {
+          _addressName.text = oldAddress.name;
+          _addressDetails.text = oldAddress.details;
+        } else {
+          getAddressDetailsFromLoc(latLng).then((val) {
+            _addressDetails.text = val;
+          });
+        }
+      },
+    );
+  }
+
+  Future<String> getAddressDetailsFromLoc(LatLng latLng) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+      latLng.latitude,
+      latLng.longitude,
+    );
+    return placemarks.isEmpty
+        ? ''
+        : placemarks[0].country == null
+            ? placemarks[0].subAdministrativeArea == null
+                ? placemarks[0].street ?? ''
+                : placemarks[0].subAdministrativeArea! +
+                    ',' +
+                    (placemarks[0].street ?? '')
+            : placemarks[0].subAdministrativeArea != null
+                ? placemarks[0].country! +
+                    ',' +
+                    placemarks[0].subAdministrativeArea! +
+                    ',' +
+                    (placemarks[0].street ?? '')
+                : placemarks[0].country! + ',' + (placemarks[0].street ?? '');
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -142,6 +193,32 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
                 ),
                 pannel: AddressBottomWidget(
                   address: widget.address,
+                  addressName: _addressName,
+                  addressDetails: _addressDetails,
+                  onClickButton: (isDefault) {
+                    LatLng latLng = _currentPosition!.target;
+                    Address address = Address(
+                      id: widget.address?.id,
+                      name: _addressName.text,
+                      details: _addressDetails.text,
+                      lat: latLng.latitude,
+                      lon: latLng.longitude,
+                      isDefault: isDefault,
+                    );
+                    if (isEdit) {
+                      sl<AddressBloc>().add(
+                        EditAddressEvent(
+                          address: address,
+                        ),
+                      );
+                    } else {
+                      sl<AddressBloc>().add(
+                        AddAddressEvent(
+                          address: address,
+                        ),
+                      );
+                    }
+                  },
                 ),
                 body: CustomGoogleMapMarkerBuilder(
                   customMarkers: _markers
