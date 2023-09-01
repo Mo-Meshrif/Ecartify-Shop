@@ -9,7 +9,7 @@ import '../../modules/sub/address/presentation/screens/address_screen.dart';
 import '../../modules/sub/help/presentation/screens/help_screen.dart';
 import '../../modules/sub/notification/presentation/screens/notification_screen.dart';
 import '../../modules/sub/order/presentation/screens/order_screen.dart';
-import '../../modules/sub/payment/presentation/screens/payment_screen.dart';
+import '../../modules/sub/payment/presentation/screens/wallet_screen.dart';
 import '../../modules/sub/product/domain/entities/product.dart';
 import '../../modules/sub/product/domain/usecases/get_products_by_parameter_use_case.dart';
 import '../../modules/sub/product/presentation/screens/productDetailsScreen/product_details_screen.dart';
@@ -30,7 +30,7 @@ class Routes {
   static const String exploreRoute = "/explore";
   static const String orderRoute = "/order";
   static const String addressRoute = "/address";
-  static const String paymentRoute = "/payment";
+  static const String walletRoute = "/wallet";
   static const String helpRoute = "/help";
 }
 
@@ -83,9 +83,9 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) => const AddressScreen(),
         );
-      case Routes.paymentRoute:
+      case Routes.walletRoute:
         return MaterialPageRoute(
-          builder: (_) => const PaymentScreen(),
+          builder: (_) => const WalletScreen(),
         );
       case Routes.helpRoute:
         return MaterialPageRoute(

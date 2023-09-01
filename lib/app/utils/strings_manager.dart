@@ -73,6 +73,7 @@ class AppStrings {
   static const String orders = 'Orders';
   static const String deliceryAddress = 'Delivery Address';
   static const String payment = 'Payment Methods';
+  static const String wallet = 'Wallet';
   static const String privacy = 'Privacy';
   static const String help = 'Help';
   static const String about = 'About';

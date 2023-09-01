@@ -45,8 +45,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       title: AppStrings.deliceryAddress,
     ),
     ProfileItem(
-      icon: IconAssets.payment,
-      title: AppStrings.payment,
+      icon: IconAssets.wallet,
+      title: AppStrings.wallet,
     ),
     ProfileItem(
       icon: IconAssets.privacy,
@@ -210,7 +210,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     case 2:
                                       NavigationHelper.pushNamed(
                                         context,
-                                        Routes.paymentRoute,
+                                        Routes.walletRoute,
                                       );
                                       break;
                                     case 3:
