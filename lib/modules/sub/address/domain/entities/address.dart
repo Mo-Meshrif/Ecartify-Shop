@@ -6,7 +6,7 @@ class Address extends Equatable {
   final int? id;
   final String name, details;
   final double lat, lon;
-  final bool isDefault;
+  final bool isDefault,selected;
 
   const Address({
     this.id,
@@ -15,15 +15,17 @@ class Address extends Equatable {
     required this.lat,
     required this.lon,
     this.isDefault = false,
+    this.selected=false,
   });
 
-  Address copyWith({bool? isDefault}) => Address(
+  Address copyWith({bool? isDefault,bool? selected}) => Address(
         id: id,
         name: name,
         details: details,
         lat: lat,
         lon: lon,
         isDefault: isDefault ?? this.isDefault,
+        selected: selected ?? this.selected,
       );
       
   AddressModel toModel() => AddressModel(
@@ -43,5 +45,6 @@ class Address extends Equatable {
         lat,
         lon,
         isDefault,
+        selected,
       ];
 }

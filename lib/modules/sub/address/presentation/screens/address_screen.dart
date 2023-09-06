@@ -19,7 +19,8 @@ import '../widgets/address_item.dart';
 import 'add_edit_address_screen.dart';
 
 class AddressScreen extends StatefulWidget {
-  const AddressScreen({Key? key}) : super(key: key);
+  final bool fromCheckout;
+  const AddressScreen({Key? key, this.fromCheckout = false}) : super(key: key);
 
   @override
   State<AddressScreen> createState() => _AddressScreenState();
@@ -29,37 +30,54 @@ class _AddressScreenState extends State<AddressScreen> {
   bool _hasOperation = false;
   @override
   void initState() {
-    sl<AddressBloc>().add(GetAddressListEvent());
+    if (!widget.fromCheckout) {
+      sl<AddressBloc>().add(GetAddressListEvent());
+    }
     super.initState();
   }
+
+  Widget? _trailingButton(Address address) => widget.fromCheckout
+      ? IconButton(
+          onPressed: () =>
+              sl<AddressBloc>().add(SelectAddressEvent(address: address)),
+          splashRadius: AppSize.s30.r,
+          icon: Icon(
+            address.selected
+                ? Icons.radio_button_checked
+                : Icons.radio_button_off_outlined,
+          ),
+        )
+      : null;
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: CustomText(
-            data: AppStrings.deliceryAddress.tr(),
+            data: AppStrings.deliveryAddresses.tr(),
           ),
         ),
         body: BlocConsumer<AddressBloc, AddressState>(
           listener: (context, state) {
-            if (state.addAddressStatus == Status.loading ||
-                state.editAddressStatus == Status.loading) {
-              if (!_hasOperation) {
-                _hasOperation = true;
-                HelperFunctions.showPopUpLoading(context);
-              }
-            } else if (state.addAddressStatus == Status.loaded ||
-                state.editAddressStatus == Status.loaded) {
-              if (_hasOperation) {
-                NavigationHelper.pop(context);
-                _hasOperation = false;
-                NavigationHelper.pop(context);
-              }
-            } else if (state.addAddressStatus == Status.error ||
-                state.editAddressStatus == Status.error) {
-              if (_hasOperation) {
-                _hasOperation = false;
-                NavigationHelper.pop(context);
+            if (!widget.fromCheckout) {
+              if (state.addAddressStatus == Status.loading ||
+                  state.editAddressStatus == Status.loading) {
+                if (!_hasOperation) {
+                  _hasOperation = true;
+                  HelperFunctions.showPopUpLoading(context);
+                }
+              } else if (state.addAddressStatus == Status.loaded ||
+                  state.editAddressStatus == Status.loaded) {
+                if (_hasOperation) {
+                  NavigationHelper.pop(context);
+                  _hasOperation = false;
+                  NavigationHelper.pop(context);
+                }
+              } else if (state.addAddressStatus == Status.error ||
+                  state.editAddressStatus == Status.error) {
+                if (_hasOperation) {
+                  _hasOperation = false;
+                  NavigationHelper.pop(context);
+                }
               }
             }
           },
@@ -76,7 +94,10 @@ class _AddressScreenState extends State<AddressScreen> {
                                 itemCount: state.addressList.length,
                                 itemBuilder: (context, index) {
                                   Address address = state.addressList[index];
-                                  return address.isDefault
+                                  bool selected =
+                                      state.userAddress?.id == address.id;
+                                  return address.isDefault &&
+                                          !widget.fromCheckout
                                       ? ClipRect(
                                           child: Banner(
                                             message:
@@ -87,7 +108,14 @@ class _AddressScreenState extends State<AddressScreen> {
                                             ),
                                           ),
                                         )
-                                      : AddressItem(address: address);
+                                      : AddressItem(
+                                          address: address,
+                                          trailingButton: _trailingButton(
+                                            address.copyWith(
+                                              selected: selected,
+                                            ),
+                                          ),
+                                        );
                                 },
                                 separatorBuilder: (_, __) => SizedBox(
                                   height: AppSize.s10.h,
@@ -101,8 +129,9 @@ class _AddressScreenState extends State<AddressScreen> {
                           onPressed: () => NavigationHelper.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  const AddEditAddressScreen(),
+                              builder: (context) => AddEditAddressScreen(
+                                forceDefault: widget.fromCheckout,
+                              ),
                             ),
                           ),
                           padding:
@@ -110,8 +139,9 @@ class _AddressScreenState extends State<AddressScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(AppSize.s10.r),
                           ),
-                          child:
-                              CustomText(data: AppStrings.addNewAddress.tr()),
+                          child: CustomText(
+                            data: AppStrings.addNewAddress.tr(),
+                          ),
                         ),
                       ),
                     ],

@@ -8,6 +8,7 @@ class AddressModel extends Address {
     required double lat,
     required double lon,
     bool isDefault = false,
+    bool selected = false,
   }) : super(
           id: id,
           name: name,
@@ -15,6 +16,7 @@ class AddressModel extends Address {
           lat: lat,
           lon: lon,
           isDefault: isDefault,
+          selected: selected,
         );
 
   factory AddressModel.fromJson(Map<String, dynamic> json) => AddressModel(
@@ -27,13 +29,15 @@ class AddressModel extends Address {
       );
 
   @override
-  AddressModel copyWith({int? id, bool? isDefault}) => AddressModel(
+  AddressModel copyWith({int? id, bool? isDefault, bool? selected}) =>
+      AddressModel(
         id: id ?? this.id,
         name: name,
         details: details,
         lat: lat,
         lon: lon,
         isDefault: isDefault ?? this.isDefault,
+        selected: selected ?? this.selected,
       );
 
   Map<String, dynamic> toJson() => {

@@ -23,3 +23,8 @@ class DeleteAddressEvent extends AddressEvent {
   final int addressId;
   const DeleteAddressEvent({required this.addressId});
 }
+
+class SelectAddressEvent extends AddressEvent {
+  final Address address;
+  const SelectAddressEvent({required this.address});
+}

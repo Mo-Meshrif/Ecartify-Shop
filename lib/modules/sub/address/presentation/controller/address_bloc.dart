@@ -29,6 +29,7 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
     on<AddAddressEvent>(_addAddress);
     on<EditAddressEvent>(_editAddress);
     on<DeleteAddressEvent>(_deleteAddress);
+    on<SelectAddressEvent>(_selectAddress);
   }
 
   FutureOr<void> _getAddressList(
@@ -36,6 +37,7 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
     emit(
       state.copyWith(
         addressListStatus: Status.loading,
+        userAddressStatus: Status.sleep,
         addAddressStatus: Status.sleep,
         editAddressStatus: Status.sleep,
         deleteAddressStatus: Status.sleep,
@@ -46,12 +48,20 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
       (l) => emit(
         state.copyWith(
           addressListStatus: Status.error,
+          addressList: [],
         ),
       ),
       (newList) => emit(
         state.copyWith(
           addressListStatus: Status.loaded,
           addressList: newList,
+          userAddressStatus: Status.loaded,
+          userAddress: newList.isNotEmpty
+              ? newList.firstWhere(
+                  (e) => e.isDefault,
+                  orElse: () => newList.first,
+                )
+              : null,
         ),
       ),
     );
@@ -62,6 +72,7 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
     emit(
       state.copyWith(
         addAddressStatus: Status.loading,
+        userAddressStatus: Status.sleep,
       ),
     );
     var result = await addAddressUseCase(event.address);
@@ -80,6 +91,10 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
                   .toList()
               : state.addressList)
             ..insert(0, address),
+          userAddressStatus: Status.loaded,
+          userAddress: address.isDefault || state.addressList.length == 1
+              ? address
+              : state.userAddress,
         ),
       ),
     );
@@ -137,4 +152,15 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
       ),
     );
   }
+
+  FutureOr<void> _selectAddress(
+    SelectAddressEvent event,
+    Emitter<AddressState> emit,
+  ) async =>
+      emit(
+        state.copyWith(
+          userAddressStatus: Status.loaded,
+          userAddress: event.address,
+        ),
+      );
 }

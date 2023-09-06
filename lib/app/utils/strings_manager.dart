@@ -71,7 +71,8 @@ class AppStrings {
   static const String findProds = 'Find Products';
   static const String allToCart = 'Add all to cart';
   static const String orders = 'Orders';
-  static const String deliceryAddress = 'Delivery Address';
+  static const String deliveryAddresses = 'Delivery Addresses';
+  static const String deliveryAddress = 'Delivery Address';
   static const String payment = 'Payment Methods';
   static const String wallet = 'Wallet';
   static const String privacy = 'Privacy';

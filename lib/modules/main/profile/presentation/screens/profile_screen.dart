@@ -41,8 +41,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       title: AppStrings.orders,
     ),
     ProfileItem(
-      icon: IconAssets.deliceryAddress,
-      title: AppStrings.deliceryAddress,
+      icon: IconAssets.deliveryAddress,
+      title: AppStrings.deliveryAddresses,
     ),
     ProfileItem(
       icon: IconAssets.wallet,

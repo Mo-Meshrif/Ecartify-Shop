@@ -13,8 +13,13 @@ import '../controller/address_bloc.dart';
 import '../screens/add_edit_address_screen.dart';
 
 class AddressItem extends StatelessWidget {
+  final Widget? trailingButton;
   final Address address;
-  const AddressItem({Key? key, required this.address}) : super(key: key);
+  const AddressItem({
+    Key? key,
+    this.trailingButton,
+    required this.address,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Material(
@@ -27,6 +32,7 @@ class AddressItem extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => AddEditAddressScreen(
+                disableGestures: trailingButton != null,
                 address: address,
               ),
             ),
@@ -41,7 +47,7 @@ class AddressItem extends StatelessWidget {
           leading: CircleAvatar(
             backgroundColor: Theme.of(context).primaryColor,
             child: SvgPicture.asset(
-              IconAssets.deliceryAddress,
+              IconAssets.deliveryAddress,
               color: Theme.of(context).canvasColor,
             ),
           ),
@@ -59,16 +65,19 @@ class AddressItem extends StatelessWidget {
               ),
             ],
           ),
-          trailing: IconButton(
-            onPressed: () {
-              sl<AddressBloc>().add(DeleteAddressEvent(addressId: address.id!));
-            },
-            splashRadius: AppSize.s30.r,
-            icon: Icon(
-              Icons.delete,
-              color: ColorManager.kRed,
-            ),
-          ),
+          trailing: trailingButton ??
+              IconButton(
+                onPressed: () => sl<AddressBloc>().add(
+                  DeleteAddressEvent(
+                    addressId: address.id!,
+                  ),
+                ),
+                splashRadius: AppSize.s30.r,
+                icon: Icon(
+                  Icons.delete,
+                  color: ColorManager.kRed,
+                ),
+              ),
         ),
       );
 }

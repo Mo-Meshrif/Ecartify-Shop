@@ -8,6 +8,7 @@ import '../../../../../app/common/widgets/custom_elevated_button.dart';
 import '../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../app/helper/enums.dart';
 import '../../../../../app/helper/helper_functions.dart';
+import '../../../../../app/helper/navigation_helper.dart';
 import '../../../../../app/services/services_locator.dart';
 import '../../../../../app/utils/assets_manager.dart';
 import '../../../../../app/utils/color_manager.dart';
@@ -15,6 +16,7 @@ import '../../../../../app/utils/strings_manager.dart';
 import '../../../../../app/utils/values_manager.dart';
 import '../controller/cart_bloc.dart';
 import '../widgets/cart_item_widget.dart';
+import 'checkout_screen.dart';
 
 class CartScreen extends StatefulWidget {
   final bool hasTitle;
@@ -163,7 +165,13 @@ class _CartScreenState extends State<CartScreen> {
                                       }
                                     }
                                     if (errorCount == 0) {
-                                      //TODO to checkout
+                                      NavigationHelper.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const CheckoutScreen(),
+                                        ),
+                                      );
                                     }
                                   },
                                   padding: EdgeInsets.symmetric(

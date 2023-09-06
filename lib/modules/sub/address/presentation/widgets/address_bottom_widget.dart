@@ -12,6 +12,7 @@ import '../../domain/entities/address.dart';
 class AddressBottomWidget extends StatefulWidget {
   final TextEditingController addressName, addressDetails;
   final Address? address;
+  final bool forceDefault;
   final Function(
     bool isDefault,
   ) onClickButton;
@@ -21,6 +22,7 @@ class AddressBottomWidget extends StatefulWidget {
     required this.addressName,
     required this.addressDetails,
     this.address,
+    required this.forceDefault,
     required this.onClickButton,
   }) : super(key: key);
 
@@ -100,7 +102,9 @@ class _AddressBottomWidgetState extends State<AddressBottomWidget> {
                       : null,
                 ),
                 Visibility(
-                  visible: isEdit ? !widget.address!.isDefault : true,
+                  visible: isEdit
+                      ? !widget.address!.isDefault
+                      : !widget.forceDefault,
                   child: Padding(
                     padding: EdgeInsets.only(top: AppPadding.p15.h),
                     child: Row(

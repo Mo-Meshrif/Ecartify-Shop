@@ -24,8 +24,15 @@ import '../widgets/address_bottom_widget.dart';
 import '../widgets/custom_marker_widget.dart';
 
 class AddEditAddressScreen extends StatefulWidget {
+  final bool disableGestures;
+  final bool forceDefault;
   final Address? address;
-  const AddEditAddressScreen({Key? key, this.address}) : super(key: key);
+  const AddEditAddressScreen({
+    Key? key,
+    this.disableGestures = false,
+    this.forceDefault = false,
+    this.address,
+  }) : super(key: key);
 
   @override
   State<AddEditAddressScreen> createState() => _AddEditAddressScreenState();
@@ -154,9 +161,11 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: CustomText(
-            data: isEdit
-                ? AppStrings.editAddress.tr()
-                : AppStrings.addNewAddress.tr(),
+            data: widget.disableGestures
+                ? AppStrings.deliveryAddress.tr()
+                : isEdit
+                    ? AppStrings.editAddress.tr()
+                    : AppStrings.addNewAddress.tr(),
           ),
         ),
         body: _loading || _currentPosition == null
@@ -170,56 +179,61 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
                       ),
               )
             : CustomSlidingUpPanel(
-                collapsed: Card(
-                  margin: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(AppSize.s25.r),
-                      topRight: Radius.circular(AppSize.s25.r),
-                    ),
-                  ),
-                  child: Container(
-                    width: 1.sw,
-                    padding: EdgeInsets.symmetric(
-                      vertical: AppPadding.p20.h,
-                    ),
-                    child: CustomText(
-                      textAlign: TextAlign.center,
-                      data: AppStrings.swipeToFillAddressDetails.tr(),
-                      fontWeight: FontWeight.bold,
-                      fontSize: AppSize.s25.sp,
-                    ),
-                  ),
-                ),
-                pannel: AddressBottomWidget(
-                  address: widget.address,
-                  addressName: _addressName,
-                  addressDetails: _addressDetails,
-                  onClickButton: (isDefault) {
-                    LatLng latLng = _currentPosition!.target;
-                    Address address = Address(
-                      id: widget.address?.id,
-                      name: _addressName.text,
-                      details: _addressDetails.text,
-                      lat: latLng.latitude,
-                      lon: latLng.longitude,
-                      isDefault: isDefault,
-                    );
-                    if (isEdit) {
-                      sl<AddressBloc>().add(
-                        EditAddressEvent(
-                          address: address,
+                collapsed: widget.disableGestures
+                    ? const SizedBox()
+                    : Card(
+                        margin: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(AppSize.s25.r),
+                            topRight: Radius.circular(AppSize.s25.r),
+                          ),
                         ),
-                      );
-                    } else {
-                      sl<AddressBloc>().add(
-                        AddAddressEvent(
-                          address: address,
+                        child: Container(
+                          width: 1.sw,
+                          padding: EdgeInsets.symmetric(
+                            vertical: AppPadding.p20.h,
+                          ),
+                          child: CustomText(
+                            textAlign: TextAlign.center,
+                            data: AppStrings.swipeToFillAddressDetails.tr(),
+                            fontWeight: FontWeight.bold,
+                            fontSize: AppSize.s25.sp,
+                          ),
                         ),
-                      );
-                    }
-                  },
-                ),
+                      ),
+                pannel: widget.disableGestures
+                    ? const SizedBox()
+                    : AddressBottomWidget(
+                        address: widget.address,
+                        addressName: _addressName,
+                        addressDetails: _addressDetails,
+                        forceDefault: widget.forceDefault,
+                        onClickButton: (isDefault) {
+                          LatLng latLng = _currentPosition!.target;
+                          Address address = Address(
+                            id: widget.address?.id,
+                            name: _addressName.text,
+                            details: _addressDetails.text,
+                            lat: latLng.latitude,
+                            lon: latLng.longitude,
+                            isDefault: widget.forceDefault ? true : isDefault,
+                          );
+                          if (isEdit) {
+                            sl<AddressBloc>().add(
+                              EditAddressEvent(
+                                address: address,
+                              ),
+                            );
+                          } else {
+                            sl<AddressBloc>().add(
+                              AddAddressEvent(
+                                address: address,
+                              ),
+                            );
+                          }
+                        },
+                      ),
                 body: CustomGoogleMapMarkerBuilder(
                   customMarkers: _markers
                       .map(
@@ -234,7 +248,11 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
                     markers: markers ?? {},
                     initialCameraPosition: _currentPosition!,
                     myLocationButtonEnabled: false,
-                    onTap: (newLoc) => updateLocation(newLoc),
+                    onTap: (newLoc) {
+                      if (!widget.disableGestures) {
+                        updateLocation(newLoc);
+                      }
+                    },
                     onMapCreated: (controller) => _controller.complete(
                       controller,
                     ),

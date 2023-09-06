@@ -81,7 +81,9 @@ class RouteGenerator {
         );
       case Routes.addressRoute:
         return MaterialPageRoute(
-          builder: (_) => const AddressScreen(),
+          builder: (_) => AddressScreen(
+            fromCheckout: settings.arguments is bool,
+          ),
         );
       case Routes.walletRoute:
         return MaterialPageRoute(

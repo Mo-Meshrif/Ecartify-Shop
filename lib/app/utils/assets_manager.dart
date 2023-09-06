@@ -24,7 +24,7 @@ class IconAssets {
   static const String filter = "$iconPath/filter.svg";
   static const String flash = "$iconPath/flash.svg";
   static const String orders = "$iconPath/orders.svg";
-  static const String deliceryAddress = "$iconPath/delicery-address.svg";
+  static const String deliveryAddress = "$iconPath/delivery-address.svg";
   static const String payment = "$iconPath/payments.svg";
   static const String wallet = "$iconPath/wallet.svg";
   static const String privacy = "$iconPath/privacy.svg";
