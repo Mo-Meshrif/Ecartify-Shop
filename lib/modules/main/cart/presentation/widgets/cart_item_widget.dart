@@ -18,8 +18,13 @@ import '../../domain/entities/cart_item_statistics.dart';
 import '../controller/cart_bloc.dart';
 
 class CartItemWidget extends StatefulWidget {
+  final bool disableGestures;
   final CartItem cartItem;
-  const CartItemWidget({Key? key, required this.cartItem}) : super(key: key);
+  const CartItemWidget({
+    Key? key,
+    required this.cartItem,
+    this.disableGestures = false,
+  }) : super(key: key);
 
   @override
   State<CartItemWidget> createState() => _CartItemWidgetState();
@@ -83,7 +88,11 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                       : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Divider(),
+                            Divider(
+                              color: widget.disableGestures
+                                  ? ColorManager.kGrey.withOpacity(0.3)
+                                  : null,
+                            ),
                             Row(
                               children: [
                                 CustomText(
@@ -124,7 +133,11 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Divider(),
+                              Divider(
+                                color: widget.disableGestures
+                                    ? ColorManager.kGrey.withOpacity(0.3)
+                                    : null,
+                              ),
                               Row(
                                 children: [
                                   CustomText(
@@ -204,7 +217,8 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                         } else {
                           HelperFunctions.showSnackBar(
                             context,
-                            AppStrings.productQuantity.tr() +' '+
+                            AppStrings.productQuantity.tr() +
+                                ' ' +
                                 AppStrings.quantityCondition.tr() +
                                 ' ' '${widget.cartItem.product!.storeAmount}',
                           );
@@ -219,118 +233,156 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                 : Row(
                     children: [
                       Expanded(
-                        child: Row(
-                          children: [
-                            SizedBox(width: AppSize.s25.w),
-                            CustomText(
-                              data: widget.cartItem.product!.price,
-                              fontSize: AppSize.s20.sp,
-                              color: theme.canvasColor,
-                            ),
-                            Expanded(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      if (widget.cartItem.product!.storeAmount >
-                                          HelperFunctions
-                                              .refactorCartItemLength(
-                                                  [widget.cartItem])) {
-                                        setState(() {
-                                          statistics = statistics!.copyWith(
-                                              '${int.parse(statistics!.quantity) + 1}');
-                                          quantity = statistics!.quantity;
-                                        });
-                                        sl<CartBloc>().add(
-                                          ChangeQuantityEvent(
-                                            statistics: statistics!,
-                                          ),
-                                        );
-                                      } else {
-                                        HelperFunctions.showSnackBar(
-                                          context,
-                                          AppStrings.productQuantity.tr() +' '+
-                                              AppStrings.quantityCondition
-                                                  .tr() +
-                                              ' '
-                                                  '${widget.cartItem.product!.storeAmount}',
-                                        );
-                                      }
-                                    },
-                                    splashRadius: AppSize.s25.r,
-                                    icon: SvgPicture.asset(
-                                      IconAssets.add,
-                                      color: theme.canvasColor,
-                                    ),
-                                  ),
-                                  CustomText(
-                                    data: quantity,
-                                    fontSize: AppSize.s25.sp,
-                                    color: theme.canvasColor,
-                                  ),
-                                  Visibility(
-                                    visible:
-                                        widget.cartItem.statistics.length ==
-                                                    1 &&
-                                                quantity == '1'
-                                            ? false
-                                            : true,
-                                    child: IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          statistics = statistics!.copyWith(
-                                              '${int.parse(statistics!.quantity) - 1}');
-                                          quantity = statistics!.quantity;
-                                        });
-                                        sl<CartBloc>().add(
-                                          ChangeQuantityEvent(
-                                            statistics: statistics!,
-                                          ),
-                                        );
-                                        if (quantity == '0') {
-                                          setState(
-                                            () {
-                                              statistics = widget
-                                                  .cartItem.statistics
-                                                  .firstWhere(
-                                                (e) =>
-                                                    e.color !=
-                                                        statistics!.color ||
-                                                    e.size != statistics!.size,
-                                              );
-                                              selectedColor = statistics!.color;
-                                              selectedSize = statistics!.size;
-                                              quantity = statistics!.quantity;
-                                            },
-                                          );
-                                        }
-                                      },
-                                      splashRadius: AppSize.s25.r,
-                                      icon: SvgPicture.asset(
-                                        IconAssets.subtrack,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal:
+                                widget.disableGestures ? AppPadding.p25.w : 0,
+                            vertical:
+                                widget.disableGestures ? AppPadding.p10.h : 0,
+                          ),
+                          child: Row(
+                            children: widget.disableGestures
+                                ? [
+                                    Expanded(
+                                      child: CustomText(
+                                        data: widget.cartItem.product!.price,
+                                        fontSize: AppSize.s20.sp,
                                         color: theme.canvasColor,
                                       ),
                                     ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () => sl<CartBloc>().add(
-                          DeleteItemEvent(
-                            prodId: widget.cartItem.prodId,
+                                    CustomText(
+                                      data: quantity,
+                                      fontSize: AppSize.s25.sp,
+                                      color: theme.canvasColor,
+                                    )
+                                  ]
+                                : [
+                                    SizedBox(width: AppSize.s25.w),
+                                    CustomText(
+                                      data: widget.cartItem.product!.price,
+                                      fontSize: AppSize.s20.sp,
+                                      color: theme.canvasColor,
+                                    ),
+                                    Expanded(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          IconButton(
+                                            onPressed: () {
+                                              if (widget.cartItem.product!
+                                                      .storeAmount >
+                                                  HelperFunctions
+                                                      .refactorCartItemLength(
+                                                          [widget.cartItem])) {
+                                                setState(() {
+                                                  statistics = statistics!.copyWith(
+                                                      '${int.parse(statistics!.quantity) + 1}');
+                                                  quantity =
+                                                      statistics!.quantity;
+                                                });
+                                                sl<CartBloc>().add(
+                                                  ChangeQuantityEvent(
+                                                    statistics: statistics!,
+                                                  ),
+                                                );
+                                              } else {
+                                                HelperFunctions.showSnackBar(
+                                                  context,
+                                                  AppStrings.productQuantity
+                                                          .tr() +
+                                                      ' ' +
+                                                      AppStrings
+                                                          .quantityCondition
+                                                          .tr() +
+                                                      ' '
+                                                          '${widget.cartItem.product!.storeAmount}',
+                                                );
+                                              }
+                                            },
+                                            splashRadius: AppSize.s25.r,
+                                            icon: SvgPicture.asset(
+                                              IconAssets.add,
+                                              color: theme.canvasColor,
+                                            ),
+                                          ),
+                                          CustomText(
+                                            data: quantity,
+                                            fontSize: AppSize.s25.sp,
+                                            color: theme.canvasColor,
+                                          ),
+                                          Visibility(
+                                            visible: widget.cartItem.statistics
+                                                            .length ==
+                                                        1 &&
+                                                    quantity == '1'
+                                                ? false
+                                                : true,
+                                            child: IconButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  statistics = statistics!.copyWith(
+                                                      '${int.parse(statistics!.quantity) - 1}');
+                                                  quantity =
+                                                      statistics!.quantity;
+                                                });
+                                                sl<CartBloc>().add(
+                                                  ChangeQuantityEvent(
+                                                    statistics: statistics!,
+                                                  ),
+                                                );
+                                                if (quantity == '0') {
+                                                  setState(
+                                                    () {
+                                                      statistics = widget
+                                                          .cartItem.statistics
+                                                          .firstWhere(
+                                                        (e) =>
+                                                            e.color !=
+                                                                statistics!
+                                                                    .color ||
+                                                            e.size !=
+                                                                statistics!
+                                                                    .size,
+                                                      );
+                                                      selectedColor =
+                                                          statistics!.color;
+                                                      selectedSize =
+                                                          statistics!.size;
+                                                      quantity =
+                                                          statistics!.quantity;
+                                                    },
+                                                  );
+                                                }
+                                              },
+                                              splashRadius: AppSize.s25.r,
+                                              icon: SvgPicture.asset(
+                                                IconAssets.subtrack,
+                                                color: theme.canvasColor,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                           ),
                         ),
-                        splashRadius: AppSize.s25.r,
-                        icon: Icon(
-                          Icons.delete,
-                          color: ColorManager.kRed,
-                        ),
-                      )
+                      ),
+                      widget.disableGestures
+                          ? const SizedBox()
+                          : IconButton(
+                              onPressed: () => sl<CartBloc>().add(
+                                DeleteItemEvent(
+                                  prodId: widget.cartItem.prodId,
+                                ),
+                              ),
+                              splashRadius: AppSize.s25.r,
+                              icon: Icon(
+                                Icons.delete,
+                                color: ColorManager.kRed,
+                              ),
+                            )
                     ],
                   ),
           )

@@ -107,4 +107,5 @@ class AppStrings {
   static const String editAddress = "Edit address";
   static const String enterAddressName = 'Enter your address name,please';
   static const String enterAddressDetails = 'Enter your address details,please';
+  static const String orderList = 'Order List';
 }
