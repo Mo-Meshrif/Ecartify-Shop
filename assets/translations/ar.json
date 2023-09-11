@@ -87,7 +87,7 @@
     "Rating": "تقييم",
     "Rest": "اعاده تعيين",
     "Apply": "تطبيق",
-    "Total price": "السعر الكلي",
+    "Total price": "الاجمالى",
     "Checkout": "الدفع",
     "Colors": "الألوان",
     "Sizes": "الأحجام",
@@ -104,5 +104,13 @@
     "Edit address": "تعديل العنوان",
     "Enter your address name,please": "أدخل اسم عنوانك من فضلك",
     "Enter your address details,please": "أدخل تفاصيل عنوانك من فضلك",
-    "Order List": "قائمة الطلبات"
+    "Order List": "قائمة الطلبات",
+    "Shipping Type": "نوع الشحن",
+    "Choose Shipping Type": "اختار نوع الشحن",
+    "Promo Code": "كود الخصم",
+    "Enter Promo Code": "ادخل الكود هنا",
+    "Items price": "تكلغة المنتجات",
+    "Shipping": "الشحن",
+    "Promo": "الخصم",
+    "Continue to Payment": "متابعة للدفع"
 }

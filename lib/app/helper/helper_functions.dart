@@ -50,10 +50,12 @@ class HelperFunctions {
   static showSnackBar(BuildContext context, String msg) =>
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          backgroundColor: Theme.of(context).canvasColor,
           duration: const Duration(seconds: AppConstants.durationInSec),
-          content: Text(
-            msg,
+          content: CustomText(
+            data: msg,
             textAlign: TextAlign.center,
+            color: Theme.of(context).primaryColor,
           ),
         ),
       );

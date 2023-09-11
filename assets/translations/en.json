@@ -104,5 +104,13 @@
     "Edit address": "Edit address",
     "Enter your address name,please": "Enter your address name,please !",
     "Enter your address details,please": "Enter your address details,please !",
-    "Order List": "Order List"
+    "Order List": "Order List",
+    "Shipping Type": "Shipping Type",
+    "Choose Shipping Type": "Choose Shipping Type",
+    "Promo Code": "Promo Code",
+    "Enter Promo Code": "Enter Promo Code",
+    "Items price": "Items price",
+    "Shipping": "Shipping",
+    "Promo": "Promo",
+    "Continue to Payment": "Continue to Payment"
 }

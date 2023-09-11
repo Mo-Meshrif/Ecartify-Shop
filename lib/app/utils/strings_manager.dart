@@ -108,4 +108,12 @@ class AppStrings {
   static const String enterAddressName = 'Enter your address name,please';
   static const String enterAddressDetails = 'Enter your address details,please';
   static const String orderList = 'Order List';
+  static const String continueToPayment = 'Continue to Payment';
+  static const String shippingType = 'Shipping Type';
+  static const String chooseShippingType = 'Choose Shipping Type';
+  static const String promo = 'Promo';
+  static const String promoCode = 'Promo Code';
+  static const String enterPromoCode = 'Enter Promo Code';
+  static const String itemsPrice = 'Items price';
+  static const String shipping = 'Shipping';
 }
