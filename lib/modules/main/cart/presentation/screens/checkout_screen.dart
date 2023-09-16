@@ -16,9 +16,12 @@ import '../../../../../app/utils/routes_manager.dart';
 import '../../../../../app/utils/strings_manager.dart';
 import '../../../../../app/utils/values_manager.dart';
 import '../../../../sub/address/domain/entities/address.dart';
+import '../../../../sub/address/domain/entities/shipping.dart';
 import '../../../../sub/address/presentation/controller/address_bloc.dart';
+import '../../../../sub/address/presentation/screens/shipping_screen.dart';
 import '../../../../sub/address/presentation/widgets/add_new_address_widget.dart';
 import '../../../../sub/address/presentation/widgets/address_item.dart';
+import '../../../../sub/address/presentation/widgets/shipping_item.dart';
 import '../controller/cart_bloc.dart';
 import '../widgets/cart_item_widget.dart';
 
@@ -84,13 +87,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               children: [
                                 const Divider(),
                                 SizedBox(height: AppSize.s15.h),
-                                _deliveryAddress(addressState, context),
+                                _deliveryAddress(
+                                  addressState.userAddress,
+                                  context,
+                                ),
                                 SizedBox(height: AppSize.s15.h),
                                 const Divider(),
                                 _orderList(),
                                 const Divider(),
                                 SizedBox(height: AppSize.s15.h),
-                                _shippingType(),
+                                _shippingType(addressState.userShipping),
                                 SizedBox(height: AppSize.s15.h),
                                 const Divider(),
                                 SizedBox(height: AppSize.s15.h),
@@ -137,8 +143,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         ),
       );
 
-  Column _deliveryAddress(AddressState addressState, BuildContext context) =>
-      Column(
+  Column _deliveryAddress(Address? userAddress, BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomText(
@@ -147,9 +152,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             fontWeight: FontWeight.bold,
           ),
           SizedBox(height: AppSize.s15.h),
-          addressState.userAddress != null
+          userAddress != null
               ? AddressItem(
-                  address: addressState.userAddress!,
+                  address: userAddress,
                   trailingButton: IconButton(
                     onPressed: () => NavigationHelper.pushNamed(
                       context,
@@ -202,32 +207,43 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         },
       );
 
-  Column _shippingType() => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CustomText(
-            data: AppStrings.shippingType.tr(),
-            fontSize: AppSize.s20.sp,
-            fontWeight: FontWeight.bold,
-          ),
-          SizedBox(height: AppSize.s15.h),
-          ListTile(
-            tileColor: ColorManager.kGrey.withOpacity(0.3),
-            leading: const Icon(Icons.delivery_dining),
-            title: CustomText(
-              data: AppStrings.chooseShippingType.tr(),
-              fontSize: AppSize.s20.sp,
-            ),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppSize.s10.r),
-            ),
-            onTap: () {
-              //TODO shipping logic
-            },
-          )
-        ],
-      );
+  Widget _shippingType(Shipping? shipping) {
+    shippingVal = double.parse(shipping?.price ?? '0.0');
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomText(
+          data: AppStrings.shippingType.tr(),
+          fontSize: AppSize.s20.sp,
+          fontWeight: FontWeight.bold,
+        ),
+        SizedBox(height: AppSize.s15.h),
+        shipping != null
+            ? ShippingItem(
+                shipping: shipping,
+                showEdit: true,
+              )
+            : ListTile(
+                tileColor: ColorManager.kGrey.withOpacity(0.3),
+                leading: const Icon(Icons.delivery_dining),
+                title: CustomText(
+                  data: AppStrings.chooseShippingType.tr(),
+                  fontSize: AppSize.s20.sp,
+                ),
+                trailing: const Icon(Icons.arrow_forward_ios),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(AppSize.s10.r),
+                ),
+                onTap: () => NavigationHelper.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ShippingScreen(),
+                  ),
+                ),
+              )
+      ],
+    );
+  }
 
   Column _promoCode() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,

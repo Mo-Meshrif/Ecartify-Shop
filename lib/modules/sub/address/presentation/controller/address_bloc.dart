@@ -6,10 +6,12 @@ import 'package:equatable/equatable.dart';
 import '../../../../../app/common/usecase/base_use_case.dart';
 import '../../../../../app/helper/enums.dart';
 import '../../domain/entities/address.dart';
+import '../../domain/entities/shipping.dart';
 import '../../domain/usecases/add_address_use_case.dart';
 import '../../domain/usecases/delete_address_use_case.dart';
 import '../../domain/usecases/edit_address_use_case.dart';
 import '../../domain/usecases/get_address_list_use_case.dart';
+import '../../domain/usecases/get_shipping_list_use_case.dart';
 
 part 'address_event.dart';
 part 'address_state.dart';
@@ -19,17 +21,21 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
   final AddAddressUseCase addAddressUseCase;
   final EditAddressUseCase editAddressUseCase;
   final DeleteAddressUseCase deleteAddressUseCase;
+  final GetShippingListUseCase getShippingListUseCase;
   AddressBloc({
     required this.getAddressListUseCase,
     required this.addAddressUseCase,
     required this.editAddressUseCase,
     required this.deleteAddressUseCase,
+    required this.getShippingListUseCase,
   }) : super(const AddressState()) {
     on<GetAddressListEvent>(_getAddressList);
     on<AddAddressEvent>(_addAddress);
     on<EditAddressEvent>(_editAddress);
     on<DeleteAddressEvent>(_deleteAddress);
     on<SelectAddressEvent>(_selectAddress);
+    on<GetShippingListEvent>(_getShippingList);
+    on<SelectShippingEvent>(_selectShipping);
   }
 
   FutureOr<void> _getAddressList(
@@ -161,6 +167,41 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
         state.copyWith(
           userAddressStatus: Status.loaded,
           userAddress: event.address,
+        ),
+      );
+
+  FutureOr<void> _getShippingList(
+      GetShippingListEvent event, Emitter<AddressState> emit) async {
+    emit(
+      state.copyWith(
+        shippingListStatus: Status.loading,
+      ),
+    );
+    var result = await getShippingListUseCase(const NoParameters());
+    result.fold(
+      (l) => emit(
+        state.copyWith(
+          shippingListStatus: Status.error,
+          shippingList: [],
+        ),
+      ),
+      (shippingList) => emit(
+        state.copyWith(
+          shippingListStatus: Status.loaded,
+          shippingList: shippingList,
+        ),
+      ),
+    );
+  }
+
+  FutureOr<void> _selectShipping(
+    SelectShippingEvent event,
+    Emitter<AddressState> emit,
+  ) async =>
+      emit(
+        state.copyWith(
+          userShippingStatus: Status.loaded,
+          userShipping: event.shipping,
         ),
       );
 }

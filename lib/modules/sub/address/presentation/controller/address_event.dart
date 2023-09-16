@@ -28,3 +28,10 @@ class SelectAddressEvent extends AddressEvent {
   final Address address;
   const SelectAddressEvent({required this.address});
 }
+
+class GetShippingListEvent extends AddressEvent {}
+
+class SelectShippingEvent extends AddressEvent {
+  final Shipping shipping;
+  const SelectShippingEvent({required this.shipping});
+}

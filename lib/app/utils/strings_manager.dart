@@ -116,4 +116,5 @@ class AppStrings {
   static const String enterPromoCode = 'Enter Promo Code';
   static const String itemsPrice = 'Items price';
   static const String shipping = 'Shipping';
+  static const String estimatedArrival = 'Estimated Arrival';
 }

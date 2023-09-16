@@ -47,12 +47,14 @@ import '../../modules/main/shop/domain/repositories/base_shop_repository.dart';
 import '../../modules/main/shop/domain/usecases/get_sliders_banners_use_case.dart';
 import '../../modules/main/shop/presentation/controller/shop_bloc.dart';
 import '../../modules/sub/address/data/dataSources/local_data_source.dart';
+import '../../modules/sub/address/data/dataSources/remote_data_source.dart';
 import '../../modules/sub/address/data/repositories/address_repository_impl.dart';
 import '../../modules/sub/address/domain/repositories/base_address_repository.dart';
 import '../../modules/sub/address/domain/usecases/add_address_use_case.dart';
 import '../../modules/sub/address/domain/usecases/delete_address_use_case.dart';
 import '../../modules/sub/address/domain/usecases/edit_address_use_case.dart';
 import '../../modules/sub/address/domain/usecases/get_address_list_use_case.dart';
+import '../../modules/sub/address/domain/usecases/get_shipping_list_use_case.dart';
 import '../../modules/sub/address/presentation/controller/address_bloc.dart';
 import '../../modules/sub/notification/data/datasources/remote_data_source.dart';
 import '../../modules/sub/notification/data/repositories/notification_repository_impl.dart';
@@ -139,6 +141,9 @@ class ServicesLocator {
     sl.registerLazySingleton<BaseAddressLocalDataSource>(
       () => AddressLocalDataSource.db,
     );
+    sl.registerLazySingleton<BaseAddressRemoteDataSource>(
+      () => AddressRemoteDataSource(sl()),
+    );
     //Repositories
     sl.registerLazySingleton<BaseAuthRepository>(
         () => AuthRepositoryImpl(sl(), sl()));
@@ -157,7 +162,7 @@ class ServicesLocator {
     sl.registerLazySingleton<BaseProfileRepository>(
         () => ProfileRepositoryImpl(sl(), sl(), sl()));
     sl.registerLazySingleton<BaseAddressRepository>(
-        () => AddressRepositoryImpl(sl()));
+        () => AddressRepositoryImpl(sl(), sl()));
     //UseCases
     sl.registerLazySingleton(() => LoginUseCase(sl()));
     sl.registerLazySingleton(() => SignUpUseCase(sl()));
@@ -189,6 +194,7 @@ class ServicesLocator {
     sl.registerLazySingleton(() => AddAddressUseCase(sl()));
     sl.registerLazySingleton(() => EditAddressUseCase(sl()));
     sl.registerLazySingleton(() => DeleteAddressUseCase(sl()));
+    sl.registerLazySingleton(() => GetShippingListUseCase(sl()));
     //blocs
     sl.registerLazySingleton(
       () => AppConfigBloc(
@@ -267,6 +273,7 @@ class ServicesLocator {
         addAddressUseCase: sl(),
         editAddressUseCase: sl(),
         deleteAddressUseCase: sl(),
+        getShippingListUseCase: sl(),
       ),
     );
   }

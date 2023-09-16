@@ -5,12 +5,18 @@ import '../../../../../app/errors/exception.dart';
 import '../../../../../app/errors/failure.dart';
 import '../../../../../app/utils/strings_manager.dart';
 import '../../domain/entities/address.dart';
+import '../../domain/entities/shipping.dart';
 import '../../domain/repositories/base_address_repository.dart';
 import '../dataSources/local_data_source.dart';
+import '../dataSources/remote_data_source.dart';
 
 class AddressRepositoryImpl implements BaseAddressRepository {
   final BaseAddressLocalDataSource baseAddressLocalDataSource;
-  AddressRepositoryImpl(this.baseAddressLocalDataSource);
+  final BaseAddressRemoteDataSource baseAddressRemoteDataSource;
+  AddressRepositoryImpl(
+    this.baseAddressLocalDataSource,
+    this.baseAddressRemoteDataSource,
+  );
 
   @override
   Future<Either<Failure, List<Address>>> getAddressList() async {
@@ -58,6 +64,16 @@ class AddressRepositoryImpl implements BaseAddressRepository {
           : left(LocalFailure(msg: AppStrings.operationFailed.tr()));
     } on LocalExecption catch (failure) {
       return Left(LocalFailure(msg: failure.msg));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Shipping>>> getShippingList() async {
+    try {
+      final shippingList = await baseAddressRemoteDataSource.getShippingList();
+      return Right(List<Shipping>.from(shippingList));
+    } on ServerExecption catch (failure) {
+      return Left(ServerFailure(msg: failure.msg));
     }
   }
 }

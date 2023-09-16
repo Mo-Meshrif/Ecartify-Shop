@@ -5,18 +5,26 @@ class AddressState extends Equatable {
       addAddressStatus,
       editAddressStatus,
       deleteAddressStatus,
-      userAddressStatus;
+      userAddressStatus,
+      shippingListStatus,
+      userShippingStatus;
   final List<Address> addressList;
   final Address? userAddress;
+  final List<Shipping> shippingList;
+  final Shipping? userShipping;
 
   const AddressState({
     this.addressListStatus = Status.sleep,
     this.addAddressStatus = Status.sleep,
     this.editAddressStatus = Status.sleep,
     this.deleteAddressStatus = Status.sleep,
-    this.addressList = const [],
     this.userAddressStatus = Status.sleep,
+    this.shippingListStatus = Status.sleep,
+    this.addressList = const [],
     this.userAddress,
+    this.shippingList = const [],
+    this.userShippingStatus = Status.sleep,
+    this.userShipping,
   });
 
   AddressState copyWith({
@@ -24,9 +32,13 @@ class AddressState extends Equatable {
     Status? addAddressStatus,
     Status? editAddressStatus,
     Status? deleteAddressStatus,
-    List<Address>? addressList,
     Status? userAddressStatus,
+    Status? shippingListStatus,
+    Status? userShippingStatus,
+    List<Address>? addressList,
     Address? userAddress,
+    List<Shipping>? shippingList,
+    Shipping? userShipping,
   }) =>
       AddressState(
         addressListStatus: addressListStatus ?? this.addressListStatus,
@@ -34,13 +46,18 @@ class AddressState extends Equatable {
         editAddressStatus: editAddressStatus ?? this.editAddressStatus,
         deleteAddressStatus: deleteAddressStatus ?? this.deleteAddressStatus,
         addressList: addressList ?? this.addressList,
-        userAddressStatus: addressListStatus ??
-            userAddressStatus ??
-            this.userAddressStatus,
+        userAddressStatus:
+            addressListStatus ?? userAddressStatus ?? this.userAddressStatus,
         userAddress: userAddressStatus == Status.loaded ||
                 (addressList?.isEmpty ?? false)
             ? userAddress
             : this.userAddress,
+        shippingListStatus: shippingListStatus ?? this.shippingListStatus,
+        shippingList: shippingList ?? this.shippingList,
+        userShippingStatus: userShippingStatus ?? this.userShippingStatus,
+        userShipping: userShippingStatus == Status.loaded
+            ? userShipping
+            : this.userShipping,
       );
 
   @override
@@ -49,8 +66,12 @@ class AddressState extends Equatable {
         addAddressStatus,
         editAddressStatus,
         deleteAddressStatus,
-        addressList,
         userAddressStatus,
+        shippingListStatus,
+        userShippingStatus,
+        addressList,
         userAddress,
+        shippingList,
+        userShipping,
       ];
 }
