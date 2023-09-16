@@ -20,6 +20,7 @@ import 'modules/main/shop/presentation/controller/shop_bloc.dart';
 import 'modules/sub/address/presentation/controller/address_bloc.dart';
 import 'modules/sub/notification/presentation/controller/notification_bloc.dart';
 import 'modules/sub/product/presentation/controller/product_bloc.dart';
+import 'modules/sub/promo/presentation/Controller/promo_bloc.dart';
 import 'modules/sub/review/presentation/controller/review_bloc.dart';
 
 void main() async {
@@ -76,6 +77,9 @@ void main() async {
             create: (context) => sl(),
           ),
           BlocProvider<AddressBloc>(
+            create: (context) => sl(),
+          ),
+           BlocProvider<PromoBloc>(
             create: (context) => sl(),
           ),
         ],

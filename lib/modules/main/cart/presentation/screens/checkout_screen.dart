@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:ecartify/modules/sub/promo/presentation/Controller/promo_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -245,43 +246,78 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 
-  Column _promoCode() => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CustomText(
-            data: AppStrings.promoCode.tr(),
-            fontSize: AppSize.s20.sp,
-            fontWeight: FontWeight.bold,
-          ),
-          SizedBox(height: AppSize.s15.h),
-          ListTile(
-            tileColor: ColorManager.kGrey.withOpacity(0.3),
-            title: TextFormField(
-              controller: promoController,
-              decoration: InputDecoration(
-                hintText: AppStrings.enterPromoCode.tr(),
-                border: InputBorder.none,
-                focusedBorder: InputBorder.none,
+  Widget _promoCode() => BlocConsumer<PromoBloc, PromoState>(
+        listener: (context, state) {
+          switch (state.checkPromoCodeStatus) {
+            case Status.loading:
+              HelperFunctions.showPopUpLoading(context);
+              break;
+            case Status.error:
+              NavigationHelper.pop(context);
+              HelperFunctions.showSnackBar(
+                context,
+                AppStrings.expiryEnteredCode.tr(),
+              );
+              promoVal = 0.0;
+              break;
+            case Status.loaded:
+              NavigationHelper.pop(context);
+              promoVal = double.parse(state.promoResult!.discount);
+              promoController.text = '';
+              break;
+            default:
+          }
+        },
+        builder: (context, state) => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomText(
+              data: AppStrings.promoCode.tr(),
+              fontSize: AppSize.s20.sp,
+              fontWeight: FontWeight.bold,
+            ),
+            SizedBox(height: AppSize.s15.h),
+            ListTile(
+              tileColor: ColorManager.kGrey.withOpacity(0.3),
+              title: promoVal == 0.0
+                  ? TextFormField(
+                      controller: promoController,
+                      decoration: InputDecoration(
+                        hintText: AppStrings.enterPromoCode.tr(),
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                      ),
+                    )
+                  : CustomText(data: AppStrings.youSaved.tr() + '$promoVal'),
+              trailing: promoVal == 0.0
+                  ? TextButton(
+                      child: CustomText(
+                        data: AppStrings.apply.tr(),
+                        fontSize: AppSize.s20.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      onPressed: promoController.text.isEmpty
+                          ? null
+                          : () => sl<PromoBloc>().add(
+                                CheckPromoCodeEvent(
+                                  promoCode: promoController.text,
+                                ),
+                              ),
+                    )
+                  : GestureDetector(
+                      child: const Icon(Icons.close),
+                      onTap: () => setState(
+                        () => promoVal = 0.0,
+                      ),
+                    ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(
+                  AppSize.s10.r,
+                ),
               ),
-            ),
-            trailing: TextButton(
-              child: CustomText(
-                data: AppStrings.apply.tr(),
-                fontSize: AppSize.s20.sp,
-                fontWeight: FontWeight.bold,
-              ),
-              onPressed: promoController.text.isEmpty
-                  ? null
-                  : () {
-                      debugPrint(promoController.text);
-                      //TODO promo logic
-                    },
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppSize.s10.r),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       );
 
   Container _priceSummary() {

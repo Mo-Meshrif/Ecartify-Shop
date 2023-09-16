@@ -117,4 +117,6 @@ class AppStrings {
   static const String itemsPrice = 'Items price';
   static const String shipping = 'Shipping';
   static const String estimatedArrival = 'Estimated Arrival';
+  static const String expiryEnteredCode = 'ExpiryEnteredCode';
+  static const String youSaved = 'YouSaved';
 }

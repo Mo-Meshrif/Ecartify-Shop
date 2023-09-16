@@ -113,5 +113,7 @@
     "Shipping": "الشحن",
     "Promo": "الخصم",
     "Continue to Payment": "متابعة للدفع",
-    "Estimated Arrival": "الوصول المتوقع : "
+    "Estimated Arrival": "الوصول المتوقع : ",
+    "ExpiryEnteredCode":"الكود الذي تم إدخاله منتهي الصلاحية",
+    "YouSaved":"لقد وفرت : "
 }

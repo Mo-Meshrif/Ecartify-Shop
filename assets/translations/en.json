@@ -113,5 +113,7 @@
     "Shipping": "Shipping",
     "Promo": "Promo",
     "Continue to Payment": "Continue to Payment",
-    "Estimated Arrival": "Estimated Arrival : "
+    "Estimated Arrival": "Estimated Arrival : ",
+    "ExpiryEnteredCode":"Entered code is Expired",
+    "YouSaved":"You have saved : "
 }

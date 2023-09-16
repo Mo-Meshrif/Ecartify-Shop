@@ -72,6 +72,11 @@ import '../../modules/sub/product/domain/usecases/get_product_details_use_case.d
 import '../../modules/sub/product/domain/usecases/get_products_by_parameter_use_case.dart';
 import '../../modules/sub/product/domain/usecases/update_product_use_case.dart';
 import '../../modules/sub/product/presentation/controller/product_bloc.dart';
+import '../../modules/sub/promo/data/dataSources/remote_data_source.dart';
+import '../../modules/sub/promo/data/repositories/promo_repository_impl.dart';
+import '../../modules/sub/promo/domain/repositories/base_promo_repository.dart';
+import '../../modules/sub/promo/domain/usecases/check_promo_code_use_case.dart';
+import '../../modules/sub/promo/presentation/Controller/promo_bloc.dart';
 import '../../modules/sub/review/data/dataSource/remote_data_source.dart';
 import '../../modules/sub/review/data/repositories/review_repository_impl.dart';
 import '../../modules/sub/review/domain/repositories/base_review_repository.dart';
@@ -144,6 +149,9 @@ class ServicesLocator {
     sl.registerLazySingleton<BaseAddressRemoteDataSource>(
       () => AddressRemoteDataSource(sl()),
     );
+    sl.registerLazySingleton<BasePromoRemoteDataSource>(
+      () => PromoRemoteDataSource(sl()),
+    );
     //Repositories
     sl.registerLazySingleton<BaseAuthRepository>(
         () => AuthRepositoryImpl(sl(), sl()));
@@ -163,6 +171,8 @@ class ServicesLocator {
         () => ProfileRepositoryImpl(sl(), sl(), sl()));
     sl.registerLazySingleton<BaseAddressRepository>(
         () => AddressRepositoryImpl(sl(), sl()));
+    sl.registerLazySingleton<BasePromoRepository>(
+        () => PromoRepositoryImpl(sl()));
     //UseCases
     sl.registerLazySingleton(() => LoginUseCase(sl()));
     sl.registerLazySingleton(() => SignUpUseCase(sl()));
@@ -195,6 +205,7 @@ class ServicesLocator {
     sl.registerLazySingleton(() => EditAddressUseCase(sl()));
     sl.registerLazySingleton(() => DeleteAddressUseCase(sl()));
     sl.registerLazySingleton(() => GetShippingListUseCase(sl()));
+    sl.registerLazySingleton(() => CheckPromoCodeUseCase(sl()));
     //blocs
     sl.registerLazySingleton(
       () => AppConfigBloc(
@@ -274,6 +285,11 @@ class ServicesLocator {
         editAddressUseCase: sl(),
         deleteAddressUseCase: sl(),
         getShippingListUseCase: sl(),
+      ),
+    );
+    sl.registerLazySingleton(
+      () => PromoBloc(
+        checkPromoCodeUseCase: sl(),
       ),
     );
   }
