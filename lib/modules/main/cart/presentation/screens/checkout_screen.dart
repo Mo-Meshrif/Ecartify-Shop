@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:ecartify/modules/sub/promo/presentation/Controller/promo_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,8 +22,10 @@ import '../../../../sub/address/presentation/screens/shipping_screen.dart';
 import '../../../../sub/address/presentation/widgets/add_new_address_widget.dart';
 import '../../../../sub/address/presentation/widgets/address_item.dart';
 import '../../../../sub/address/presentation/widgets/shipping_item.dart';
+import '../../../../sub/promo/presentation/Controller/promo_bloc.dart';
 import '../controller/cart_bloc.dart';
 import '../widgets/cart_item_widget.dart';
+import 'payment_screen.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({Key? key}) : super(key: key);
@@ -129,8 +130,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             );
           } else {
             double totalPrice = itemsPrice + shippingVal - promoVal;
-            debugPrint(totalPrice.toStringAsFixed(2));
-            //TODO add to payment logic
+            NavigationHelper.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PaymentScreen(
+                  totalPrice: totalPrice,
+                ),
+              ),
+            );
           }
         },
         shape: const RoundedRectangleBorder(

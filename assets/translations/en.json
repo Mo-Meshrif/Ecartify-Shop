@@ -114,6 +114,8 @@
     "Promo": "Promo",
     "Continue to Payment": "Continue to Payment",
     "Estimated Arrival": "Estimated Arrival : ",
-    "ExpiryEnteredCode":"Entered code is Expired",
-    "YouSaved":"You have saved : "
+    "ExpiryEnteredCode": "Entered code is Expired",
+    "YouSaved": "You have saved : ",
+    "Select Payment": "Select the payment method you want to use",
+    "Confirm Payment": "Confirm Payment"
 }

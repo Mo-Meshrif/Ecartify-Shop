@@ -112,8 +112,10 @@
     "Items price": "تكلغة المنتجات",
     "Shipping": "الشحن",
     "Promo": "الخصم",
-    "Continue to Payment": "متابعة للدفع",
+    "Continue to Payment": "متابعة الدفع",
     "Estimated Arrival": "الوصول المتوقع : ",
     "ExpiryEnteredCode":"الكود الذي تم إدخاله منتهي الصلاحية",
-    "YouSaved":"لقد وفرت : "
+    "YouSaved":"لقد وفرت : ",
+    "Select Payment": "حدد طريقة الدفع التي تريد استخدامها",
+    "Confirm Payment":"تأكيد الدفع"
 }

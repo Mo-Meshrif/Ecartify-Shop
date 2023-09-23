@@ -31,6 +31,11 @@ class IconAssets {
   static const String help = "$iconPath/help.svg";
   static const String about = "$iconPath/about.svg";
   static const String logout = "$iconPath/logout.svg";
+  static const String stripe = "$iconPath/stripe.svg";
+  static const String paymob = "$iconPath/paymob.svg";
+  static const String paypal = "$iconPath/paypal.svg";
+  static const String google = "$iconPath/google.svg";
+  static const String apple = "$iconPath/apple.svg";
 }
 
 class JsonAssets {

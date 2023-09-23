@@ -119,4 +119,11 @@ class AppStrings {
   static const String estimatedArrival = 'Estimated Arrival';
   static const String expiryEnteredCode = 'ExpiryEnteredCode';
   static const String youSaved = 'YouSaved';
+  static const String selectPayment = 'Select Payment';
+  static const String confirmPayment = 'Confirm Payment';
+  static const String stripe = 'Stripe';
+  static const String paymob = 'Paymob';
+  static const String paypal = 'PayPal';
+  static const String googlePay = 'Google Pay';
+  static const String applePay = 'Apple Pay';
 }
