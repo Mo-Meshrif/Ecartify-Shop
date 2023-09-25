@@ -25,7 +25,7 @@ import '../../../../sub/address/presentation/widgets/shipping_item.dart';
 import '../../../../sub/promo/presentation/Controller/promo_bloc.dart';
 import '../controller/cart_bloc.dart';
 import '../widgets/cart_item_widget.dart';
-import 'payment_screen.dart';
+import '../../../../sub/payment/presentation/screens/payment_screen.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({Key? key}) : super(key: key);
