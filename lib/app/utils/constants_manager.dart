@@ -28,4 +28,8 @@ class AppConstants {
   static const String redirectAndroidUri =
       'https://play.google.com/store/apps/details?id=com.ecartify.store';
   static const String recentSearchedKey = 'recent-seacrched';
+  static const String stripePublishTestKey = 'pk_test_51NuNBwFSiISHjJ6H9mCh64EO8eCcFX27pEbzKQzL4ygCEHJAU1c5qNCjUozLainEZI57WNZwYTO2n9mK27RiRZFD00TqE929U0';
+  static const String stripePublishLiveKey = '';
+  static const String stripeSecretTestKey = 'sk_test_51NuNBwFSiISHjJ6HjWVnzOCjVlSj1AItsu1LsFFv5BRJbOuHu7VPmR4TJpIXI6WF8p0LhpNH2lr4qqoxIJe0qLB800pYGquE7f';
+  static const String stripeSecretLiveKey = '';
 }

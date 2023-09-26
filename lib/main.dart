@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get_storage/get_storage.dart';
 
 import 'app/app.dart';
@@ -19,6 +20,7 @@ import 'modules/main/profile/presentation/controller/profile_bloc.dart';
 import 'modules/main/shop/presentation/controller/shop_bloc.dart';
 import 'modules/sub/address/presentation/controller/address_bloc.dart';
 import 'modules/sub/notification/presentation/controller/notification_bloc.dart';
+import 'modules/sub/payment/presentation/controller/payment_bloc.dart';
 import 'modules/sub/product/presentation/controller/product_bloc.dart';
 import 'modules/sub/promo/presentation/Controller/promo_bloc.dart';
 import 'modules/sub/review/presentation/controller/review_bloc.dart';
@@ -27,6 +29,7 @@ void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   EasyLocalization.logger.enableLevels = [LevelMessages.warning];
+  Stripe.publishableKey=AppConstants.stripePublishTestKey;
   Bloc.observer = MyBlocObserver();
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
@@ -80,6 +83,9 @@ void main() async {
             create: (context) => sl(),
           ),
            BlocProvider<PromoBloc>(
+            create: (context) => sl(),
+          ),
+           BlocProvider<PaymentBloc>(
             create: (context) => sl(),
           ),
         ],

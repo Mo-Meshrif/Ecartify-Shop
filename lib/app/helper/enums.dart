@@ -20,3 +20,12 @@ enum ProductSort {
   lh,
   hl,
 }
+
+enum PaymentType {
+  wallet,
+  stripe,
+  paymob,
+  paypal,
+  googlePay,
+  applePay,
+}
