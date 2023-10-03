@@ -61,6 +61,7 @@ class _CartItemWidgetState extends State<CartItemWidget> {
     sizeList = widget.cartItem.statistics.map((e) => e.size).toSet().toList();
     return Card(
       shape: RoundedRectangleBorder(
+        side: BorderSide(color: theme.primaryColor),
         borderRadius: BorderRadius.circular(AppSize.s10.r),
       ),
       child: Column(

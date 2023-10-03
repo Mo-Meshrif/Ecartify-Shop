@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import 'package:dbcrypt/dbcrypt.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:ecartify/modules/main/auth/data/models/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -148,16 +149,7 @@ class HelperFunctions {
   //getSavedUser
   static AuthUser getSavedUser() {
     var savedData = sl<AppShared>().getVal(AppConstants.userKey);
-    return savedData is Map
-        ? AuthUser(
-            id: savedData['id'],
-            name: savedData['name'],
-            email: savedData['email'],
-            password: savedData['password'],
-            pic: savedData['pic'],
-            deviceToken: savedData['deviceToken'],
-          )
-        : savedData;
+    return UserModel.fromJson(savedData);
   }
 
   //getLastUserName

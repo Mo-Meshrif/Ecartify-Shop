@@ -1,11 +1,10 @@
 import 'package:equatable/equatable.dart';
 
-class AuthUser extends Equatable {
-  final String id, name, email;
-  final String? password;
-  final String? pic;
-  final String deviceToken;
+import '../../data/models/user_model.dart';
 
+class AuthUser extends Equatable {
+  final String id, name, email, deviceToken;
+  final String? password, pic;
   const AuthUser({
     required this.id,
     required this.name,
@@ -29,6 +28,15 @@ class AuthUser extends Equatable {
         deviceToken: deviceToken,
       );
 
+  UserModel toModel() => UserModel(
+        id: id,
+        name: name,
+        email: email,
+        password: password,
+        deviceToken: deviceToken,
+        pic: pic ?? '',
+      );
+      
   @override
   List<Object?> get props => [
         id,

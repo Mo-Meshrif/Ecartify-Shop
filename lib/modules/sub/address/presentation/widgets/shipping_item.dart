@@ -25,6 +25,11 @@ class ShippingItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ListTile(
+        onTap: () => sl<AddressBloc>().add(
+          SelectShippingEvent(
+            shipping: shipping,
+          ),
+        ),
         tileColor: ColorManager.kGrey.withOpacity(0.3),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(
@@ -34,7 +39,10 @@ class ShippingItem extends StatelessWidget {
         leading: CircleAvatar(
           backgroundColor: Theme.of(context).primaryColor,
           child: shipping.img.isEmpty
-              ? const Icon(Icons.delivery_dining)
+              ? Icon(
+                  Icons.delivery_dining,
+                  color: Theme.of(context).canvasColor,
+                )
               : ImageBuilder(imageUrl: shipping.img),
         ),
         title: CustomText(data: shipping.title),
@@ -66,18 +74,10 @@ class ShippingItem extends StatelessWidget {
                     data: '\$' + shipping.price,
                     fontSize: AppSize.s20.sp,
                   ),
-                  IconButton(
-                    onPressed: () => sl<AddressBloc>().add(
-                      SelectShippingEvent(
-                        shipping: shipping,
-                      ),
-                    ),
-                    splashRadius: AppSize.s30.r,
-                    icon: Icon(
-                      shipping.selected
-                          ? Icons.radio_button_checked
-                          : Icons.radio_button_off_outlined,
-                    ),
+                  Icon(
+                    shipping.selected
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_off_outlined,
                   ),
                 ],
               ),

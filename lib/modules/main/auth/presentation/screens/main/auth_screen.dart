@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:ecartify/modules/main/auth/presentation/controller/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +16,7 @@ import '../../../../../../app/utils/constants_manager.dart';
 import '../../../../../../app/utils/routes_manager.dart';
 import '../../../../../../app/utils/strings_manager.dart';
 import '../../../../../../app/utils/values_manager.dart';
+import '../../controller/auth_bloc.dart';
 import '../../widgets/custom_or_divider.dart';
 import '../../widgets/ver_social_buttons.dart';
 
@@ -42,7 +42,10 @@ class _AuthScreenState extends State<AuthScreen> {
               HelperFunctions.showPopUpLoading(context);
             } else if (state is AuthSuccess) {
               sl<AppShared>().setVal(AppConstants.authPassKey, true);
-              sl<AppShared>().setVal(AppConstants.userKey, state.user);
+              sl<AppShared>().setVal(
+                AppConstants.userKey,
+                state.user.toModel().toJson(),
+              );
               NavigationHelper.pushNamedAndRemoveUntil(
                 context,
                 Routes.controlRoute,

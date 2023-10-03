@@ -81,8 +81,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       children: [
                         Expanded(
                           child: SingleChildScrollView(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: AppPadding.p15.w,
+                            padding: EdgeInsets.fromLTRB(
+                              AppPadding.p15.w,
+                              0,
+                              AppPadding.p15.w,
+                              AppPadding.p15.h,
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,7 +112,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(height: AppSize.s15.h),
                         _toPayment(addressState.userAddress),
                       ],
                     ),
