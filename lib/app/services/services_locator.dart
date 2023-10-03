@@ -68,6 +68,7 @@ import '../../modules/sub/notification/presentation/controller/notification_bloc
 import '../../modules/sub/payment/data/datasources/remote_data_source.dart';
 import '../../modules/sub/payment/data/repositories/payment_repository_impl.dart';
 import '../../modules/sub/payment/domain/repositories/base_payment_repository.dart';
+import '../../modules/sub/payment/domain/usecases/get_paymob_ifram_id_use_case.dart';
 import '../../modules/sub/payment/domain/usecases/get_stripe_client_secret_use_case.dart';
 import '../../modules/sub/payment/presentation/controller/payment_bloc.dart';
 import '../../modules/sub/product/data/datasources/remote_data_source.dart';
@@ -217,6 +218,7 @@ class ServicesLocator {
     sl.registerLazySingleton(() => GetShippingListUseCase(sl()));
     sl.registerLazySingleton(() => CheckPromoCodeUseCase(sl()));
     sl.registerLazySingleton(() => GetStripeClientSecretUseCase(sl()));
+    sl.registerLazySingleton(() => GetPaymobIframeIdUseCase(sl()));
     //blocs
     sl.registerLazySingleton(
       () => AppConfigBloc(
@@ -306,6 +308,7 @@ class ServicesLocator {
     sl.registerLazySingleton(
       () => PaymentBloc(
         getStripeClientSecretUseCase: sl(),
+        getPaymobIframeIdUseCase: sl(),
       ),
     );
   }

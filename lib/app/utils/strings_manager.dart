@@ -126,4 +126,12 @@ class AppStrings {
   static const String paypal = 'PayPal';
   static const String googlePay = 'Google Pay';
   static const String applePay = 'Apple Pay';
+  static const String billingData = 'Billing data';
+  static const String fillMissingData = 'Fill the missing data';
+  static const String firstName= 'First name';
+  static const String enterFirstName = 'Enter youe first name';
+  static const String lastName= 'Last name';
+  static const String enterLastName = 'Enter youe last name';
+  static const String mobile='Mobile';
+  static const String enterMobile = 'Enter your mobile';
 }

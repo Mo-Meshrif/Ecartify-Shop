@@ -151,9 +151,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           ? null
                           : () => sl<PaymentBloc>().add(
                                 PaymentToggleEvent(
+                                  context: context,
                                   paymentType: selecedPayment!.paymentType,
                                   totalPrice: widget.totalPrice,
-                                  currency: 'USD',
                                 ),
                               ),
                       shape: const RoundedRectangleBorder(

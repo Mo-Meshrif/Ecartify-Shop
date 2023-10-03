@@ -52,6 +52,7 @@ dependencies:
   geocoding: ^2.1.0
   http: ^0.13.5
   flutter_stripe: ^9.4.0
+  webview_flutter: ^4.2.2
 
 dev_dependencies:
   flutter_native_splash: ^2.1.6

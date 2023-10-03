@@ -117,5 +117,13 @@
     "ExpiryEnteredCode": "Entered code is Expired",
     "YouSaved": "You have saved : ",
     "Select Payment": "Select the payment method you want to use",
-    "Confirm Payment": "Confirm Payment"
+    "Confirm Payment": "Confirm Payment",
+    "Billing data": "Billing data",
+    "Fill the missing data": "Fill the missing data",
+    "First name": "First name",
+    "Last name": "Last name",
+    "Mobile": "Mobile",
+    "Enter youe first name": "Enter youe first name",
+    "Enter youe last name": "Enter youe last name",
+    "Enter your mobile": "Enter your mobile"
 }

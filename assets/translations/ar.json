@@ -114,8 +114,16 @@
     "Promo": "الخصم",
     "Continue to Payment": "متابعة الدفع",
     "Estimated Arrival": "الوصول المتوقع : ",
-    "ExpiryEnteredCode":"الكود الذي تم إدخاله منتهي الصلاحية",
-    "YouSaved":"لقد وفرت : ",
+    "ExpiryEnteredCode": "الكود الذي تم إدخاله منتهي الصلاحية",
+    "YouSaved": "لقد وفرت : ",
     "Select Payment": "حدد طريقة الدفع التي تريد استخدامها",
-    "Confirm Payment":"تأكيد الدفع"
+    "Confirm Payment": "تأكيد الدفع",
+    "Billing data": "بيانات الدفع",
+    "Fill the missing data": "املأ البيانات المفقودة",
+    "First name": "الاسم الأول",
+    "Last name": "الاسم الاخير",
+    "Mobile": "الهاتف",
+    "Enter youe first name": "أدخل اسمك الأول",
+    "Enter youe last name": "أدخل اسمك الأخير",
+    "Enter your mobile": "أدخل الهاتف الخاص بك"
 }
