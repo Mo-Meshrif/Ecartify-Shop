@@ -28,7 +28,9 @@ class ProductDetailsBody extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Padding(
+  Widget build(BuildContext context) {
+    String mark = HelperFunctions.getCurrencyMark();
+    return Padding(
         padding: EdgeInsets.symmetric(
           horizontal: AppPadding.p25.w,
           vertical: AppPadding.p20.h,
@@ -40,7 +42,7 @@ class ProductDetailsBody extends StatelessWidget {
             Row(
               children: [
                 CustomText(
-                  data: '\$' + product.price,
+                  data:product.price+' '+ mark ,
                 ),
                 Visibility(
                   visible: product.lastPrice.isNotEmpty,
@@ -48,7 +50,7 @@ class ProductDetailsBody extends StatelessWidget {
                     children: [
                       SizedBox(width: AppSize.s10.w),
                       CustomText(
-                        data: '\$' + product.lastPrice,
+                        data:product.lastPrice+' '+ mark,
                         color: ColorManager.kRed,
                         textDecoration: TextDecoration.lineThrough,
                         decorationColor: Theme.of(context).primaryColor,
@@ -157,4 +159,5 @@ class ProductDetailsBody extends StatelessWidget {
           ],
         ),
       );
+  }
 }

@@ -9,10 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 
+import '../../../../../app/common/usecase/base_use_case.dart';
 import '../../../../../app/errors/failure.dart';
 import '../../../../../app/helper/enums.dart';
 import '../../../../../app/utils/constants_manager.dart';
 import '../../../../../app/utils/strings_manager.dart';
+import '../../domain/entities/currency.dart';
+import '../../domain/usecases/get_currency_rates_use_case.dart';
 import '../../domain/usecases/get_paymob_ifram_id_use_case.dart';
 import '../../domain/usecases/get_stripe_client_secret_use_case.dart';
 import '../widgets/billing_form_data.dart';
@@ -22,12 +25,21 @@ part 'payment_event.dart';
 part 'payment_state.dart';
 
 class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
+  final GetCurrencyRatesUseCase getCurrencyRatesUseCase;
   final GetStripeClientSecretUseCase getStripeClientSecretUseCase;
   final GetPaymobIframeIdUseCase getPaymobIframeIdUseCase;
   PaymentBloc({
+    required this.getCurrencyRatesUseCase,
     required this.getStripeClientSecretUseCase,
     required this.getPaymobIframeIdUseCase,
   }) : super(const PaymentState()) {
+    on<GetCurrencyRatesEvent>(
+      _getCurrencyRates,
+    );
+    on<ChangeCurrencyEvent>(
+      _changeCurrency,
+      transformer: droppable(),
+    );
     on<PaymentToggleEvent>(
       _paymentToggle,
       transformer: droppable(),
@@ -47,6 +59,43 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
       ),
     );
   }
+
+  FutureOr<void> _getCurrencyRates(
+      GetCurrencyRatesEvent event, Emitter<PaymentState> emit) async {
+    emit(
+      state.copyWith(
+        currencyStatus: Status.loading,
+      ),
+    );
+    Either<Failure, Currency> result =
+        await getCurrencyRatesUseCase(const NoParameters());
+    result.fold(
+      (failure) => emit(
+        state.copyWith(
+          currencyStatus: Status.error,
+          currency: const Currency(),
+        ),
+      ),
+      (currency) => emit(
+        state.copyWith(
+          currencyStatus: Status.loaded,
+          currency: currency,
+        ),
+      ),
+    );
+  }
+
+  FutureOr<void> _changeCurrency(
+          ChangeCurrencyEvent event, Emitter<PaymentState> emit) async =>
+      emit(
+        state.copyWith(
+          currencyStatus: Status.updated,
+          currency: state.currency.copyWith(
+            selectedBase: event.currency.selectedBase,
+            selectedRate: event.currency.selectedRate,
+          ),
+        ),
+      );
 
   FutureOr<void> _paymentToggle(
       PaymentToggleEvent event, Emitter<PaymentState> emit) {
@@ -84,9 +133,13 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         paymentStatus: Status.initial,
       ),
     );
+    double aedRate = double.parse(state.currency.rates?['AED'] ?? '1');
+    double selectedRate = double.parse(state.currency.selectedRate);
     Either<Failure, String> result = await getStripeClientSecretUseCase(
       StripeClientSecretParameters(
-        amount: (event.totalPrice * 100).round().toString(),
+        amount: (event.totalPrice * 100 * aedRate / selectedRate)
+            .round()
+            .toString(),
         currency: 'AED',
       ),
     );
@@ -138,6 +191,8 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
   FutureOr<void> _paymob(
       PaymentToggleEvent event, Emitter<PaymentState> emit) async {
     if (event.paymobIFrameParameters == null) {
+      double egRate = double.parse(state.currency.rates?['EGP'] ?? '1');
+      double selectedRate = double.parse(state.currency.selectedRate);
       showModalBottomSheet(
         context: event.context,
         backgroundColor: Theme.of(event.context).primaryColor,
@@ -152,7 +207,9 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
           onFinish: (firstName, lastName, email, mobile) => add(
             event.copyWith(
               PaymobIFrameParameters(
-                amount: (event.totalPrice * 100).round().toString(),
+                amount: (event.totalPrice * 100 * egRate / selectedRate)
+                    .round()
+                    .toString(),
                 currency: 'EGP',
                 firstName: firstName,
                 lastName: lastName,

@@ -126,8 +126,9 @@ class _CartScreenState extends State<CartScreen> {
                                     color: ColorManager.kGrey,
                                   ),
                                   CustomText(
-                                    data: '\$' +
-                                        state.totalPrice.toStringAsFixed(2),
+                                    data: state.totalPrice.toStringAsFixed(2) +
+                                        ' ' +
+                                        HelperFunctions.getCurrencyMark(),
                                     fontSize: AppSize.s20.sp,
                                     color: theme.canvasColor,
                                   ),

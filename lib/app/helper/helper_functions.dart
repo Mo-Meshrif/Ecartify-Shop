@@ -3,13 +3,13 @@ import 'dart:math' as math;
 
 import 'package:dbcrypt/dbcrypt.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:ecartify/modules/main/auth/data/models/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../modules/main/auth/data/models/user_model.dart';
 import '../../modules/main/auth/domain/entities/user.dart';
 import '../../modules/main/cart/domain/entities/cart_item.dart';
 import '../../modules/main/favourite/presentation/controller/favourite_bloc.dart';
@@ -410,4 +410,52 @@ class HelperFunctions {
     }
     return total;
   }
+
+  //getSelectedCurrency
+  static String getSelectedCurrencyBase() {
+    final AppShared appShared = sl<AppShared>();
+    return appShared.getVal('currency-base') ?? 'USD';
+  }
+
+  //setCurrency
+  static String setCurrencyBase(String currencyBase) {
+    final AppShared appShared = sl<AppShared>();
+    appShared.setVal(
+      'currency-base',
+      currencyBase,
+    );
+    AppConstants.currencyBase = currencyBase;
+    return currencyBase;
+  }
+
+  //getSelectedCurrency
+  static String getSelectedCurrencyRate() {
+    final AppShared appShared = sl<AppShared>();
+    return appShared.getVal('currency-rate') ?? '1';
+  }
+
+  //setCurrency
+  static String setCurrencyRate(String currencyRate) {
+    final AppShared appShared = sl<AppShared>();
+    appShared.setVal(
+      'currency-rate',
+      currencyRate,
+    );
+    AppConstants.currencyRate = currencyRate;
+    return currencyRate;
+  }
+
+  //getPriceAfterRate
+  static String getPriceAfterRate(String originalPrice) {
+    if (originalPrice.isEmpty) {
+      return originalPrice;
+    } else {
+      String rate = AppConstants.currencyRate;
+      double tempPrice = double.parse(originalPrice) * double.parse(rate);
+      return tempPrice.toStringAsFixed(2);
+    }
+  }
+
+  //getCurrencyMarkFromBase
+  static String getCurrencyMark() => (AppConstants.currencyBase + '-S').tr();
 }

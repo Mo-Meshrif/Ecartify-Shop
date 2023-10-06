@@ -1,17 +1,69 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import '../../../../../app/errors/exception.dart';
 import '../../../../../app/services/api_services.dart';
 import '../../../../../app/utils/constants_manager.dart';
 import '../../domain/usecases/get_paymob_ifram_id_use_case.dart';
 import '../../domain/usecases/get_stripe_client_secret_use_case.dart';
+import '../models/currency_model.dart';
 
 abstract class BasePaymentRemoteDataSource {
+  Future<CurrencyModel> getCurrencyRates();
   Future<String> getStripeClientSecret(StripeClientSecretParameters parameters);
   Future<String> getPaymobIframeId(PaymobIFrameParameters parameters);
 }
 
 class PaymentRemoteDataSource implements BasePaymentRemoteDataSource {
   final ApiServices apiServices;
-  PaymentRemoteDataSource(this.apiServices);
+  final FirebaseFirestore firebaseFirestore;
+
+  PaymentRemoteDataSource(
+    this.apiServices,
+    this.firebaseFirestore,
+  );
+
+  @override
+  Future<CurrencyModel> getCurrencyRates() async {
+    try {
+      String now = DateFormat('yyyy-MM-dd').format(DateTime.now());
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await firebaseFirestore.collection('Currencies').get();
+      if (querySnapshot.docs.isNotEmpty) {
+        int index = querySnapshot.docs.indexWhere((e) => e.get('date') == now);
+        if (index > -1) {
+          return CurrencyModel.fromJson(querySnapshot.docs[index].data());
+        } else {
+          for (var e in querySnapshot.docs) {
+            e.reference.delete();
+          }
+          return _getCurrencyRatesFromApi();
+        }
+      } else {
+        return _getCurrencyRatesFromApi();
+      }
+    } catch (e) {
+      throw ServerExecption(e.toString());
+    }
+  }
+
+  Future<CurrencyModel> _getCurrencyRatesFromApi() async {
+    try {
+      String now = DateFormat('yyyy-MM-dd').format(DateTime.now());
+      var response = await apiServices.get(
+        url:
+            '${AppConstants.currencyUrl}?apikey=${AppConstants.currencyServerKey}',
+      );
+      var currencyModel = CurrencyModel.fromJson(response);
+      firebaseFirestore
+          .collection('Currencies')
+          .doc(now)
+          .set(currencyModel.toJson());
+      return currencyModel;
+    } catch (e) {
+      throw ServerExecption(e.toString());
+    }
+  }
 
   @override
   Future<String> getStripeClientSecret(

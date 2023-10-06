@@ -39,14 +39,16 @@ class ProductModel extends Product {
           offerEndDate: offerEndDate,
           isFavourite: isFavourite,
         );
-        
+
   factory ProductModel.fromSnapshot(DocumentSnapshot snapshot) => ProductModel(
         id: snapshot.id,
         name: snapshot.get('name'),
         image: snapshot.get('image'),
         description: snapshot.get('description'),
-        price: snapshot.get('price'),
-        lastPrice: snapshot.get('last_price'),
+        price: HelperFunctions.getPriceAfterRate(snapshot.get('price')),
+        lastPrice: HelperFunctions.getPriceAfterRate(
+          snapshot.get('last_price'),
+        ),
         barcode: snapshot.get('barcode'),
         catName: snapshot.get('cat-name'),
         color:

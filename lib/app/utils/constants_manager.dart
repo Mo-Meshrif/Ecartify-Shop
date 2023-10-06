@@ -28,6 +28,9 @@ class AppConstants {
   static const String redirectAndroidUri =
       'https://play.google.com/store/apps/details?id=com.ecartify.store';
   static const String recentSearchedKey = 'recent-seacrched';
+  static const String currencyUrl =
+      'https://api.currencyfreaks.com/v2.0/rates/latest';
+  static const String currencyServerKey = 'cf0d579312744954a24763ee3808c5c7';
   static const String stripePublishTestKey =
       'pk_test_51NuNBwFSiISHjJ6H9mCh64EO8eCcFX27pEbzKQzL4ygCEHJAU1c5qNCjUozLainEZI57WNZwYTO2n9mK27RiRZFD00TqE929U0';
   static const String stripePublishLiveKey = '';
@@ -37,5 +40,8 @@ class AppConstants {
   static const String paymobApiKey =
       'ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2T1RFd01UZ3pMQ0p1WVcxbElqb2lhVzVwZEdsaGJDSjkuZ2ZKelF0ak5FamljbEpNRk5CUGtLdjBYSHJjeHpockhhdVM4bTZWczBHb0czb0NCMVlNanVOTW81a0FuaWdBdnFKRC1hT2Z3Z05NR3NJYkM2ZFVSSXc=';
   static const int paymobIntegrationId = 4243177;
-  static const String paymobiFrameURL='https://accept.paymob.com/api/acceptance/iframes/790544?payment_token=';
+  static const String paymobiFrameURL =
+      'https://accept.paymob.com/api/acceptance/iframes/790544?payment_token=';
+  static String currencyBase = 'USD';
+  static String currencyRate = '1';
 }

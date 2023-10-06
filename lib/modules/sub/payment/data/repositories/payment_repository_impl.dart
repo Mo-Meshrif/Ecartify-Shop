@@ -5,6 +5,7 @@ import '../../../../../app/errors/exception.dart';
 import '../../../../../app/errors/failure.dart';
 import '../../../../../app/services/network_services.dart';
 import '../../../../../app/utils/strings_manager.dart';
+import '../../domain/entities/currency.dart';
 import '../../domain/repositories/base_payment_repository.dart';
 import '../../domain/usecases/get_paymob_ifram_id_use_case.dart';
 import '../../domain/usecases/get_stripe_client_secret_use_case.dart';
@@ -17,7 +18,23 @@ class PaymentRepositoryImpl implements BasePaymentRepository {
   PaymentRepositoryImpl(this.basePaymentRemoteDataSource, this.networkServices);
 
   @override
-  Future<Either<Failure, String>> getStripeClientSecret(StripeClientSecretParameters parameters) async {
+  Future<Either<Failure, Currency>> getCurrencyRates() async {
+    if (await networkServices.isConnected()) {
+      try {
+        final currency =
+            await basePaymentRemoteDataSource.getCurrencyRates();
+        return Right(currency);
+      } on ServerExecption catch (_) {
+        return Left(ServerFailure(msg: AppStrings.operationFailed.tr()));
+      }
+    } else {
+      return Left(ServerFailure(msg: AppStrings.noConnection.tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> getStripeClientSecret(
+      StripeClientSecretParameters parameters) async {
     if (await networkServices.isConnected()) {
       try {
         final clientSecret =
@@ -30,10 +47,11 @@ class PaymentRepositoryImpl implements BasePaymentRepository {
       return Left(ServerFailure(msg: AppStrings.noConnection.tr()));
     }
   }
-  
+
   @override
-  Future<Either<Failure, String>> getPaymobIframeId(PaymobIFrameParameters parameters)async {
-   if (await networkServices.isConnected()) {
+  Future<Either<Failure, String>> getPaymobIframeId(
+      PaymobIFrameParameters parameters) async {
+    if (await networkServices.isConnected()) {
       try {
         final paymobToken =
             await basePaymentRemoteDataSource.getPaymobIframeId(parameters);

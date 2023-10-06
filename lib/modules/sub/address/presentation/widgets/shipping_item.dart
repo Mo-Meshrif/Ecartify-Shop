@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../app/common/widgets/image_builder.dart';
+import '../../../../../app/helper/helper_functions.dart';
 import '../../../../../app/helper/navigation_helper.dart';
 import '../../../../../app/services/services_locator.dart';
 import '../../../../../app/utils/color_manager.dart';
@@ -71,9 +72,12 @@ class ShippingItem extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   CustomText(
-                    data: '\$' + shipping.price,
+                    data: HelperFunctions.getPriceAfterRate(shipping.price) +
+                        ' ' +
+                        HelperFunctions.getCurrencyMark(),
                     fontSize: AppSize.s20.sp,
                   ),
+                  SizedBox(width: AppSize.s10.w),
                   Icon(
                     shipping.selected
                         ? Icons.radio_button_checked

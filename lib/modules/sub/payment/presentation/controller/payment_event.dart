@@ -7,6 +7,13 @@ abstract class PaymentEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class GetCurrencyRatesEvent extends PaymentEvent {}
+
+class ChangeCurrencyEvent extends PaymentEvent {
+  final Currency currency;
+  const ChangeCurrencyEvent({required this.currency});
+}
+
 class PaymentToggleEvent extends PaymentEvent {
   final BuildContext context;
   final PaymentType paymentType;

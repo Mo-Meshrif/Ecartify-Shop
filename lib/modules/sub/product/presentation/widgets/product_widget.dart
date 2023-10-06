@@ -26,174 +26,190 @@ class ProductWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Card(
-        margin: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(
-            AppSize.s15.r,
-          ),
+  Widget build(BuildContext context) {
+    String mark = HelperFunctions.getCurrencyMark();
+    return Card(
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+          AppSize.s15.r,
         ),
-        child: InkWell(
-          onTap: () {
-            context.read<ProductBloc>().add(
-                  UpdateProductDetailsEvent(
-                    product: product,
-                  ),
-                );
-            NavigationHelper.pushNamed(
-              context,
-              Routes.productDetailsRoute,
-            );
-          },
-          borderRadius: BorderRadius.circular(15.r),
-          child: Padding(
-            padding: const EdgeInsets.all(5),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(AppSize.s15.r),
-                  child: Container(
-                    color: ColorManager.kGrey.withOpacity(0.3),
-                    child: Stack(
-                      children: [
-                        Center(
-                          child: ImageBuilder(
-                            height: AppSize.s205.h,
-                            fit: BoxFit.contain,
-                            imageUrl: product.image,
-                          ),
+      ),
+      child: InkWell(
+        onTap: () {
+          context.read<ProductBloc>().add(
+                UpdateProductDetailsEvent(
+                  product: product,
+                ),
+              );
+          NavigationHelper.pushNamed(
+            context,
+            Routes.productDetailsRoute,
+          );
+        },
+        borderRadius: BorderRadius.circular(15.r),
+        child: Padding(
+          padding: const EdgeInsets.all(5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(AppSize.s15.r),
+                child: Container(
+                  color: ColorManager.kGrey.withOpacity(0.3),
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: ImageBuilder(
+                          height: AppSize.s205.h,
+                          fit: BoxFit.contain,
+                          imageUrl: product.image,
                         ),
-                        BlocBuilder<CartBloc, CartState>(
-                          builder: (context, state) {
-                            int index = state.cartItems.indexWhere(
-                              (e) => e.prodId == product.id,
-                            );
-                            return Align(
-                              alignment: AlignmentDirectional.topEnd,
-                              child: index > -1
-                                  ? IconButton(
-                                      padding: EdgeInsets.zero,
-                                      splashRadius: AppSize.s30.r,
-                                      onPressed: () => sl<CartBloc>().add(
-                                        DeleteItemEvent(
-                                          prodId: product.id,
+                      ),
+                      BlocBuilder<CartBloc, CartState>(
+                        builder: (context, state) {
+                          int index = state.cartItems.indexWhere(
+                            (e) => e.prodId == product.id,
+                          );
+                          return Align(
+                            alignment: AlignmentDirectional.topEnd,
+                            child: index > -1
+                                ? IconButton(
+                                    padding: EdgeInsets.zero,
+                                    splashRadius: AppSize.s30.r,
+                                    onPressed: () => sl<CartBloc>().add(
+                                      DeleteItemEvent(
+                                        prodId: product.id,
+                                      ),
+                                    ),
+                                    icon: CircleAvatar(
+                                      radius: AppSize.s20.r,
+                                      backgroundColor: ColorManager.kBlack,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                          top: AppPadding.p5.h,
                                         ),
-                                      ),
-                                      icon: CircleAvatar(
-                                        radius: AppSize.s20.r,
-                                        backgroundColor: ColorManager.kBlack,
-                                        child: Padding(
-                                          padding: EdgeInsets.only(
-                                            top: AppPadding.p5.h,
-                                          ),
-                                          child: SvgPicture.asset(
-                                            IconAssets.cart,
-                                            width: AppSize.s20.w,
-                                            color: ColorManager.kRed,
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : IconButton(
-                                      padding: EdgeInsets.zero,
-                                      splashRadius: AppSize.s30.r,
-                                      onPressed: () =>
-                                          HelperFunctions.handleFavFun(
-                                        context,
-                                        product,
-                                      ),
-                                      icon: CircleAvatar(
-                                        radius: AppSize.s20.r,
-                                        backgroundColor: ColorManager.kBlack,
-                                        child: Padding(
-                                          padding: EdgeInsets.only(
-                                            top: AppPadding.p5.h,
-                                          ),
-                                          child: SvgPicture.asset(
-                                            IconAssets.favourite,
-                                            width: AppSize.s20.w,
-                                            color: product.isFavourite
-                                                ? ColorManager.kRed
-                                                : ColorManager.kWhite,
-                                          ),
+                                        child: SvgPicture.asset(
+                                          IconAssets.cart,
+                                          width: AppSize.s20.w,
+                                          color: ColorManager.kRed,
                                         ),
                                       ),
                                     ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: AppSize.s5.h),
-                CustomText(
-                  data: product.name,
-                  maxLines: 2,
-                ),
-                SizedBox(height: AppSize.s5.h),
-                IntrinsicHeight(
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.star_half,
-                        size: AppSize.s20,
-                      ),
-                      SizedBox(width: AppSize.s10.w),
-                      CustomText(
-                        data: product.avRateValue.toStringAsFixed(2),
-                      ),
-                      SizedBox(width: AppSize.s5.w),
-                      VerticalDivider(
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      Expanded(
-                        child: Center(
-                          child: Container(
-                            padding: const EdgeInsets.all(AppPadding.p5),
-                            decoration: BoxDecoration(
-                              color: ColorManager.kGrey.withOpacity(0.3),
-                              borderRadius:
-                                  BorderRadius.circular(AppSize.s10.r),
-                            ),
-                            child: CustomText(
-                              data: product.soldNum.toString() +
-                                  ' ' +
-                                  AppStrings.sold.tr(),
-                            ),
-                          ),
-                        ),
+                                  )
+                                : IconButton(
+                                    padding: EdgeInsets.zero,
+                                    splashRadius: AppSize.s30.r,
+                                    onPressed: () =>
+                                        HelperFunctions.handleFavFun(
+                                      context,
+                                      product,
+                                    ),
+                                    icon: CircleAvatar(
+                                      radius: AppSize.s20.r,
+                                      backgroundColor: ColorManager.kBlack,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                          top: AppPadding.p5.h,
+                                        ),
+                                        child: SvgPicture.asset(
+                                          IconAssets.favourite,
+                                          width: AppSize.s20.w,
+                                          color: product.isFavourite
+                                              ? ColorManager.kRed
+                                              : ColorManager.kWhite,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                          );
+                        },
                       ),
                     ],
                   ),
                 ),
-                SizedBox(height: AppSize.s5.h),
-                Row(
+              ),
+              SizedBox(height: AppSize.s5.h),
+              CustomText(
+                data: product.name,
+                maxLines: 2,
+              ),
+              SizedBox(height: AppSize.s5.h),
+              IntrinsicHeight(
+                child: Row(
                   children: [
-                    CustomText(
-                      data: '\$' + product.price,
+                    const Icon(
+                      Icons.star_half,
+                      size: AppSize.s20,
                     ),
-                    Visibility(
-                      visible: product.lastPrice.isNotEmpty,
-                      child: Row(
-                        children: [
-                          SizedBox(width: 10.w),
-                          CustomText(
-                            data: '\$' + product.lastPrice,
-                            color: ColorManager.kRed,
-                            textDecoration: TextDecoration.lineThrough,
-                            decorationColor: Theme.of(context).primaryColor,
+                    SizedBox(width: AppSize.s10.w),
+                    CustomText(
+                      data: product.avRateValue.toStringAsFixed(2),
+                    ),
+                    SizedBox(width: AppSize.s5.w),
+                    VerticalDivider(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Container(
+                          padding: const EdgeInsets.all(AppPadding.p5),
+                          decoration: BoxDecoration(
+                            color: ColorManager.kGrey.withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(AppSize.s10.r),
                           ),
-                        ],
+                          child: CustomText(
+                            data: product.soldNum.toString() +
+                                ' ' +
+                                AppStrings.sold.tr(),
+                          ),
+                        ),
                       ),
-                    )
+                    ),
                   ],
                 ),
-                SizedBox(height: AppSize.s5.h),
-              ],
-            ),
+              ),
+              SizedBox(height: AppSize.s5.h),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: product.price + ' ' + mark + '  ',
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    product.lastPrice.isNotEmpty
+                        ? TextSpan(
+                            children: [
+                              TextSpan(
+                                text: product.lastPrice,
+                                style: TextStyle(
+                                  color: ColorManager.kRed,
+                                  decoration: TextDecoration.lineThrough,
+                                  decorationColor:
+                                      Theme.of(context).primaryColor,
+                                ),
+                              ),
+                              TextSpan(
+                                text: ' ' + mark,
+                                style: TextStyle(
+                                  color: ColorManager.kRed,
+                                  decorationColor:
+                                      Theme.of(context).primaryColor,
+                                ),
+                              )
+                            ],
+                          )
+                        : const WidgetSpan(child: SizedBox())
+                  ],
+                ),
+              ),
+              SizedBox(height: AppSize.s5.h),
+            ],
           ),
         ),
-      );
+      ),
+    );
+  }
 }

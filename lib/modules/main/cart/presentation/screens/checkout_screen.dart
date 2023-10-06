@@ -218,7 +218,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       );
 
   Widget _shippingType(Shipping? shipping) {
-    shippingVal = double.parse(shipping?.price ?? '0.0');
+    shippingVal = double.parse(
+      HelperFunctions.getPriceAfterRate(
+        shipping?.price ?? '0.0',
+      ),
+    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -271,7 +275,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               break;
             case Status.loaded:
               NavigationHelper.pop(context);
-              promoVal = double.parse(state.promoResult!.discount);
+              promoVal = double.parse(
+                HelperFunctions.getPriceAfterRate(
+                  state.promoResult!.discount,
+                ),
+              );
               promoController.text = '';
               break;
             default:
@@ -331,6 +339,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   Container _priceSummary() {
     double totalPrice = itemsPrice + shippingVal - promoVal;
+    String currencyMark = HelperFunctions.getCurrencyMark();
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -348,7 +357,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
               ),
               CustomText(
-                data: itemsPrice.toStringAsFixed(2),
+                data: itemsPrice.toStringAsFixed(2) + ' ' + currencyMark,
                 fontSize: AppSize.s20.sp,
               ),
             ],
@@ -363,7 +372,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
               ),
               CustomText(
-                data: shippingVal.toStringAsFixed(2),
+                data: shippingVal.toStringAsFixed(2) + ' ' + currencyMark,
                 fontSize: AppSize.s20.sp,
               ),
             ],
@@ -382,7 +391,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     ),
                   ),
                   CustomText(
-                    data: promoVal.toStringAsFixed(2),
+                    data: promoVal.toStringAsFixed(2) + ' ' + currencyMark,
                     fontSize: AppSize.s20.sp,
                     color: ColorManager.kRed,
                   ),
@@ -401,7 +410,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
               ),
               CustomText(
-                data: totalPrice.toStringAsFixed(2),
+                data: totalPrice.toStringAsFixed(2) + ' ' + currencyMark,
                 fontSize: AppSize.s20.sp,
               ),
             ],

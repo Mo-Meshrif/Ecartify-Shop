@@ -68,6 +68,7 @@ import '../../modules/sub/notification/presentation/controller/notification_bloc
 import '../../modules/sub/payment/data/datasources/remote_data_source.dart';
 import '../../modules/sub/payment/data/repositories/payment_repository_impl.dart';
 import '../../modules/sub/payment/domain/repositories/base_payment_repository.dart';
+import '../../modules/sub/payment/domain/usecases/get_currency_rates_use_case.dart';
 import '../../modules/sub/payment/domain/usecases/get_paymob_ifram_id_use_case.dart';
 import '../../modules/sub/payment/domain/usecases/get_stripe_client_secret_use_case.dart';
 import '../../modules/sub/payment/presentation/controller/payment_bloc.dart';
@@ -161,7 +162,7 @@ class ServicesLocator {
       () => PromoRemoteDataSource(sl()),
     );
     sl.registerLazySingleton<BasePaymentRemoteDataSource>(
-      () => PaymentRemoteDataSource(sl()),
+      () => PaymentRemoteDataSource(sl(),sl()),
     );
     //Repositories
     sl.registerLazySingleton<BaseAuthRepository>(
@@ -219,6 +220,7 @@ class ServicesLocator {
     sl.registerLazySingleton(() => DeleteAddressUseCase(sl()));
     sl.registerLazySingleton(() => GetShippingListUseCase(sl()));
     sl.registerLazySingleton(() => CheckPromoCodeUseCase(sl()));
+    sl.registerLazySingleton(() => GetCurrencyRatesUseCase(sl()));
     sl.registerLazySingleton(() => GetStripeClientSecretUseCase(sl()));
     sl.registerLazySingleton(() => GetPaymobIframeIdUseCase(sl()));
     //blocs
@@ -309,6 +311,7 @@ class ServicesLocator {
     );
     sl.registerLazySingleton(
       () => PaymentBloc(
+        getCurrencyRatesUseCase: sl(),
         getStripeClientSecretUseCase: sl(),
         getPaymobIframeIdUseCase: sl(),
       ),

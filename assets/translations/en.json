@@ -125,5 +125,14 @@
     "Mobile": "Mobile",
     "Enter youe first name": "Enter youe first name",
     "Enter youe last name": "Enter youe last name",
-    "Enter your mobile": "Enter your mobile"
+    "Enter your mobile": "Enter your mobile",
+    "Currencies": "Currencies",
+    "EGP": "EGP",
+    "AED": "AED",
+    "SAR": "SAR",
+    "USD": "USD",
+    "EGP-S": "L.E",
+    "AED-S": "AED",
+    "SAR-S": "SAR",
+    "USD-S": "$"
 }

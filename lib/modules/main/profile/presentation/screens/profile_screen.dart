@@ -19,6 +19,7 @@ import '../../../../../app/utils/routes_manager.dart';
 import '../../../../../app/utils/strings_manager.dart';
 import '../../../../../app/utils/values_manager.dart';
 import '../../../../control/presentation/controller/app_config_bloc.dart';
+import '../../../../sub/payment/presentation/screens/currency_screen.dart';
 import '../controller/profile_bloc.dart';
 import '../widgets/about_widget.dart';
 import '../widgets/edit_profile_widget.dart';
@@ -47,6 +48,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     ProfileItem(
       icon: IconAssets.wallet,
       title: AppStrings.wallet,
+    ),
+    ProfileItem(
+      icon: IconAssets.currency,
+      title: AppStrings.currencies,
     ),
     ProfileItem(
       icon: IconAssets.privacy,
@@ -145,125 +150,138 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       : const Icon(Icons.error),
                 )
               : Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      children: [
-                        ListTile(
-                          leading: CircleAvatar(
-                            radius: AppSize.s30.r,
-                            backgroundColor: Theme.of(context).primaryColor,
-                            child: CustomText(
-                              data: name[0].toUpperCase(),
-                              color: Theme.of(context).canvasColor,
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            ListTile(
+                              leading: CircleAvatar(
+                                radius: AppSize.s30.r,
+                                backgroundColor: Theme.of(context).primaryColor,
+                                child: CustomText(
+                                  data: name[0].toUpperCase(),
+                                  color: Theme.of(context).canvasColor,
+                                ),
+                              ),
+                              title: CustomText(
+                                data: name,
+                                fontSize: AppSize.s20.sp,
+                              ),
+                              subtitle: CustomText(
+                                data: state.user!.email,
+                                fontSize: AppSize.s15.sp,
+                              ),
+                              trailing: IconButton(
+                                onPressed: () => NavigationHelper.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Scaffold(
+                                      appBar: AppBar(),
+                                      body: EditProfileWidget(
+                                        user: state.user!,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                splashRadius: AppSize.s30.r,
+                                icon: const Icon(Icons.edit),
+                              ),
                             ),
-                          ),
-                          title: CustomText(
-                            data: name,
-                            fontSize: AppSize.s20.sp,
-                          ),
-                          subtitle: CustomText(
-                            data: state.user!.email,
-                            fontSize: AppSize.s15.sp,
-                          ),
-                          trailing: IconButton(
-                            onPressed: () => NavigationHelper.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Scaffold(
-                                  appBar: AppBar(),
-                                  body: EditProfileWidget(
-                                    user: state.user!,
+                            const Divider(),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: AppPadding.p10.w,
+                                vertical: AppPadding.p15.h,
+                              ),
+                              child: Column(
+                                children: List.generate(
+                                  profileItems.length,
+                                  (index) => ListTile(
+                                    horizontalTitleGap: AppSize.s5.w,
+                                    onTap: () {
+                                      switch (index) {
+                                        case 0:
+                                          NavigationHelper.pushNamed(
+                                            context,
+                                            Routes.orderRoute,
+                                          );
+                                          break;
+                                        case 1:
+                                          NavigationHelper.pushNamed(
+                                            context,
+                                            Routes.addressRoute,
+                                          );
+                                          break;
+                                        case 2:
+                                          NavigationHelper.pushNamed(
+                                            context,
+                                            Routes.walletRoute,
+                                          );
+                                          break;
+                                        case 3:
+                                          NavigationHelper.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const CurrencyScreen(),
+                                            ),
+                                          );
+                                          break;
+                                        case 4:
+                                          NavigationHelper.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => Scaffold(
+                                                appBar: AppBar(),
+                                                body: const PrivacyWidget(),
+                                              ),
+                                            ),
+                                          );
+                                          break;
+                                        case 5:
+                                          NavigationHelper.pushNamed(
+                                            context,
+                                            Routes.helpRoute,
+                                          );
+                                          break;
+                                        case 6:
+                                          NavigationHelper.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => Scaffold(
+                                                appBar: AppBar(
+                                                  title: CustomText(
+                                                    data: AppStrings.about.tr(),
+                                                  ),
+                                                ),
+                                                body: const AboutWidget(),
+                                              ),
+                                            ),
+                                          );
+                                          break;
+                                      }
+                                    },
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(AppSize.s5.r),
+                                    ),
+                                    leading: SvgPicture.asset(
+                                      profileItems[index].icon,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                    title: CustomText(
+                                      data: profileItems[index].title.tr(),
+                                    ),
+                                    trailing:
+                                        const Icon(Icons.arrow_forward_ios),
                                   ),
                                 ),
                               ),
                             ),
-                            splashRadius: AppSize.s30.r,
-                            icon: const Icon(Icons.edit),
-                          ),
+                          ],
                         ),
-                        const Divider(),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: AppPadding.p10.w,
-                            vertical: AppPadding.p15.h,
-                          ),
-                          child: Column(
-                            children: List.generate(
-                              profileItems.length,
-                              (index) => ListTile(
-                                horizontalTitleGap: AppSize.s5.w,
-                                onTap: () {
-                                  switch (index) {
-                                    case 0:
-                                      NavigationHelper.pushNamed(
-                                        context,
-                                        Routes.orderRoute,
-                                      );
-                                      break;
-                                    case 1:
-                                      NavigationHelper.pushNamed(
-                                        context,
-                                        Routes.addressRoute,
-                                      );
-                                      break;
-                                    case 2:
-                                      NavigationHelper.pushNamed(
-                                        context,
-                                        Routes.walletRoute,
-                                      );
-                                      break;
-                                    case 3:
-                                      NavigationHelper.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => Scaffold(
-                                            appBar: AppBar(),
-                                            body: const PrivacyWidget(),
-                                          ),
-                                        ),
-                                      );
-                                      break;
-                                    case 4:
-                                      NavigationHelper.pushNamed(
-                                        context,
-                                        Routes.helpRoute,
-                                      );
-                                      break;
-                                    case 5:
-                                      NavigationHelper.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => Scaffold(
-                                            appBar: AppBar(
-                                              title: CustomText(
-                                                data: AppStrings.about.tr(),
-                                              ),
-                                            ),
-                                            body: const AboutWidget(),
-                                          ),
-                                        ),
-                                      );
-                                      break;
-                                  }
-                                },
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(AppSize.s5.r),
-                                ),
-                                leading: SvgPicture.asset(
-                                  profileItems[index].icon,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                title: CustomText(
-                                  data: profileItems[index].title.tr(),
-                                ),
-                                trailing: const Icon(Icons.arrow_forward_ios),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(

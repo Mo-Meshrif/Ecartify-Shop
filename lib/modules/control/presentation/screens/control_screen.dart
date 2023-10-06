@@ -5,6 +5,7 @@ import '../../../../app/helper/shared_helper.dart';
 import '../../../../app/services/services_locator.dart';
 import '../../../../app/utils/constants_manager.dart';
 import '../../../main/auth/presentation/screens/main/auth_screen.dart';
+import '../../../sub/payment/presentation/controller/payment_bloc.dart';
 import 'toggle_screens.dart';
 
 class ControlScreen extends StatefulWidget {
@@ -20,10 +21,12 @@ class _ControlScreenState extends State<ControlScreen> {
   void initState() {
     FlutterNativeSplash.remove();
     setState(
-      () => authPass = sl<AppShared>().getVal(
-            AppConstants.authPassKey,
-          ) ??
-          false,
+      () {
+        authPass = sl<AppShared>().getVal(AppConstants.authPassKey) ?? false;
+        if (authPass) {
+          sl<PaymentBloc>().add(GetCurrencyRatesEvent());
+        }
+      },
     );
     super.initState();
   }

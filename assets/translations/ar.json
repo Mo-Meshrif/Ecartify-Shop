@@ -125,5 +125,14 @@
     "Mobile": "الهاتف",
     "Enter youe first name": "أدخل اسمك الأول",
     "Enter youe last name": "أدخل اسمك الأخير",
-    "Enter your mobile": "أدخل الهاتف الخاص بك"
+    "Enter your mobile": "أدخل الهاتف الخاص بك",
+    "Currencies": "العملات",
+    "EGP": "جنية مصرى",
+    "AED": "درهم اماراتي",
+    "SAR": "ريال سعودى",
+    "USD": "دولار امريكي",
+    "EGP-S": "ج.م",
+    "AED-S": "درهم",
+    "SAR-S": "ريال",
+    "USD-S": "$"
 }
