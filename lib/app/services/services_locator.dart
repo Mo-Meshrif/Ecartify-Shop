@@ -91,6 +91,7 @@ import '../../modules/sub/review/domain/usecases/get_reviews_use_case.dart';
 import '../../modules/sub/review/presentation/controller/review_bloc.dart';
 import '../helper/shared_helper.dart';
 import '../utils/constants_manager.dart';
+import 'api_services.dart';
 import 'network_services.dart';
 
 final GetIt sl = GetIt.instance;
@@ -120,6 +121,7 @@ class ServicesLocator {
     final googleSignIn = GoogleSignIn(scopes: [AppConstants.googleScope]);
     sl.registerLazySingleton<GoogleSignIn>(() => googleSignIn);
     //services
+    sl.registerLazySingleton<ApiServices>(() => ApiServicesImpl());
     sl.registerLazySingleton<NetworkServices>(() => InternetCheckerLookup());
     //DataSources
     sl.registerLazySingleton<BaseAuthRemoteDataSource>(
@@ -159,7 +161,7 @@ class ServicesLocator {
       () => PromoRemoteDataSource(sl()),
     );
     sl.registerLazySingleton<BasePaymentRemoteDataSource>(
-      () => PaymentRemoteDataSource(),
+      () => PaymentRemoteDataSource(sl()),
     );
     //Repositories
     sl.registerLazySingleton<BaseAuthRepository>(
