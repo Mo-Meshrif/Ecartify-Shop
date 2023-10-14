@@ -2,6 +2,7 @@
     package="com.ecartify.store">
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
     <queries>
       <package android:name="com.google.android.apps.maps" />
       <!-- If your app checks for SMS support -->
@@ -20,7 +21,9 @@
    <application
         android:label="Ecartify"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        tools:replace="android:label"
+        xmlns:tools="http://schemas.android.com/tools">
         <activity
             android:name=".MainActivity"
             android:exported="true"

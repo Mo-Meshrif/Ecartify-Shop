@@ -50,7 +50,12 @@ class PresentPaymobPaymentEvent extends PaymentEvent {
   });
 }
 
-class PaymentErrorEvent extends PaymentEvent {
-  final String msg;
-  const PaymentErrorEvent({required this.msg});
+class PaymentResultEvent extends PaymentEvent {
+  final bool success;
+  final String? transactionId, msg;
+  const PaymentResultEvent({
+    required this.success,
+    this.transactionId,
+    this.msg,
+  });
 }

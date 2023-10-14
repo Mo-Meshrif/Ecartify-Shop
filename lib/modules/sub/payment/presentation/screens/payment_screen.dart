@@ -147,7 +147,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     ),
                     SizedBox(height: AppPadding.p10.h),
                     CustomElevatedButton(
-                      onPressed: selecedPayment == null
+                      onPressed: selecedPayment == null ||
+                              state.paymentStatus == Status.loading
                           ? null
                           : () => sl<PaymentBloc>().add(
                                 PaymentToggleEvent(

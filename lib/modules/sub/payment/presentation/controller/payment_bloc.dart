@@ -6,8 +6,16 @@ import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_paypal_native/models/approval/approval_data.dart';
+import 'package:flutter_paypal_native/models/custom/currency_code.dart';
+import 'package:flutter_paypal_native/models/custom/environment.dart';
+import 'package:flutter_paypal_native/models/custom/order_callback.dart';
+import 'package:flutter_paypal_native/models/custom/purchase_unit.dart';
+import 'package:flutter_paypal_native/models/custom/user_action.dart';
+import 'package:flutter_paypal_native/str_helper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:flutter_paypal_native/flutter_paypal_native.dart';
 
 import '../../../../../app/common/usecase/base_use_case.dart';
 import '../../../../../app/errors/failure.dart';
@@ -50,11 +58,12 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     on<PresentPaymobPaymentEvent>(
       _presentPaymobPayment,
     );
-    on<PaymentErrorEvent>(
+    on<PaymentResultEvent>(
       (event, emit) => emit(
         state.copyWith(
-          paymentStatus: Status.error,
-          msg: event.msg,
+          paymentStatus: event.success ? Status.loaded : Status.error,
+          transactionId: event.success ? event.transactionId : '',
+          msg: event.success ? null : event.msg,
         ),
       ),
     );
@@ -145,7 +154,8 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     );
     result.fold(
       (failure) => add(
-        PaymentErrorEvent(
+        PaymentResultEvent(
+          success: false,
           msg: failure.msg,
         ),
       ),
@@ -231,7 +241,8 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
       );
       result.fold(
         (failure) => add(
-          PaymentErrorEvent(
+          PaymentResultEvent(
+            success: false,
             msg: failure.msg,
           ),
         ),
@@ -261,6 +272,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
       emit(
         state.copyWith(
           paymentStatus: response.success ? Status.loaded : Status.error,
+          transactionId: response.success ? response.transactionID : '',
           msg: response.success ? state.msg : response.message,
         ),
       );
@@ -274,9 +286,79 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     }
   }
 
-  FutureOr<void> _paypal(PaymentToggleEvent event, Emitter<PaymentState> emit) {
-    // TODO: Handle paypal case.
+  FutureOr<void> _paypal(
+      PaymentToggleEvent event, Emitter<PaymentState> emit) async {
+    emit(
+      state.copyWith(
+        paymentStatus: Status.loading,
+      ),
+    );
+    final flutterPaypalNative = FlutterPaypalNative.instance;
+    //set debugMode for error logging
+    FlutterPaypalNative.isDebugMode = true;
+    await flutterPaypalNative.init(
+      //your app id !!! No Underscore!!! see readme.md for help
+      returnUrl: AppConstants.paypalReturnUrl,
+      //client id from developer dashboard
+      clientID: AppConstants.paypalClientId,
+      //sandbox, staging, live etc
+      payPalEnvironment: FPayPalEnvironment.sandbox,
+      //what currency do you plan to use? default is US dollars
+      currencyCode: FPayPalCurrencyCode.usd,
+      //action paynow?
+      action: FPayPalUserAction.payNow,
+    );
+    flutterPaypalNative.setPayPalOrderCallback(
+      callback: FPayPalOrderCallback(
+        onSuccess: (FPayPalApprovalData success) {
+          flutterPaypalNative.removeAllPurchaseItems();
+          add(
+            PaymentResultEvent(
+              success: true,
+              transactionId: success.orderId,
+            ),
+          );
+        },
+        onError: (error) {
+          flutterPaypalNative.removeAllPurchaseItems();
+          add(
+            PaymentResultEvent(
+              success: false,
+              msg: error.reason,
+            ),
+          );
+        },
+        onCancel: () {
+          flutterPaypalNative.removeAllPurchaseItems();
+          add(
+            PaymentResultEvent(
+              success: false,
+              msg: AppStrings.operationFailed.tr(),
+            ),
+          );
+        },
+      ),
+    );
+    if (flutterPaypalNative.canAddMorePurchaseUnit) {
+      flutterPaypalNative.addPurchaseUnit(
+        FPayPalPurchaseUnit(
+          amount: event.totalPrice / double.parse(state.currency.selectedRate),
+
+          ///please use your own algorithm for referenceId. Maybe ProductID?
+          referenceId: FPayPalStrHelper.getRandomString(16),
+        ),
+      );
+      flutterPaypalNative.makeOrder();
+    } else {
+      emit(
+        state.copyWith(
+          paymentStatus: Status.error,
+          msg: AppStrings.operationFailed.tr(),
+        ),
+      );
+    }
   }
+
   FutureOr<void> _googlePay(
       PaymentToggleEvent event, Emitter<PaymentState> emit) {
     // TODO: Handle googlePay case.

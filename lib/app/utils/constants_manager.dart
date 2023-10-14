@@ -44,4 +44,6 @@ class AppConstants {
       'https://accept.paymob.com/api/acceptance/iframes/790544?payment_token=';
   static String currencyBase = 'USD';
   static String currencyRate = '1';
+  static String paypalClientId='AcdyPYkSePcffsoZdhwx7Gqq5iqTrDlr0rqi76NeRKIEa-XIbgBS76oC7ojxnlNjU2OzL-5FZb42mZkg';
+  static String paypalReturnUrl='com.ecartify.store://paypalpay';
 }
