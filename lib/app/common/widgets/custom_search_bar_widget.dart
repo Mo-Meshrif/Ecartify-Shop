@@ -13,12 +13,12 @@ import '../../utils/strings_manager.dart';
 import '../../utils/values_manager.dart';
 
 class CustomSearchBarWidget extends StatelessWidget {
-  final bool enable;
   final TextEditingController? searchController;
+  final void Function(String searchVal)? onSearchFun;
   const CustomSearchBarWidget({
     Key? key,
-    this.enable = false,
     this.searchController,
+    this.onSearchFun,
   }) : super(key: key);
 
   @override
@@ -38,7 +38,7 @@ class CustomSearchBarWidget extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               behavior: HitTestBehavior.translucent,
-              onTap: enable
+              onTap: onSearchFun!=null
                   ? null
                   : () => NavigationHelper.pushNamed(
                         context,
@@ -66,8 +66,9 @@ class CustomSearchBarWidget extends StatelessWidget {
                   SizedBox(width: AppPadding.p10.w),
                   Expanded(
                     child: TextFormField(
-                      enabled: enable,
-                      autofocus: enable,
+                      enabled:  onSearchFun!=null,
+                      autofocus:  onSearchFun!=null,
+                      onChanged: onSearchFun,
                       controller: searchController,
                       decoration: InputDecoration(
                         isDense: true,

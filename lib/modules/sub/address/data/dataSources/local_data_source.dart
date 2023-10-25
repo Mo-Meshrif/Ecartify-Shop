@@ -40,15 +40,19 @@ class AddressLocalDataSource implements BaseAddressLocalDataSource {
   @override
   Future<List<AddressModel>> getAddressList() async {
     try {
-      String uid = HelperFunctions.getSavedUser().id;
-      var dbClient = await database;
-      List<Map<String, Object?>> list = await dbClient!.query(
-        'address',
-        orderBy: 'id DESC',
-        where: 'uid=?',
-        whereArgs: [uid],
-      );
-      return list.map((e) => AddressModel.fromJson(e)).toList();
+      String? uid = HelperFunctions.getSavedUser()?.id;
+      if (uid != null) {
+        var dbClient = await database;
+        List<Map<String, Object?>> list = await dbClient!.query(
+          'address',
+          orderBy: 'id DESC',
+          where: 'uid=?',
+          whereArgs: [uid],
+        );
+        return list.map((e) => AddressModel.fromJson(e)).toList();
+      } else {
+        return [];
+      }
     } catch (e) {
       throw LocalExecption(e.toString());
     }
@@ -57,18 +61,22 @@ class AddressLocalDataSource implements BaseAddressLocalDataSource {
   @override
   Future<AddressModel?> addAddress(AddressModel addressModel) async {
     try {
-      String uid = HelperFunctions.getSavedUser().id;
-      var dbClient = await database;
-      await _removeDefualt(addressModel.isDefault);
-      int val = await dbClient!.insert(
-        'address',
-        addressModel.toJson()
-          ..addAll(
-            {'uid': uid},
-          ),
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-      return val != 0 ? addressModel.copyWith(id: val) : null;
+      String? uid = HelperFunctions.getSavedUser()?.id;
+      if (uid != null) {
+        var dbClient = await database;
+        await _removeDefualt(addressModel.isDefault);
+        int val = await dbClient!.insert(
+          'address',
+          addressModel.toJson()
+            ..addAll(
+              {'uid': uid},
+            ),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+        return val != 0 ? addressModel.copyWith(id: val) : null;
+      } else {
+        return null;
+      }
     } catch (e) {
       throw LocalExecption(e.toString());
     }
@@ -77,20 +85,24 @@ class AddressLocalDataSource implements BaseAddressLocalDataSource {
   @override
   Future<bool> editAddress(AddressModel addressModel) async {
     try {
-      String uid = HelperFunctions.getSavedUser().id;
-      var dbClient = await database;
-      await _removeDefualt(addressModel.isDefault);
-      int val = await dbClient!.update(
-        'address',
-        addressModel.toJson(),
-        where: 'uid=? AND id=?',
-        whereArgs: [
-          uid,
-          addressModel.id,
-        ],
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-      return val != 0;
+      String? uid = HelperFunctions.getSavedUser()?.id;
+      if (uid != null) {
+        var dbClient = await database;
+        await _removeDefualt(addressModel.isDefault);
+        int val = await dbClient!.update(
+          'address',
+          addressModel.toJson(),
+          where: 'uid=? AND id=?',
+          whereArgs: [
+            uid,
+            addressModel.id,
+          ],
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+        return val != 0;
+      } else {
+        return false;
+      }
     } catch (e) {
       throw LocalExecption(e.toString());
     }
@@ -99,14 +111,18 @@ class AddressLocalDataSource implements BaseAddressLocalDataSource {
   @override
   Future<bool> deleteAddress(int addressId) async {
     try {
-      String uid = HelperFunctions.getSavedUser().id;
-      var dbClient = await database;
-      int val = await dbClient!.delete(
-        'address',
-        where: 'uid=? AND id=?',
-        whereArgs: [uid, addressId],
-      );
-      return val != 0;
+      String? uid = HelperFunctions.getSavedUser()?.id;
+      if (uid != null) {
+        var dbClient = await database;
+        int val = await dbClient!.delete(
+          'address',
+          where: 'uid=? AND id=?',
+          whereArgs: [uid, addressId],
+        );
+        return val != 0;
+      } else {
+        return false;
+      }
     } catch (e) {
       throw LocalExecption(e.toString());
     }
@@ -114,18 +130,20 @@ class AddressLocalDataSource implements BaseAddressLocalDataSource {
 
   Future<void> _removeDefualt(bool newIsDefault) async {
     if (newIsDefault) {
-      String uid = HelperFunctions.getSavedUser().id;
-      var dbClient = await database;
-      dbClient!.update(
-        'address',
-        {'isDefault': '0'},
-        where: 'uid=? AND isDefault=?',
-        whereArgs: [
-          uid,
-          '1',
-        ],
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
+      String? uid = HelperFunctions.getSavedUser()?.id;
+      if (uid != null) {
+        var dbClient = await database;
+        dbClient!.update(
+          'address',
+          {'isDefault': '0'},
+          where: 'uid=? AND isDefault=?',
+          whereArgs: [
+            uid,
+            '1',
+          ],
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      }
     }
   }
 }

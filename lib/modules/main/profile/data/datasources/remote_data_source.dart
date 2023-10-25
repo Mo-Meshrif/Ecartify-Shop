@@ -6,7 +6,7 @@ import '../../../../../app/utils/constants_manager.dart';
 import '../../../auth/data/models/user_model.dart';
 
 abstract class BaseProfileRemoteDataSource {
-  Future<UserModel> getUserData();
+  Future<UserModel?> getUserData();
 }
 
 class ProfileRemoteDataSource implements BaseProfileRemoteDataSource {
@@ -14,15 +14,19 @@ class ProfileRemoteDataSource implements BaseProfileRemoteDataSource {
   ProfileRemoteDataSource(this.firebaseFirestore);
 
   @override
-  Future<UserModel> getUserData() async {
+  Future<UserModel?> getUserData() async {
     try {
-      String uid = HelperFunctions.getSavedUser().id;
-      DocumentSnapshot<Map<String, dynamic>> querySnapshot =
-          await firebaseFirestore
-              .collection(AppConstants.usersCollection)
-              .doc(uid)
-              .get();
-      return UserModel.fromSnapshot(querySnapshot);
+      String? uid = HelperFunctions.getSavedUser()?.id;
+      if (uid != null) {
+        DocumentSnapshot<Map<String, dynamic>> querySnapshot =
+            await firebaseFirestore
+                .collection(AppConstants.usersCollection)
+                .doc(uid)
+                .get();
+        return UserModel.fromSnapshot(querySnapshot);
+      } else {
+        return null;
+      }
     } catch (e) {
       throw ServerExecption(e.toString());
     }

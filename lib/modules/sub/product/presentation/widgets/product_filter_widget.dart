@@ -75,11 +75,9 @@ class _ProductFilterWidgetState extends State<ProductFilterWidget> {
       List<Product> filteredProds = widget.prods.where((element) {
         bool hasPass =
             double.parse(element.price) <= selectedParameters.priceRange.end &&
-                    double.parse(element.price) >=
-                        selectedParameters.priceRange.start &&
-                    selectedParameters.rate == 0
-                ? true
-                : element.avRateValue.toInt() == selectedParameters.rate;
+                double.parse(element.price) >=
+                    selectedParameters.priceRange.start &&
+                selectedParameters.rate == element.avRateValue.toInt();
         return selectedParameters.category.isEmpty
             ? hasPass
             : element.catName == selectedParameters.category && hasPass;

@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -54,36 +54,6 @@ class _TempProductListScreenState extends State<TempProductListScreen> {
         List temp = appShared.getVal(AppConstants.recentSearchedKey) ?? [];
         recentSearchedWords = List.from(temp);
       });
-      searchController!.addListener(() {
-        if (searchController!.text.isNotEmpty) {
-          //set cursor position at the end of the value
-          searchController!.selection = TextSelection.collapsed(
-            offset: searchController!.text.length,
-          );
-          setState(
-            () => productsParmeters = ProductsParmeters(
-              start: 0,
-              fromSearch: true,
-              searchKey: searchController!.text.toTitleCase(),
-              lastDateAdded: '2021-02-15T18:42:49.608466Z',
-            ),
-          );
-          getPageData(
-            newParmeters: productsParmeters,
-          );
-        } else {
-          setState(() {
-            productsParmeters = widget.productsParmeters;
-            tempProds = [];
-          });
-        }
-        if (filterParameters != null) {
-          setState(() {
-            filterParameters = null;
-            filteredProds = [];
-          });
-        }
-      });
     }
     super.initState();
   }
@@ -95,6 +65,43 @@ class _TempProductListScreenState extends State<TempProductListScreen> {
               ? GetSearchedProductsEvent(productsParmeters: _parmeters)
               : GetCustomProductsEvent(productsParmeters: _parmeters),
         );
+  }
+
+  void onSearchFun(String searchVal) {
+    if (searchVal.isNotEmpty) {
+      if (searchVal.length > (productsParmeters.searchKey?.length ?? 0)) {
+        setCursorsSearchPositionEnd(searchVal);
+      }
+      setState(
+        () => productsParmeters = ProductsParmeters(
+          start: 0,
+          fromSearch: true,
+          searchKey: searchVal.toTitleCase(),
+          lastDateAdded: '2021-02-15T18:42:49.608466Z',
+        ),
+      );
+      getPageData(
+        newParmeters: productsParmeters,
+      );
+    } else {
+      setState(() {
+        productsParmeters = widget.productsParmeters;
+        tempProds = [];
+      });
+    }
+    if (filterParameters != null) {
+      setState(() {
+        filterParameters = null;
+        filteredProds = [];
+      });
+    }
+  }
+
+  setCursorsSearchPositionEnd(String searchVal) {
+    //set cursor position at the end of the value
+    searchController!.selection = TextSelection.collapsed(
+      offset: searchVal.length,
+    );
   }
 
   @override
@@ -125,8 +132,8 @@ class _TempProductListScreenState extends State<TempProductListScreen> {
                 ),
               ),
               splashRadius: AppSize.s30.r,
-              icon: Badge(
-                position: BadgePosition.topEnd(top: -15, end: -5),
+              icon: badge.Badge(
+                position: badge.BadgePosition.topEnd(top: -15, end: -5),
                 showBadge: state.cartItemsNumber > 0,
                 badgeContent: CustomText(
                   data: state.cartItemsNumber > 9
@@ -198,8 +205,9 @@ class _TempProductListScreenState extends State<TempProductListScreen> {
                             children: [
                               TempProductListHeader(
                                 searchController: searchController,
-                                enableSearch:
-                                    widget.productsParmeters.fromSearch,
+                                onSearchFun: widget.productsParmeters.fromSearch
+                                    ? onSearchFun
+                                    : null,
                                 showFilter: tempProds.length > 1,
                                 filterIconColor: filterParameters != null
                                     ? ColorManager.kGreen
@@ -236,8 +244,10 @@ class _TempProductListScreenState extends State<TempProductListScreen> {
                                     : tempProds,
                                 productsParmeters: productsParmeters,
                                 recentSearchedWords: recentSearchedWords,
-                                onTapRecentVal: (val) =>
-                                    searchController!.text = val,
+                                onTapRecentVal: (val) {
+                                  searchController!.text = val;
+                                  onSearchFun(val);
+                                },
                               ),
                             ],
                           ),

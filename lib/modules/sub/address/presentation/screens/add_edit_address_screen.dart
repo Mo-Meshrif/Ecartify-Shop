@@ -39,7 +39,7 @@ class AddEditAddressScreen extends StatefulWidget {
 }
 
 class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
-  AuthUser user = HelperFunctions.getSavedUser();
+  AuthUser? user = HelperFunctions.getSavedUser();
   late bool isEdit = widget.address != null;
   bool _loading = true;
   Set<Marker> _markers = {};
@@ -240,7 +240,8 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
                         (e) => MarkerData(
                           marker: e,
                           child: CustomMarkerWidget(
-                              symbol: user.name[0].toUpperCase()),
+                            symbol: user?.name[0].toUpperCase() ?? '',
+                          ),
                         ),
                       )
                       .toList(),

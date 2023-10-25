@@ -1,4 +1,6 @@
 import 'package:dartz/dartz.dart';
+import 'package:easy_localization/easy_localization.dart';
+import '../../../../../app/utils/strings_manager.dart';
 
 import '../../../../../app/errors/exception.dart';
 import '../../../../../app/errors/failure.dart';
@@ -24,8 +26,12 @@ class ProfileRepositoryImpl implements BaseProfileRepository {
     if (await networkServices.isConnected()) {
       try {
         final user = await baseProfileRemoteDataSource.getUserData();
-        baseProfileLocalDataSource.saveUserData(user);
-        return Right(user);
+        if (user != null) {
+          baseProfileLocalDataSource.saveUserData(user);
+          return Right(user);
+        } else {
+          return Left(ServerFailure(msg: AppStrings.operationFailed.tr()));
+        }
       } on ServerExecption catch (failure) {
         return Left(ServerFailure(msg: failure.msg));
       }

@@ -118,13 +118,11 @@ class HelperFunctions {
   }
 
   //show popUp loading
-  static showPopUpLoading(BuildContext context) => showAlert(
+  static showPopUpLoading(BuildContext context) => showDialog(
+        barrierDismissible: false,
         context: context,
-        content: const SizedBox(
-          height: AppSize.s80,
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
+        builder: (_) => const Center(
+          child: CircularProgressIndicator(),
         ),
       );
 
@@ -147,15 +145,15 @@ class HelperFunctions {
   }
 
   //getSavedUser
-  static AuthUser getSavedUser() {
+  static AuthUser? getSavedUser() {
     var savedData = sl<AppShared>().getVal(AppConstants.userKey);
-    return UserModel.fromJson(savedData);
+    return savedData == null ? null : UserModel.fromJson(savedData);
   }
 
   //getLastUserName
   static String lastUserName() {
-    AuthUser user = getSavedUser();
-    return user.name.split(' ').last;
+    AuthUser? user = getSavedUser();
+    return user?.name.split(' ').last ?? '';
   }
 
   //get welcome string

@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,8 +42,8 @@ class BottomNavBar extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             icon: BlocBuilder<CartBloc, CartState>(
-              builder: (context, state) => Badge(
-                position: BadgePosition.topEnd(top: -10, end: -10),
+              builder: (context, state) => badge.Badge(
+                position: badge.BadgePosition.topEnd(top: -10, end: -10),
                 showBadge: state.cartItemsNumber > 0,
                 badgeContent: CustomText(
                   data: state.cartItemsNumber > 9
@@ -61,8 +61,8 @@ class BottomNavBar extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             icon: BlocBuilder<FavouriteBloc, FavouriteState>(
-              builder: (context, state) => Badge(
-                position: BadgePosition.topEnd(top: -10, end: -10),
+              builder: (context, state) => badge.Badge(
+                position: badge.BadgePosition.topEnd(top: -10, end: -10),
                 showBadge: state.favProdsNumber > 0,
                 badgeContent: CustomText(
                   data: state.favProdsNumber > 9

@@ -31,133 +31,140 @@ class ProductDetailsBody extends StatelessWidget {
   Widget build(BuildContext context) {
     String mark = HelperFunctions.getCurrencyMark();
     return Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: AppPadding.p25.w,
-          vertical: AppPadding.p20.h,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: AppSize.s10.h),
-            Row(
-              children: [
-                CustomText(
-                  data:product.price+' '+ mark ,
+      padding: EdgeInsets.symmetric(
+        horizontal: AppPadding.p25.w,
+        vertical: AppPadding.p20.h,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: AppSize.s10.h),
+          Row(
+            children: [
+              CustomText(
+                data: product.price + ' ' + mark,
+              ),
+              Visibility(
+                visible: product.lastPrice.isNotEmpty,
+                child: Row(
+                  children: [
+                    SizedBox(width: AppSize.s10.w),
+                    CustomText(
+                      data: product.lastPrice + ' ' + mark,
+                      color: ColorManager.kRed,
+                      textDecoration: TextDecoration.lineThrough,
+                      decorationColor: Theme.of(context).primaryColor,
+                    ),
+                  ],
                 ),
-                Visibility(
-                  visible: product.lastPrice.isNotEmpty,
-                  child: Row(
-                    children: [
-                      SizedBox(width: AppSize.s10.w),
-                      CustomText(
-                        data:product.lastPrice+' '+ mark,
-                        color: ColorManager.kRed,
-                        textDecoration: TextDecoration.lineThrough,
-                        decorationColor: Theme.of(context).primaryColor,
-                      ),
-                    ],
+              )
+            ],
+          ),
+          Visibility(
+            visible: !showTitle,
+            child: Padding(
+              padding: EdgeInsets.only(top: AppPadding.p5.h),
+              child: CustomText(
+                data: product.name,
+                fontSize: AppSize.s22.sp,
+              ),
+            ),
+          ),
+          Visibility(
+            visible: product.color.isNotEmpty,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Divider(),
+                CustomText(data: AppStrings.selectColor.tr()),
+                Padding(
+                  padding: EdgeInsets.only(top: AppPadding.p5.h),
+                  child: ColorSelectorWidget(
+                    colorList: product.color,
+                    getSelectedColor: getSelectedColor,
                   ),
-                )
+                ),
               ],
             ),
-            Visibility(
-              visible: !showTitle,
-              child: Padding(
-                padding: EdgeInsets.only(top: AppPadding.p5.h),
-                child: CustomText(
-                  data: product.name,
-                  fontSize: AppSize.s22.sp,
+          ),
+          Visibility(
+            visible: product.size.isNotEmpty,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Divider(),
+                CustomText(data: AppStrings.selectSize.tr()),
+                Padding(
+                  padding: EdgeInsets.only(top: AppPadding.p15.h),
+                  child: SizeSelectorWidget(
+                    sizeList: product.size,
+                    getSelectedSize: getSelectedSize,
+                  ),
                 ),
-              ),
+              ],
             ),
-            Visibility(
-              visible: product.color.isNotEmpty,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Divider(),
-                  CustomText(data: AppStrings.selectColor.tr()),
-                  Padding(
-                    padding: EdgeInsets.only(top: AppPadding.p5.h),
-                    child: ColorSelectorWidget(
-                      colorList: product.color,
-                      getSelectedColor: getSelectedColor,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Visibility(
-              visible: product.size.isNotEmpty,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Divider(),
-                  CustomText(data: AppStrings.selectSize.tr()),
-                  Padding(
-                    padding: EdgeInsets.only(top: AppPadding.p15.h),
-                    child: SizeSelectorWidget(
-                      sizeList: product.size,
-                      getSelectedSize: getSelectedSize,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Divider(),
-            CustomText(
-              data: product.description,
-            ),
-            const Divider(),
-            product.avRateValue == 0
-                ? CustomElevatedButton(
-                    onPressed: () {
-                      AuthUser user = HelperFunctions.getSavedUser();
+          ),
+          const Divider(),
+          CustomText(
+            data: product.description,
+          ),
+          const Divider(),
+          product.avRateValue == 0
+              ? CustomElevatedButton(
+                  onPressed: () {
+                    AuthUser? user = HelperFunctions.getSavedUser();
+                    if (user != null) {
                       HelperFunctions.addReview(
                         context,
                         product,
                         user,
                         fromDetails: true,
                       );
-                    },
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppSize.s12.r),
+                    } else {
+                      HelperFunctions.showSnackBar(
+                        context,
+                        AppStrings.operationFailed.tr(),
+                      );
+                    }
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(AppSize.s12.r),
+                  ),
+                  padding: EdgeInsets.symmetric(vertical: AppPadding.p20.h),
+                  child: CustomText(
+                    data: AppStrings.writeReview.tr(),
+                  ),
+                )
+              : Row(
+                  children: [
+                    Expanded(
+                      child: CustomText(data: AppStrings.review.tr()),
                     ),
-                    padding: EdgeInsets.symmetric(vertical: AppPadding.p20.h),
-                    child: CustomText(
-                      data: AppStrings.writeReview.tr(),
+                    const Icon(
+                      Icons.star_half,
+                      size: AppSize.s20,
                     ),
-                  )
-                : Row(
-                    children: [
-                      Expanded(
-                        child: CustomText(data: AppStrings.review.tr()),
+                    SizedBox(width: AppSize.s10.w),
+                    CustomText(
+                      data: product.avRateValue.toStringAsFixed(2),
+                    ),
+                    SizedBox(width: AppSize.s10.w),
+                    GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () => NavigationHelper.pushNamed(
+                        context,
+                        Routes.productReviewRoute,
+                        arguments: product,
                       ),
-                      const Icon(
-                        Icons.star_half,
+                      child: const Icon(
+                        Icons.arrow_forward_ios,
                         size: AppSize.s20,
                       ),
-                      SizedBox(width: AppSize.s10.w),
-                      CustomText(
-                        data: product.avRateValue.toStringAsFixed(2),
-                      ),
-                      SizedBox(width: AppSize.s10.w),
-                      GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () => NavigationHelper.pushNamed(
-                          context,
-                          Routes.productReviewRoute,
-                          arguments: product,
-                        ),
-                        child: const Icon(
-                          Icons.arrow_forward_ios,
-                          size: AppSize.s20,
-                        ),
-                      )
-                    ],
-                  ),
-          ],
-        ),
-      );
+                    )
+                  ],
+                ),
+        ],
+      ),
+    );
   }
 }

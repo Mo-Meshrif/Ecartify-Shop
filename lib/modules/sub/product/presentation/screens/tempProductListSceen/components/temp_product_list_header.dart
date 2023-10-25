@@ -8,17 +8,17 @@ import '../../../../../../../app/utils/color_manager.dart';
 import '../../../../../../../app/utils/values_manager.dart';
 
 class TempProductListHeader extends StatelessWidget {
-  final bool enableSearch, showFilter;
+  final bool showFilter;
   final TextEditingController? searchController;
   final void Function()? filterFun;
+   final void Function(String searchVal)? onSearchFun;
   final Color? filterIconColor;
   const TempProductListHeader({
     Key? key,
-    required this.enableSearch,
     required this.showFilter,
     this.filterIconColor,
     this.filterFun,
-    this.searchController,
+    this.searchController, this.onSearchFun,
   }) : super(key: key);
 
   @override
@@ -28,7 +28,7 @@ class TempProductListHeader extends StatelessWidget {
             Expanded(
               child: CustomSearchBarWidget(
                 searchController: searchController,
-                enable: enableSearch,
+                onSearchFun: onSearchFun,
               ),
             ),
             AnimatedCrossFade(

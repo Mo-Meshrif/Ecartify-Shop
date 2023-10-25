@@ -40,7 +40,7 @@ class CartLocalDataSource implements BaseCartLocalDataSource {
 
   @override
   Future<List<CartItemModel>> getCartItems() async {
-    String uid = HelperFunctions.getSavedUser().id;
+    String? uid = HelperFunctions.getSavedUser()?.id;
     var dbClient = await database;
     List<CartItemModel> cartItems = [];
     List<Map<String, Object?>> list = await dbClient!.query(
@@ -71,7 +71,7 @@ class CartLocalDataSource implements BaseCartLocalDataSource {
   @override
   Future<bool> addToCart(CartItemStatisticsModel statisticsModel) async {
     try {
-      String uid = HelperFunctions.getSavedUser().id;
+      String? uid = HelperFunctions.getSavedUser()?.id;
       var dbClient = await database;
       int val = await dbClient!.insert(
         'cart',
@@ -90,7 +90,7 @@ class CartLocalDataSource implements BaseCartLocalDataSource {
   @override
   Future<bool> changeQuantity(CartItemStatisticsModel statisticsModel) async {
     try {
-      String uid = HelperFunctions.getSavedUser().id;
+      String? uid = HelperFunctions.getSavedUser()?.id;
       var dbClient = await database;
       int val = 0;
       if (statisticsModel.quantity != '0') {
@@ -127,7 +127,7 @@ class CartLocalDataSource implements BaseCartLocalDataSource {
   @override
   Future<bool> deleteItem(String prodId) async {
     try {
-      String uid = HelperFunctions.getSavedUser().id;
+      String? uid = HelperFunctions.getSavedUser()?.id;
       var dbClient = await database;
       int val = await dbClient!.delete(
         'cart',

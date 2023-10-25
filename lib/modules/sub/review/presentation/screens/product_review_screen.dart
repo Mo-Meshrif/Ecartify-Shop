@@ -142,20 +142,27 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
                       SizedBox(height: AppSize.s5.h),
                       CustomElevatedButton(
                         onPressed: () {
-                          AuthUser user = HelperFunctions.getSavedUser();
-                          int index = state.reviews.indexWhere(
-                            (element) => element.userId == user.id,
-                          );
-                          if (index > -1) {
+                          AuthUser? user = HelperFunctions.getSavedUser();
+                          if (user != null) {
+                            int index = state.reviews.indexWhere(
+                              (element) => element.userId == user.id,
+                            );
+                            if (index > -1) {
+                              HelperFunctions.showSnackBar(
+                                context,
+                                AppStrings.exceededLimit.tr(),
+                              );
+                            } else {
+                              HelperFunctions.addReview(
+                                context,
+                                widget.product,
+                                user,
+                              );
+                            }
+                          } else {
                             HelperFunctions.showSnackBar(
                               context,
-                              AppStrings.exceededLimit.tr(),
-                            );
-                          } else {
-                            HelperFunctions.addReview(
-                              context,
-                              widget.product,
-                              user,
+                              AppStrings.operationFailed.tr(),
                             );
                           }
                         },

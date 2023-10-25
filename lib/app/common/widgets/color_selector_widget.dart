@@ -47,6 +47,11 @@ class _ColorSelectorWidgetState extends State<ColorSelectorWidget> {
                 width: AppSize.s30,
                 decoration: BoxDecoration(
                   color: convertedColor,
+                  border: Border.all(
+                    color: convertedColor.computeLuminance() > 0.5
+                        ? ColorManager.kBlack
+                        : ColorManager.kWhite,
+                  ),
                   borderRadius: BorderRadius.circular(
                     AppSize.s10.r,
                   ),

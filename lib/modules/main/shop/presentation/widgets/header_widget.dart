@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 
 import '../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../app/helper/enums.dart';
@@ -70,8 +70,8 @@ class HeaderWidget extends StatelessWidget {
                 Routes.notificationRoute,
               ),
               borderRadius: BorderRadius.circular(AppSize.s10.r),
-              child: Badge(
-                position: BadgePosition.topEnd(top: -5, end: 5),
+              child: badge.Badge(
+                position: badge.BadgePosition.topEnd(top: -5, end: 5),
                 showBadge: state.unReadNum != '0',
                 badgeContent: CustomText(
                   data: state.unReadNum,

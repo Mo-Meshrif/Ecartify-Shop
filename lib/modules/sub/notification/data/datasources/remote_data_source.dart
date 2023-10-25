@@ -20,14 +20,19 @@ class NotificationRemoteDataSource implements BaseNotificationRemoteDataSource {
   @override
   Future<int> getUnReadNotificationNum() async {
     try {
-      CollectionReference<Map<String, dynamic>> collection =
-          firebaseFirestore.collection('Notifications');
-      AggregateQuerySnapshot aggregateQuerySnapshot = await collection
-          .where('to', isEqualTo: _getUserId())
-          .where('status', isEqualTo: '1')
-          .count()
-          .get();
-      return aggregateQuerySnapshot.count;
+      String? uid = _getUserId();
+      if (uid != null) {
+        CollectionReference<Map<String, dynamic>> collection =
+            firebaseFirestore.collection('Notifications');
+        AggregateQuerySnapshot aggregateQuerySnapshot = await collection
+            .where('to', isEqualTo: uid)
+            .where('status', isEqualTo: '1')
+            .count()
+            .get();
+        return aggregateQuerySnapshot.count;
+      } else {
+        return 0;
+      }
     } catch (e) {
       throw ServerExecption(e.toString());
     }
@@ -36,15 +41,20 @@ class NotificationRemoteDataSource implements BaseNotificationRemoteDataSource {
   @override
   Future<List<NotificationModel>> getNotificationsList() async {
     try {
-      CollectionReference<Map<String, dynamic>> collection =
-          firebaseFirestore.collection('Notifications');
-      QuerySnapshot<Map<String, dynamic>> querySnapshot = await collection
-          .where('to', isEqualTo: _getUserId())
-          .orderBy('date-added', descending: true)
-          .get();
-      return querySnapshot.docs
-          .map((e) => NotificationModel.fromSnapshot(e))
-          .toList();
+      String? uid = _getUserId();
+      if (uid != null) {
+        CollectionReference<Map<String, dynamic>> collection =
+            firebaseFirestore.collection('Notifications');
+        QuerySnapshot<Map<String, dynamic>> querySnapshot = await collection
+            .where('to', isEqualTo: _getUserId())
+            .orderBy('date-added', descending: true)
+            .get();
+        return querySnapshot.docs
+            .map((e) => NotificationModel.fromSnapshot(e))
+            .toList();
+      } else {
+        return [];
+      }
     } catch (e) {
       throw ServerExecption(e.toString());
     }
@@ -87,5 +97,5 @@ class NotificationRemoteDataSource implements BaseNotificationRemoteDataSource {
     }
   }
 
-  String _getUserId() => HelperFunctions.getSavedUser().id;
+  String? _getUserId() => HelperFunctions.getSavedUser()?.id;
 }
