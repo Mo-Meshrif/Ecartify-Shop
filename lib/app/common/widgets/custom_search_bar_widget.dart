@@ -11,8 +11,9 @@ import '../../utils/color_manager.dart';
 import '../../utils/routes_manager.dart';
 import '../../utils/strings_manager.dart';
 import '../../utils/values_manager.dart';
+import '../models/debouncer.dart';
 
-class CustomSearchBarWidget extends StatelessWidget {
+class CustomSearchBarWidget extends StatefulWidget {
   final TextEditingController? searchController;
   final void Function(String searchVal)? onSearchFun;
   const CustomSearchBarWidget({
@@ -20,6 +21,20 @@ class CustomSearchBarWidget extends StatelessWidget {
     this.searchController,
     this.onSearchFun,
   }) : super(key: key);
+
+  @override
+  State<CustomSearchBarWidget> createState() => _CustomSearchBarWidgetState();
+}
+
+class _CustomSearchBarWidgetState extends State<CustomSearchBarWidget> {
+  Debouncer? debouncer;
+  @override
+  void initState() {
+    if (widget.onSearchFun != null) {
+      debouncer = Debouncer(milliseconds: 500);
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +53,7 @@ class CustomSearchBarWidget extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               behavior: HitTestBehavior.translucent,
-              onTap: onSearchFun!=null
+              onTap: widget.onSearchFun != null
                   ? null
                   : () => NavigationHelper.pushNamed(
                         context,
@@ -66,10 +81,18 @@ class CustomSearchBarWidget extends StatelessWidget {
                   SizedBox(width: AppPadding.p10.w),
                   Expanded(
                     child: TextFormField(
-                      enabled:  onSearchFun!=null,
-                      autofocus:  onSearchFun!=null,
-                      onChanged: onSearchFun,
-                      controller: searchController,
+                      enabled: widget.onSearchFun != null,
+                      autofocus: widget.onSearchFun != null,
+                      onChanged: (value) {
+                        if (debouncer != null) {
+                          debouncer!.run(
+                            () => widget.onSearchFun!(
+                              value,
+                            ),
+                          );
+                        }
+                      },
+                      controller: widget.searchController,
                       decoration: InputDecoration(
                         isDense: true,
                         contentPadding: EdgeInsets.zero,
