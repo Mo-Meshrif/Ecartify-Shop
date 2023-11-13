@@ -26,6 +26,7 @@ class IconAssets {
   static const String orders = "$iconPath/orders.svg";
   static const String deliveryAddress = "$iconPath/delivery-address.svg";
   static const String payment = "$iconPath/payments.svg";
+  static const String cash = "$iconPath/cashOnDelivery.svg";
   static const String wallet = "$iconPath/wallet.svg";
   static const String currency = "$iconPath/currency.svg";
   static const String privacy = "$iconPath/privacy.svg";
@@ -35,8 +36,6 @@ class IconAssets {
   static const String stripe = "$iconPath/stripe.svg";
   static const String paymob = "$iconPath/paymob.svg";
   static const String paypal = "$iconPath/paypal.svg";
-  static const String google = "$iconPath/google.svg";
-  static const String apple = "$iconPath/apple.svg";
 }
 
 class JsonAssets {

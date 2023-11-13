@@ -22,10 +22,9 @@ enum ProductSort {
 }
 
 enum PaymentType {
+  cashOnDelivery,
   wallet,
   stripe,
   paymob,
   paypal,
-  googlePay,
-  applePay,
 }

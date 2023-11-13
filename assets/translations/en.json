@@ -74,6 +74,7 @@
     "Delivery Address": "Delivery Address",
     "Payment Methods": "Payment Methods",
     "Wallet": "E-Wallet",
+    "Cash on delivery": "Cash on delivery",
     "Privacy": "Privacy",
     "Help": "Help",
     "About": "About",
@@ -134,5 +135,6 @@
     "EGP-S": "L.E",
     "AED-S": "AED",
     "SAR-S": "SAR",
-    "USD-S": "$"
+    "USD-S": "$",
+    "soon": "Sooooooooooooooooooon !"
 }

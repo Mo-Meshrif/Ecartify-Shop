@@ -29,6 +29,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
   PaymentMethod? selecedPayment;
   late List<PaymentMethod> paymentList = [
     PaymentMethod(
+      title: AppStrings.cash.tr(),
+      pic: IconAssets.cash,
+      paymentType: PaymentType.cashOnDelivery,
+    ),
+    PaymentMethod(
       title: AppStrings.wallet.tr(),
       pic: IconAssets.wallet,
       color: Theme.of(context).primaryColor,
@@ -49,16 +54,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
       title: AppStrings.paypal,
       pic: IconAssets.paypal,
       paymentType: PaymentType.paypal,
-    ),
-    const PaymentMethod(
-      title: AppStrings.googlePay,
-      pic: IconAssets.google,
-      paymentType: PaymentType.googlePay,
-    ),
-    const PaymentMethod(
-      title: AppStrings.applePay,
-      pic: IconAssets.apple,
-      paymentType: PaymentType.applePay,
     ),
   ];
 
@@ -150,13 +145,20 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       onPressed: selecedPayment == null ||
                               state.paymentStatus == Status.loading
                           ? null
-                          : () => sl<PaymentBloc>().add(
-                                PaymentToggleEvent(
-                                  context: context,
-                                  paymentType: selecedPayment!.paymentType,
-                                  totalPrice: widget.totalPrice,
-                                ),
-                              ),
+                          : () {
+                              if (selecedPayment!.paymentType ==
+                                  PaymentType.cashOnDelivery) {
+                                //TODO hanlde order event
+                              } else {
+                                sl<PaymentBloc>().add(
+                                  PaymentToggleEvent(
+                                    context: context,
+                                    paymentType: selecedPayment!.paymentType,
+                                    totalPrice: widget.totalPrice,
+                                  ),
+                                );
+                              }
+                            },
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.zero,
                       ),

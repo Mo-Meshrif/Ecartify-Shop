@@ -27,7 +27,7 @@ class CurrencyModel extends Currency {
         hasData ? json['rates'][currencyBase] : '1',
       ),
       date: hasData
-          ? DateFormat('yyyy-MM-dd').format(DateTime.parse(json['date']))
+          ? DateFormat('yyyy-MM-dd','en').format(DateTime.parse(json['date']),)
           : null,
       rates: hasData ? Map.from(json['rates']) : null,
     );

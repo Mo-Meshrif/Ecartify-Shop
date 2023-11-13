@@ -26,7 +26,7 @@ class PaymentRemoteDataSource implements BasePaymentRemoteDataSource {
   @override
   Future<CurrencyModel> getCurrencyRates() async {
     try {
-      String now = DateFormat('yyyy-MM-dd').format(DateTime.now());
+      String now = DateFormat('yyyy-MM-dd','en').format(DateTime.now());
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await firebaseFirestore.collection('Currencies').get();
       if (querySnapshot.docs.isNotEmpty) {
@@ -49,7 +49,7 @@ class PaymentRemoteDataSource implements BasePaymentRemoteDataSource {
 
   Future<CurrencyModel> _getCurrencyRatesFromApi() async {
     try {
-      String now = DateFormat('yyyy-MM-dd').format(DateTime.now());
+      String now = DateFormat('yyyy-MM-dd','en').format(DateTime.now());
       var response = await apiServices.get(
         url:
             '${AppConstants.currencyUrl}?apikey=${AppConstants.currencyServerKey}',
