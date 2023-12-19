@@ -18,6 +18,11 @@ abstract class BaseProductRemoteDataSource {
 class ProductRemoteDataSource implements BaseProductRemoteDataSource {
   final FirebaseFirestore firebaseFirestore;
   ProductRemoteDataSource(this.firebaseFirestore);
+  DocumentSnapshot? lastSearchedSnap,
+      lastSellerSnap,
+      lastOfferSnap,
+      lastCatSnap,
+      lastSubSnap;
 
   @override
   Future<List<ProductModel>> getCustomProducts(
@@ -26,16 +31,27 @@ class ProductRemoteDataSource implements BaseProductRemoteDataSource {
       CollectionReference<Map<String, dynamic>> collection =
           firebaseFirestore.collection('Products');
       late Query<Map<String, dynamic>> query;
+      late QuerySnapshot<Map<String, dynamic>> querySnapshot;
       if (productsParmeters.searchKey != null) {
         String searchKey = productsParmeters.searchKey!;
         query = collection
             .where('name', isGreaterThanOrEqualTo: searchKey)
             .where('name', isLessThan: searchKey + 'z')
             .orderBy('name');
+        querySnapshot = await _getQuerySnapshot(
+          productsParmeters.start == 0 ? null : lastSearchedSnap,
+          query,
+        );
+        lastSearchedSnap = querySnapshot.docs.last;
       } else if (productsParmeters.productMode == ProductMode.bestSellerProds) {
         query = collection
             .where('sold_num', isGreaterThan: 0)
             .orderBy('sold_num', descending: true);
+        querySnapshot = await _getQuerySnapshot(
+          productsParmeters.start == 0 ? null : lastSellerSnap,
+          query,
+        );
+        lastSellerSnap = querySnapshot.docs.last;
       } else if (productsParmeters.productMode == ProductMode.offerProds) {
         query = collection
             .where(
@@ -47,36 +63,61 @@ class ProductRemoteDataSource implements BaseProductRemoteDataSource {
               ),
             )
             .orderBy('offer_end_date', descending: true);
+        querySnapshot = await _getQuerySnapshot(
+          productsParmeters.start == 0 ? null : lastOfferSnap,
+          query,
+        );
+        lastOfferSnap = querySnapshot.docs.last;
       } else if (productsParmeters.catId.isNotEmpty) {
         query = collection.where(
           'cat-id',
           isEqualTo: productsParmeters.catId,
         );
+        querySnapshot = await _getQuerySnapshot(
+          productsParmeters.start == 0 ? null : lastCatSnap,
+          query,
+        );
+        lastCatSnap = querySnapshot.docs.last;
       } else if (productsParmeters.subCatId.isNotEmpty) {
         query = collection.where(
           'sub-id',
           isEqualTo: productsParmeters.subCatId,
         );
+        querySnapshot = await _getQuerySnapshot(
+          productsParmeters.start == 0 ? null : lastSubSnap,
+          query,
+        );
+        lastSubSnap = querySnapshot.docs.last;
       } else if (productsParmeters.ids.isNotEmpty) {
-        QuerySnapshot<Map<String, dynamic>> querySnapshot = await collection
+        querySnapshot = await collection
             .where(FieldPath.documentId, whereIn: productsParmeters.ids)
             .get();
-        return querySnapshot.docs
-            .map((e) => ProductModel.fromSnapshot(e))
-            .toList();
       } else {
         query = collection;
+        querySnapshot = await collection.get();
       }
-      QuerySnapshot<Map<String, dynamic>> querySnapshot = await query
-          .orderBy('date_added', descending: true)
-          .startAfter([productsParmeters.lastDateAdded])
-          .limit(10)
-          .get();
       return querySnapshot.docs
           .map((e) => ProductModel.fromSnapshot(e))
           .toList();
     } catch (e) {
       throw ServerExecption(e.toString());
+    }
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> _getQuerySnapshot(
+      DocumentSnapshot? documentSnapshot,
+      Query<Map<String, dynamic>> query) async {
+    if (documentSnapshot == null) {
+      return await query
+          .orderBy('date_added', descending: true)
+          .limit(10)
+          .get();
+    } else {
+      return await query
+          .orderBy('date_added', descending: true)
+          .startAfter([documentSnapshot])
+          .limit(10)
+          .get();
     }
   }
 

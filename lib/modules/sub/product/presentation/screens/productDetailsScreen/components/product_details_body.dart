@@ -105,10 +105,17 @@ class ProductDetailsBody extends StatelessWidget {
             ),
           ),
           const Divider(),
-          CustomText(
-            data: product.description,
+          Visibility(
+            visible: product.description.isNotEmpty,
+            child: Column(
+              children: [
+                CustomText(
+                  data: product.description,
+                ),
+                const Divider()
+              ],
+            ),
           ),
-          const Divider(),
           product.avRateValue == 0
               ? CustomElevatedButton(
                   onPressed: () {

@@ -23,7 +23,6 @@ class ProductsParmeters extends Equatable {
   final bool fromSearch;
   final String? searchKey;
   final ProductMode? productMode;
-  final String lastDateAdded;
   final String catId;
   final String subCatId;
   final List<String> ids;
@@ -37,13 +36,11 @@ class ProductsParmeters extends Equatable {
     this.catId = '',
     this.subCatId = '',
     this.ids = const [],
-    this.lastDateAdded = '2021-02-15T18:42:49.608466Z',
   });
   ProductsParmeters copyWith({
     int? start,
     String? searchKey,
     ProductMode? productMode,
-    String? lastDateAdded,
     String? catId,
     String? subCatId,
     List<String>? ids,
@@ -56,7 +53,6 @@ class ProductsParmeters extends Equatable {
         catId: catId ?? this.catId,
         subCatId: subCatId ?? this.subCatId,
         ids: ids ?? this.ids,
-        lastDateAdded: lastDateAdded ?? this.lastDateAdded,
       );
       
   @override
@@ -68,6 +64,5 @@ class ProductsParmeters extends Equatable {
         catId,
         subCatId,
         ids,
-        lastDateAdded,
       ];
 }

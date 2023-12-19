@@ -77,7 +77,6 @@ class _TempProductListScreenState extends State<TempProductListScreen> {
           start: 0,
           fromSearch: true,
           searchKey: searchVal.toTitleCase(),
-          lastDateAdded: '2021-02-15T18:42:49.608466Z',
         ),
       );
       getPageData(
@@ -189,10 +188,10 @@ class _TempProductListScreenState extends State<TempProductListScreen> {
                   : () => getPageData(
                         newParmeters: productsParmeters.copyWith(
                           start: tempProds.length,
-                          lastDateAdded: tempProds.last.dateAdded.toString(),
                         ),
                       ),
               builder: (context, properties) => CustomScrollView(
+                    controller: scrollController,
                     slivers: [
                       SliverFillRemaining(
                         hasScrollBody: false,
