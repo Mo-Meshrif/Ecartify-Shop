@@ -65,6 +65,12 @@ import '../../modules/sub/notification/domain/usecases/get_notifications_use_cas
 import '../../modules/sub/notification/domain/usecases/get_un_read_notification_num_use_case.dart';
 import '../../modules/sub/notification/domain/usecases/read_notification_use_case.dart';
 import '../../modules/sub/notification/presentation/controller/notification_bloc.dart';
+import '../../modules/sub/order/data/datasources/remote_data_source.dart';
+import '../../modules/sub/order/data/repositories/order_repository_impl.dart';
+import '../../modules/sub/order/domain/repositories/base_order_repository.dart';
+import '../../modules/sub/order/domain/usecases/add_order_use_case.dart';
+import '../../modules/sub/order/domain/usecases/get_orders_use_case.dart';
+import '../../modules/sub/order/presentation/controller/order_bloc.dart';
 import '../../modules/sub/payment/data/datasources/remote_data_source.dart';
 import '../../modules/sub/payment/data/repositories/payment_repository_impl.dart';
 import '../../modules/sub/payment/domain/repositories/base_payment_repository.dart';
@@ -162,7 +168,10 @@ class ServicesLocator {
       () => PromoRemoteDataSource(sl()),
     );
     sl.registerLazySingleton<BasePaymentRemoteDataSource>(
-      () => PaymentRemoteDataSource(sl(),sl()),
+      () => PaymentRemoteDataSource(sl(), sl()),
+    );
+    sl.registerLazySingleton<BaseOrderRemoteDataSource>(
+      () => OrderRemoteDataSource(sl()),
     );
     //Repositories
     sl.registerLazySingleton<BaseAuthRepository>(
@@ -187,6 +196,8 @@ class ServicesLocator {
         () => PromoRepositoryImpl(sl()));
     sl.registerLazySingleton<BasePaymentRepository>(
         () => PaymentRepositoryImpl(sl(), sl()));
+    sl.registerLazySingleton<BaseOrderRepository>(
+        () => OrderRepositoryImpl(sl(), sl()));
     //UseCases
     sl.registerLazySingleton(() => LoginUseCase(sl()));
     sl.registerLazySingleton(() => SignUpUseCase(sl()));
@@ -223,6 +234,8 @@ class ServicesLocator {
     sl.registerLazySingleton(() => GetCurrencyRatesUseCase(sl()));
     sl.registerLazySingleton(() => GetStripeClientSecretUseCase(sl()));
     sl.registerLazySingleton(() => GetPaymobIframeIdUseCase(sl()));
+    sl.registerLazySingleton(() => AddOrderUseCase(sl()));
+    sl.registerLazySingleton(() => GetOrdersUseCase(sl()));
     //blocs
     sl.registerLazySingleton(
       () => AppConfigBloc(
@@ -314,6 +327,13 @@ class ServicesLocator {
         getCurrencyRatesUseCase: sl(),
         getStripeClientSecretUseCase: sl(),
         getPaymobIframeIdUseCase: sl(),
+      ),
+    );
+    sl.registerLazySingleton(
+      () => OrderBloc(
+        addOrderUseCase: sl(),
+        getOrdersUseCase: sl(),
+        getCustomProductsUseCase: sl(),
       ),
     );
   }

@@ -136,5 +136,20 @@
     "AED-S": "درهم",
     "SAR-S": "ريال",
     "USD-S": "$",
-    "soon": "قـــــــــــــــــــــــريبا"
+    "soon": "قـــــــــــــــــــــــريبا",
+    "Ongoing": "جاري التنفيذ",
+    "Completed": "مكتمل",
+    "Track Order": "تتبع الطلب",
+    "Leave Review": "تقييم",
+    "pending": "قيد الإنتظار",
+    "confirmed": "تم التأكيد",
+    "under_prepare": "جاري التجهيز",
+    "ready_to_delivered": "جاهز للشحن",
+    "in_delivered": "قيد التوصيل",
+    "delivered": "تم التوصيل",
+    "canceled": "ملغي ",
+    "order-success-title": "تم الطلب بنجاح",
+    "order-success-desc": "لقد قمت بالطلب بنجاح",
+    "View Order": "مشاهدة الطلب",
+    "Back home": "العودة إلى الرئيسية"
 }

@@ -22,10 +22,11 @@ import '../../../../sub/address/presentation/screens/shipping_screen.dart';
 import '../../../../sub/address/presentation/widgets/add_new_address_widget.dart';
 import '../../../../sub/address/presentation/widgets/address_item.dart';
 import '../../../../sub/address/presentation/widgets/shipping_item.dart';
+import '../../../../sub/payment/presentation/screens/payment_screen.dart';
 import '../../../../sub/promo/presentation/Controller/promo_bloc.dart';
+import '../../domain/entities/cart_item.dart';
 import '../controller/cart_bloc.dart';
 import '../widgets/cart_item_widget.dart';
-import '../../../../sub/payment/presentation/screens/payment_screen.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({Key? key}) : super(key: key);
@@ -38,6 +39,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   bool _hasOperation = false;
   TextEditingController promoController = TextEditingController();
   double promoVal = 0.0, shippingVal = 0.0, itemsPrice = 0.0;
+  String shippingType = '';
+  List<CartItem> cartItems = [];
   @override
   void initState() {
     sl<AddressBloc>().add(GetAddressListEvent());
@@ -136,7 +139,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               context,
               MaterialPageRoute(
                 builder: (context) => PaymentScreen(
+                  items: cartItems
+                      .map((e) => e.copyWith(sellerPrice: e.product!.price))
+                      .toList(),
                   totalPrice: totalPrice,
+                  promoVal: promoVal,
+                  shippingVal: shippingVal,
+                  itemsPrice: itemsPrice,
+                  userAddress: address,
+                  shippingType: shippingType,
                 ),
               ),
             );
@@ -183,6 +194,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       BlocBuilder<CartBloc, CartState>(
         builder: (context, cartState) {
           itemsPrice = cartState.totalPrice;
+          cartItems = cartState.cartItems;
           return Theme(
             data: Theme.of(context).copyWith(
               dividerColor: Colors.transparent,
@@ -205,11 +217,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 fontWeight: FontWeight.bold,
               ),
               children: List.generate(
-                cartState.cartItems.length,
+                cartItems.length,
                 (index) => CartItemWidget(
-                  key: Key(cartState.cartItems[index].prodId),
+                  key: Key(cartItems[index].prodId),
                   disableGestures: true,
-                  cartItem: cartState.cartItems[index],
+                  cartItem: cartItems[index],
                 ),
               ),
             ),
@@ -223,6 +235,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         shipping?.price ?? '0.0',
       ),
     );
+    shippingType = shipping?.title ?? '';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

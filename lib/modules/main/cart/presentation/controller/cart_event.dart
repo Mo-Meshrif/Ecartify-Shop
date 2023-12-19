@@ -9,14 +9,14 @@ abstract class CartEvent extends Equatable {
 
 class GetCartItems extends CartEvent {
   final bool cartInit;
-  const GetCartItems({this.cartInit=false});
+  const GetCartItems({this.cartInit = false});
 }
 
 class AddItemToCartEvent extends CartEvent {
   final bool prodIsInCart;
   final Product product;
   final CartItemStatistics statistics;
-  const AddItemToCartEvent( {
+  const AddItemToCartEvent({
     required this.prodIsInCart,
     required this.product,
     required this.statistics,
@@ -33,7 +33,9 @@ class ChangeQuantityEvent extends CartEvent {
   const ChangeQuantityEvent({required this.statistics});
 }
 
-class DeleteItemEvent extends CartEvent{
+class DeleteItemEvent extends CartEvent {
   final String prodId;
   const DeleteItemEvent({required this.prodId});
 }
+
+class ClearCartEvent extends CartEvent {}

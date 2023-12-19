@@ -20,6 +20,7 @@ import 'modules/main/profile/presentation/controller/profile_bloc.dart';
 import 'modules/main/shop/presentation/controller/shop_bloc.dart';
 import 'modules/sub/address/presentation/controller/address_bloc.dart';
 import 'modules/sub/notification/presentation/controller/notification_bloc.dart';
+import 'modules/sub/order/presentation/controller/order_bloc.dart';
 import 'modules/sub/payment/presentation/controller/payment_bloc.dart';
 import 'modules/sub/product/presentation/controller/product_bloc.dart';
 import 'modules/sub/promo/presentation/Controller/promo_bloc.dart';
@@ -29,7 +30,7 @@ void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   EasyLocalization.logger.enableLevels = [LevelMessages.warning];
-  Stripe.publishableKey=AppConstants.stripePublishTestKey;
+  Stripe.publishableKey = AppConstants.stripePublishTestKey;
   Bloc.observer = MyBlocObserver();
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
@@ -82,10 +83,13 @@ void main() async {
           BlocProvider<AddressBloc>(
             create: (context) => sl(),
           ),
-           BlocProvider<PromoBloc>(
+          BlocProvider<PromoBloc>(
             create: (context) => sl(),
           ),
-           BlocProvider<PaymentBloc>(
+          BlocProvider<PaymentBloc>(
+            create: (context) => sl(),
+          ),
+          BlocProvider<OrderBloc>(
             create: (context) => sl(),
           ),
         ],

@@ -8,7 +8,9 @@ import '../../modules/main/explore/presentation/screens/explore_screen.dart';
 import '../../modules/sub/address/presentation/screens/address_screen.dart';
 import '../../modules/sub/help/presentation/screens/help_screen.dart';
 import '../../modules/sub/notification/presentation/screens/notification_screen.dart';
+import '../../modules/sub/order/domain/entities/order.dart';
 import '../../modules/sub/order/presentation/screens/order_screen.dart';
+import '../../modules/sub/order/presentation/screens/success_order_screen.dart';
 import '../../modules/sub/payment/presentation/screens/wallet_screen.dart';
 import '../../modules/sub/product/domain/entities/product.dart';
 import '../../modules/sub/product/domain/usecases/get_products_by_parameter_use_case.dart';
@@ -32,6 +34,7 @@ class Routes {
   static const String addressRoute = "/address";
   static const String walletRoute = "/wallet";
   static const String helpRoute = "/help";
+  static const String sucessOrderRoute = "/sucessOrder";
 }
 
 class RouteGenerator {
@@ -92,6 +95,12 @@ class RouteGenerator {
       case Routes.helpRoute:
         return MaterialPageRoute(
           builder: (_) => const HelpScreen(),
+        );
+      case Routes.sucessOrderRoute:
+        return MaterialPageRoute(
+          builder: (_) => SuccessOrderScreen(
+            order: settings.arguments as OrderEntity,
+          ),
         );
       default:
         return MaterialPageRoute(builder: (_) => const ControlScreen());

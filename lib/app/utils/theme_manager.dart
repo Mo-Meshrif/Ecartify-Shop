@@ -60,6 +60,9 @@ class ThemeManager {
           selectedItemColor: ColorManager.kBlack,
           unselectedItemColor: ColorManager.kGrey,
         ),
+        tabBarTheme: TabBarTheme(
+          indicatorColor: ColorManager.kBlack,
+        ),
       );
 
   static ThemeData darkTheme() => ThemeData.dark().copyWith(
@@ -111,6 +114,9 @@ class ThemeManager {
           showUnselectedLabels: true,
           selectedItemColor: ColorManager.kWhite,
           unselectedItemColor: ColorManager.kGrey,
+        ),
+        tabBarTheme: TabBarTheme(
+          indicatorColor: ColorManager.kWhite,
         ),
       );
 }

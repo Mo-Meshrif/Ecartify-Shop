@@ -38,6 +38,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<AddItemToCartEvent>(_addItemToCart);
     on<ChangeQuantityEvent>(_changeQuantity);
     on<DeleteItemEvent>(_deleteItem);
+    on<ClearCartEvent>(
+      (event, emit) => emit(
+        const CartState(),
+      ),
+    );
   }
 
   FutureOr<void> _getCartItems(
@@ -150,7 +155,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
                     ? e.copyWith(
                         statistics: statistics.quantity == '0'
                             ? e.statistics
-                                .where((e) => e.color != statistics.color||e.size!=statistics.size)
+                                .where((e) =>
+                                    e.color != statistics.color ||
+                                    e.size != statistics.size)
                                 .toList()
                             : e.statistics
                                 .map((e) => e.color == statistics.color &&

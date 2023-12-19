@@ -136,5 +136,20 @@
     "AED-S": "AED",
     "SAR-S": "SAR",
     "USD-S": "$",
-    "soon": "Sooooooooooooooooooon !"
+    "soon": "Sooooooooooooooooooon !",
+    "Ongoing": "Ongoing",
+    "Completed": "Completed",
+    "Track Order": "Track Order",
+    "Leave Review": "Leave Review",
+    "pending": "Pending",
+    "confirmed": "Confirmed",
+    "under_prepare": "Under prepare",
+    "ready_to_delivered": "Ready to delivered",
+    "in_delivered": "In delivered",
+    "delivered": "Delivered",
+    "canceled": "Canceled",
+    "order-success-title": "Order Successful !",
+    "order-success-desc": "You have successfully made order",
+    "View Order": "View Order",
+    "Back home": "Back home"
 }

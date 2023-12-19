@@ -28,3 +28,8 @@ enum PaymentType {
   paymob,
   paypal,
 }
+
+enum OrderType {
+  ongoing,
+  completed,
+}

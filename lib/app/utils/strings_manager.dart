@@ -136,4 +136,19 @@ class AppStrings {
   static const String enterLastName = 'Enter youe last name';
   static const String mobile = 'Mobile';
   static const String enterMobile = 'Enter your mobile';
+  static const String ongoing = 'Ongoing';
+  static const String completed = 'Completed';
+  static const String trackOrder = 'Track Order';
+  static const String leaveReview = 'Leave Review';
+  static const String pending = 'pending';
+  static const String confirmed = 'confirmed';
+  static const String underPrepare = 'under_prepare';
+  static const String readyToDelivered = 'ready_to_delivered';
+  static const String inDelivered = 'in_delivered';
+  static const String delivered = 'delivered';
+  static const String canceled = 'canceled';
+  static const String orderSuccessTitle = 'order-success-title';
+  static const String orderSuccessDesc = 'order-success-desc';
+  static const String viewOrder = 'View Order';
+  static const String backHome = 'Back home';
 }

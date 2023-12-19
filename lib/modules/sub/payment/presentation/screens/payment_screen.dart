@@ -9,17 +9,36 @@ import '../../../../../app/common/widgets/custom_elevated_button.dart';
 import '../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../app/helper/enums.dart';
 import '../../../../../app/helper/helper_functions.dart';
+import '../../../../../app/helper/navigation_helper.dart';
 import '../../../../../app/services/services_locator.dart';
 import '../../../../../app/utils/assets_manager.dart';
 import '../../../../../app/utils/color_manager.dart';
+import '../../../../../app/utils/routes_manager.dart';
 import '../../../../../app/utils/strings_manager.dart';
 import '../../../../../app/utils/values_manager.dart';
+import '../../../../main/cart/domain/entities/cart_item.dart';
+import '../../../../main/cart/presentation/controller/cart_bloc.dart';
+import '../../../address/domain/entities/address.dart';
+import '../../../order/domain/entities/order.dart';
+import '../../../order/presentation/controller/order_bloc.dart';
 import '../../domain/entities/payment_method.dart';
 import '../controller/payment_bloc.dart';
 
 class PaymentScreen extends StatefulWidget {
-  final double totalPrice;
-  const PaymentScreen({Key? key, required this.totalPrice}) : super(key: key);
+  final double promoVal, shippingVal, itemsPrice, totalPrice;
+  final String shippingType;
+  final Address userAddress;
+  final List<CartItem> items;
+  const PaymentScreen({
+    Key? key,
+    required this.items,
+    required this.promoVal,
+    required this.shippingVal,
+    required this.itemsPrice,
+    required this.totalPrice,
+    required this.userAddress,
+    required this.shippingType,
+  }) : super(key: key);
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -57,6 +76,31 @@ class _PaymentScreenState extends State<PaymentScreen> {
     ),
   ];
 
+  addOrder({
+    String transactionId = '',
+    required String currency,
+    required String paymentMethod,
+  }) {
+    sl<OrderBloc>().add(
+      AddOrderEvent(
+        order: OrderEntity(
+          currency: currency,
+          paymentMethod: paymentMethod,
+          transactionId: transactionId,
+          totalPrice: widget.totalPrice.toString(),
+          dateAdded: DateTime.now(),
+          items: widget.items,
+          promoVal: widget.promoVal.toString(),
+          shippingVal: widget.shippingVal.toString(),
+          itemsPrice: widget.itemsPrice.toString(),
+          shippingType: widget.shippingType.toString(),
+          status: AppStrings.pending,
+          userAddress: widget.userAddress,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
@@ -67,7 +111,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
         body: BlocConsumer<PaymentBloc, PaymentState>(
           listener: (context, state) {
             if (state.paymentStatus == Status.loaded) {
-              //TODO hanlde order event
+              addOrder(
+                transactionId: state.transactionId,
+                currency: state.currency.selectedBase,
+                paymentMethod: selecedPayment!.title,
+              );
             } else if (state.paymentStatus == Status.error) {
               if (state.msg.isNotEmpty) {
                 HelperFunctions.showSnackBar(
@@ -141,32 +189,54 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       ),
                     ),
                     SizedBox(height: AppPadding.p10.h),
-                    CustomElevatedButton(
-                      onPressed: selecedPayment == null ||
-                              state.paymentStatus == Status.loading
-                          ? null
-                          : () {
-                              if (selecedPayment!.paymentType ==
-                                  PaymentType.cashOnDelivery) {
-                                //TODO hanlde order event
-                              } else {
-                                sl<PaymentBloc>().add(
-                                  PaymentToggleEvent(
-                                    context: context,
-                                    paymentType: selecedPayment!.paymentType,
-                                    totalPrice: widget.totalPrice,
-                                  ),
-                                );
-                              }
-                            },
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        vertical: AppPadding.p20.h,
-                      ),
-                      child: CustomText(
-                        data: AppStrings.confirmPayment.tr(),
+                    BlocConsumer<OrderBloc, OrderState>(
+                      listener: (context, orderState) {
+                        if (orderState.addOrderStatus == Status.loading) {
+                          HelperFunctions.showPopUpLoading(context);
+                        } else if (orderState.addOrderStatus == Status.error ||
+                            orderState.addOrderStatus == Status.loaded) {
+                          NavigationHelper.pop(context);
+                          if (orderState.addOrderStatus == Status.loaded) {
+                            NavigationHelper.pushNamedAndRemoveUntil(
+                              context,
+                              Routes.sucessOrderRoute,
+                              (route) => false,
+                              arguments: orderState.tempOrder,
+                            );
+                            sl<CartBloc>().add(ClearCartEvent());
+                          }
+                        }
+                      },
+                      builder: (context, _) => CustomElevatedButton(
+                        onPressed: selecedPayment == null ||
+                                state.paymentStatus == Status.loading
+                            ? null
+                            : () {
+                                if (selecedPayment!.paymentType ==
+                                    PaymentType.cashOnDelivery) {
+                                  addOrder(
+                                    currency: state.currency.selectedBase,
+                                    paymentMethod: selecedPayment!.title,
+                                  );
+                                } else {
+                                  sl<PaymentBloc>().add(
+                                    PaymentToggleEvent(
+                                      context: context,
+                                      paymentType: selecedPayment!.paymentType,
+                                      totalPrice: widget.totalPrice,
+                                    ),
+                                  );
+                                }
+                              },
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          vertical: AppPadding.p20.h,
+                        ),
+                        child: CustomText(
+                          data: AppStrings.confirmPayment.tr(),
+                        ),
                       ),
                     )
                   ],
