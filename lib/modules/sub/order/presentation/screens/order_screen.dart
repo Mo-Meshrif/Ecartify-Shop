@@ -94,13 +94,17 @@ class _OrderScreenState extends State<OrderScreen>
                       start: state.orders.length,
                     ),
                     builder: (context, properties) =>
-                        state.getOrderListStatus == Status.initial
+                        state.getOrderListStatus == Status.initial ||
+                                state.orders.isEmpty
                             ? Center(
-                                child: Lottie.asset(
-                                  JsonAssets.loading,
-                                  height: AppSize.s200,
-                                  width: AppSize.s200,
-                                ),
+                                child:
+                                    state.getOrderListStatus == Status.initial
+                                        ? Lottie.asset(
+                                            JsonAssets.loading,
+                                            height: AppSize.s200,
+                                            width: AppSize.s200,
+                                          )
+                                        : Lottie.asset(JsonAssets.empty),
                               )
                             : ListView.separated(
                                 controller: scrollController,
