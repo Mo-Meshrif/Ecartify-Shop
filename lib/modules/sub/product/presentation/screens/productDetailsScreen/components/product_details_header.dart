@@ -19,13 +19,14 @@ import '../../../../domain/entities/product.dart';
 class ProductDetailsHeader extends StatefulWidget {
   final Product product;
   final double kExpandedHeight;
-  final bool showTitle;
-  const ProductDetailsHeader(
-      {Key? key,
-      required this.kExpandedHeight,
-      required this.showTitle,
-      required this.product})
-      : super(key: key);
+  final bool showTitle, isGuest;
+  const ProductDetailsHeader({
+    Key? key,
+    required this.kExpandedHeight,
+    required this.showTitle,
+    required this.product,
+    this.isGuest = false,
+  }) : super(key: key);
 
   @override
   State<ProductDetailsHeader> createState() => _ProductDetailsHeaderState();
@@ -98,53 +99,57 @@ class _ProductDetailsHeaderState extends State<ProductDetailsHeader> {
                     ),
                     Row(
                       children: [
-                        BlocBuilder<CartBloc, CartState>(
-                          builder: (context, state) {
-                            int index = state.cartItems.indexWhere(
-                              (e) => e.prodId == widget.product.id,
-                            );
-                            return index > -1
-                                ? GestureDetector(
-                                    onTap: () => sl<CartBloc>().add(
-                                      DeleteItemEvent(
-                                        prodId: widget.product.id,
-                                      ),
-                                    ),
-                                    child: CircleAvatar(
-                                      backgroundColor: theme.primaryColor,
-                                      child: Padding(
-                                        padding: EdgeInsets.only(
-                                          top: AppPadding.p5.h,
-                                        ),
-                                        child: SvgPicture.asset(
-                                          IconAssets.cart,
-                                          color: ColorManager.kRed,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                : GestureDetector(
-                                    onTap: () => HelperFunctions.handleFavFun(
-                                      context,
-                                      widget.product,
-                                    ),
-                                    child: CircleAvatar(
-                                      backgroundColor: theme.primaryColor,
-                                      child: Padding(
-                                        padding: EdgeInsets.only(
-                                          top: AppPadding.p5.h,
-                                        ),
-                                        child: SvgPicture.asset(
-                                          IconAssets.favourite,
-                                          color: widget.product.isFavourite
-                                              ? ColorManager.kRed
-                                              : theme.canvasColor,
-                                        ),
-                                      ),
-                                    ),
+                        widget.isGuest
+                            ? const SizedBox.shrink()
+                            : BlocBuilder<CartBloc, CartState>(
+                                builder: (context, state) {
+                                  int index = state.cartItems.indexWhere(
+                                    (e) => e.prodId == widget.product.id,
                                   );
-                          },
-                        ),
+                                  return index > -1
+                                      ? GestureDetector(
+                                          onTap: () => sl<CartBloc>().add(
+                                            DeleteItemEvent(
+                                              prodId: widget.product.id,
+                                            ),
+                                          ),
+                                          child: CircleAvatar(
+                                            backgroundColor: theme.primaryColor,
+                                            child: Padding(
+                                              padding: EdgeInsets.only(
+                                                top: AppPadding.p5.h,
+                                              ),
+                                              child: SvgPicture.asset(
+                                                IconAssets.cart,
+                                                color: ColorManager.kRed,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : GestureDetector(
+                                          onTap: () =>
+                                              HelperFunctions.handleFavFun(
+                                            context,
+                                            widget.product,
+                                          ),
+                                          child: CircleAvatar(
+                                            backgroundColor: theme.primaryColor,
+                                            child: Padding(
+                                              padding: EdgeInsets.only(
+                                                top: AppPadding.p5.h,
+                                              ),
+                                              child: SvgPicture.asset(
+                                                IconAssets.favourite,
+                                                color:
+                                                    widget.product.isFavourite
+                                                        ? ColorManager.kRed
+                                                        : theme.canvasColor,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                },
+                              ),
                         SizedBox(width: AppSize.s10.w),
                         GestureDetector(
                           onTap: () => Share.share(dynamicLink),

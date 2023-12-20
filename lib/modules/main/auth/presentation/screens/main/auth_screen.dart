@@ -11,7 +11,6 @@ import '../../../../../../app/helper/navigation_helper.dart';
 import '../../../../../../app/helper/shared_helper.dart';
 import '../../../../../../app/services/services_locator.dart';
 import '../../../../../../app/utils/assets_manager.dart';
-import '../../../../../../app/utils/color_manager.dart';
 import '../../../../../../app/utils/constants_manager.dart';
 import '../../../../../../app/utils/routes_manager.dart';
 import '../../../../../../app/utils/strings_manager.dart';
@@ -94,36 +93,57 @@ class _AuthScreenState extends State<AuthScreen> {
                       text: AppStrings.or.tr(),
                     ),
                     const SizedBox(height: AppSize.s10),
-                    CustomElevatedButton(
-                      padding: EdgeInsets.symmetric(
-                        vertical: AppPadding.p15.h,
-                      ),
-                      child: CustomText(
-                        data: AppStrings.signIn.tr(),
-                      ),
-                      onPressed: () => NavigationHelper.pushNamed(
-                        context,
-                        Routes.signInRoute,
-                      ),
-                    ),
-                    const SizedBox(height: AppSize.s10),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CustomText(
-                          data: AppStrings.noAccount.tr(),
-                          color: ColorManager.kGrey,
-                        ),
-                        TextButton(
-                          onPressed: () => NavigationHelper.pushNamed(
-                            context,
-                            Routes.signUpRoute,
+                        Expanded(
+                          child: CustomElevatedButton(
+                            padding: EdgeInsets.symmetric(
+                              vertical: AppPadding.p15.h,
+                            ),
+                            child: CustomText(
+                              data: AppStrings.signIn.tr(),
+                            ),
+                            onPressed: () => NavigationHelper.pushNamed(
+                              context,
+                              Routes.signInRoute,
+                            ),
                           ),
-                          child: CustomText(
-                            data: AppStrings.signUp.tr(),
+                        ),
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                        Expanded(
+                          child: CustomElevatedButton(
+                            padding: EdgeInsets.symmetric(
+                              vertical: AppPadding.p15.h,
+                            ),
+                            child: CustomText(
+                              data: AppStrings.signUp.tr(),
+                            ),
+                            onPressed: () => NavigationHelper.pushNamed(
+                              context,
+                              Routes.signUpRoute,
+                            ),
                           ),
                         ),
                       ],
+                    ),
+                    const SizedBox(height: AppSize.s10),
+                    TextButton(
+                      onPressed: () {
+                        sl<AppShared>().setVal(
+                          AppConstants.guestKey,
+                          true,
+                        );
+                        NavigationHelper.pushNamedAndRemoveUntil(
+                          context,
+                          Routes.toggleRoute,
+                          (route) => false,
+                        );
+                      },
+                      child: CustomText(
+                        data: AppStrings.skipNow.tr(),
+                      ),
                     )
                   ],
                 ),

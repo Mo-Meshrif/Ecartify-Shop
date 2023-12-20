@@ -44,8 +44,10 @@ class _TempProductListScreenState extends State<TempProductListScreen> {
   AppShared appShared = sl<AppShared>();
   TextEditingController? searchController;
   late ProductsParmeters productsParmeters = widget.productsParmeters;
+  late bool isGuest;
   @override
   void initState() {
+    isGuest = sl<AppShared>().getVal(AppConstants.guestKey) ?? false;
     if (!widget.productsParmeters.fromSearch) {
       getPageData();
     } else {
@@ -119,35 +121,37 @@ class _TempProductListScreenState extends State<TempProductListScreen> {
         title: CustomText(
           data: widget.productsParmeters.title,
         ),
-        actions: [
-          BlocBuilder<CartBloc, CartState>(
-            builder: (context, state) => IconButton(
-              onPressed: () => NavigationHelper.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CartScreen(
-                    hasTitle: true,
+        actions: isGuest
+            ? []
+            : [
+                BlocBuilder<CartBloc, CartState>(
+                  builder: (context, state) => IconButton(
+                    onPressed: () => NavigationHelper.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CartScreen(
+                          hasTitle: true,
+                        ),
+                      ),
+                    ),
+                    splashRadius: AppSize.s30.r,
+                    icon: badge.Badge(
+                      position: badge.BadgePosition.topEnd(top: -15, end: -5),
+                      showBadge: state.cartItemsNumber > 0,
+                      badgeContent: CustomText(
+                        data: state.cartItemsNumber > 9
+                            ? '9+'
+                            : '${state.cartItemsNumber}',
+                        fontSize: state.cartItemsNumber > 9 ? 14.sp : 17.sp,
+                      ),
+                      child: SvgPicture.asset(
+                        IconAssets.cart,
+                        color: theme.primaryColor,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              splashRadius: AppSize.s30.r,
-              icon: badge.Badge(
-                position: badge.BadgePosition.topEnd(top: -15, end: -5),
-                showBadge: state.cartItemsNumber > 0,
-                badgeContent: CustomText(
-                  data: state.cartItemsNumber > 9
-                      ? '9+'
-                      : '${state.cartItemsNumber}',
-                  fontSize: state.cartItemsNumber > 9 ? 14.sp : 17.sp,
-                ),
-                child: SvgPicture.asset(
-                  IconAssets.cart,
-                  color: theme.primaryColor,
-                ),
-              ),
-            ),
-          ),
-        ],
+              ],
       ),
       body: BlocConsumer<ProductBloc, ProductState>(
         listener: (context, state) {

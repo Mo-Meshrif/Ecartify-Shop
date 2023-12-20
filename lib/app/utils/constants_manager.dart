@@ -11,6 +11,7 @@ class AppConstants {
   static const int errorMaxLines = 3;
   static const String userKey = 'userKey';
   static const String authPassKey = 'authPassKey';
+  static const String guestKey = 'guestKey';
   static const String emptyVal = '';
   static const String nullError = 'null';
   static const String invaildEmail = 'invalid-email';

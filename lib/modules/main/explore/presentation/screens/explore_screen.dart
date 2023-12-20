@@ -10,9 +10,14 @@ import '../../../../../app/common/widgets/custom_refresh_wrapper.dart';
 import '../../../../../app/common/widgets/custom_search_bar_widget.dart';
 import '../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../app/helper/enums.dart';
+import '../../../../../app/helper/navigation_helper.dart';
+import '../../../../../app/helper/shared_helper.dart';
+import '../../../../../app/services/services_locator.dart';
 import '../../../../../app/utils/assets_manager.dart';
+import '../../../../../app/utils/constants_manager.dart';
 import '../../../../../app/utils/strings_manager.dart';
 import '../../../../../app/utils/values_manager.dart';
+import '../../../cart/presentation/screens/cart_screen.dart';
 import '../../domain/entities/category.dart';
 import '../controller/explore_bloc.dart';
 import '../widgets/category_widget.dart';
@@ -31,6 +36,7 @@ class _ExploreScreenState extends State<ExploreScreen>
   bool hasData = true;
   List<Category> items = [];
   Status status = Status.sleep;
+  bool isGuest = false;
 
   @override
   void initState() {
@@ -41,6 +47,8 @@ class _ExploreScreenState extends State<ExploreScreen>
   getPageContent() {
     if (widget.title == null) {
       context.read<ExploreBloc>().add(GetCategoriesEvent());
+    } else {
+      isGuest = sl<AppShared>().getVal(AppConstants.guestKey) ?? false;
     }
   }
 
@@ -54,9 +62,16 @@ class _ExploreScreenState extends State<ExploreScreen>
         ),
         actions: [
           Visibility(
-            visible: widget.title != null,
+            visible: widget.title != null && !isGuest,
             child: IconButton(
-              onPressed: () {},
+              onPressed: () => NavigationHelper.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CartScreen(
+                    hasTitle: true,
+                  ),
+                ),
+              ),
               splashRadius: AppSize.s30.r,
               icon: SvgPicture.asset(
                 IconAssets.cart,

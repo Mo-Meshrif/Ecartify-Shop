@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../../app/helper/dynamic_link_helper.dart';
+import '../../../../app/helper/shared_helper.dart';
 import '../../../../app/services/services_locator.dart';
+import '../../../../app/utils/constants_manager.dart';
 import '../../../main/cart/presentation/controller/cart_bloc.dart';
 import '../../../main/cart/presentation/screens/cart_screen.dart';
 import '../../../main/explore/presentation/screens/explore_screen.dart';
@@ -30,6 +32,7 @@ class ToggleScreens extends StatefulWidget {
 class _ToggleScreenState extends State<ToggleScreens> {
   int currentIndex = 0;
   PageController pageController = PageController();
+  late bool isGuest;
 
   @override
   void initState() {
@@ -37,6 +40,7 @@ class _ToggleScreenState extends State<ToggleScreens> {
       SystemUiMode.manual,
       overlays: SystemUiOverlay.values,
     );
+    isGuest = sl<AppShared>().getVal(AppConstants.guestKey) ?? false;
     FirebaseMessaging.onMessage.listen(
       (event) => sl<AwesomeNotifications>().createNotificationFromJsonData(
         event.data,
@@ -59,13 +63,19 @@ class _ToggleScreenState extends State<ToggleScreens> {
         child: Scaffold(
           body: PageView(
             physics: const NeverScrollableScrollPhysics(),
-            children: const [
-              ShopScreen(),
-              ExploreScreen(),
-              CartScreen(),
-              FavouriteScreen(),
-              ProfileScreen(),
-            ],
+            children: isGuest
+                ? [
+                    const ShopScreen(),
+                    const ExploreScreen(),
+                    const ProfileScreen(isGuest: true),
+                  ]
+                : [
+                    const ShopScreen(),
+                    const ExploreScreen(),
+                    const CartScreen(),
+                    const FavouriteScreen(),
+                    const ProfileScreen(),
+                  ],
             controller: pageController,
             onPageChanged: (value) => setState(
               () => currentIndex = value,
@@ -73,6 +83,7 @@ class _ToggleScreenState extends State<ToggleScreens> {
           ),
           bottomNavigationBar: BottomNavBar(
             currentIndex: currentIndex,
+            isGuest: isGuest,
             onTap: (val) => pageController.jumpToPage(val),
           ),
         ),

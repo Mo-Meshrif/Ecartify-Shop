@@ -14,10 +14,12 @@ import '../../../main/favourite/presentation/controller/favourite_bloc.dart';
 class BottomNavBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
+  final bool isGuest;
   const BottomNavBar({
     Key? key,
     required this.onTap,
     required this.currentIndex,
+    required this.isGuest,
   }) : super(key: key);
 
   @override
@@ -25,67 +27,91 @@ class BottomNavBar extends StatelessWidget {
         currentIndex: currentIndex,
         type: BottomNavigationBarType.fixed,
         onTap: onTap,
-        items: [
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              IconAssets.shop,
-              color: _getItemColor(context, 0),
-            ),
-            label: AppStrings.shop.tr(),
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              IconAssets.explore,
-              color: _getItemColor(context, 1),
-            ),
-            label: AppStrings.explore.tr(),
-          ),
-          BottomNavigationBarItem(
-            icon: BlocBuilder<CartBloc, CartState>(
-              builder: (context, state) => badge.Badge(
-                position: badge.BadgePosition.topEnd(top: -10, end: -10),
-                showBadge: state.cartItemsNumber > 0,
-                badgeContent: CustomText(
-                  data: state.cartItemsNumber > 9
-                      ? '9+'
-                      : '${state.cartItemsNumber}',
-                  fontSize: state.cartItemsNumber > 9 ? 14.sp : 17.sp,
+        items: isGuest
+            ? [
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    IconAssets.shop,
+                    color: _getItemColor(context, 0),
+                  ),
+                  label: AppStrings.shop.tr(),
                 ),
-                child: SvgPicture.asset(
-                  IconAssets.cart,
-                  color: _getItemColor(context, 2),
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    IconAssets.explore,
+                    color: _getItemColor(context, 1),
+                  ),
+                  label: AppStrings.explore.tr(),
                 ),
-              ),
-            ),
-            label: AppStrings.cart.tr(),
-          ),
-          BottomNavigationBarItem(
-            icon: BlocBuilder<FavouriteBloc, FavouriteState>(
-              builder: (context, state) => badge.Badge(
-                position: badge.BadgePosition.topEnd(top: -10, end: -10),
-                showBadge: state.favProdsNumber > 0,
-                badgeContent: CustomText(
-                  data: state.favProdsNumber > 9
-                      ? '9+'
-                      : '${state.favProdsNumber}',
-                  fontSize: state.favProdsNumber > 9 ? 14.sp : 17.sp,
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    IconAssets.profile,
+                    color: _getItemColor(context, 4),
+                  ),
+                  label: AppStrings.profile.tr(),
                 ),
-                child: SvgPicture.asset(
-                  IconAssets.favourite,
-                  color: _getItemColor(context, 3),
+              ]
+            : [
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    IconAssets.shop,
+                    color: _getItemColor(context, 0),
+                  ),
+                  label: AppStrings.shop.tr(),
                 ),
-              ),
-            ),
-            label: AppStrings.favourite.tr(),
-          ),
-          BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              IconAssets.profile,
-              color: _getItemColor(context, 4),
-            ),
-            label: AppStrings.profile.tr(),
-          ),
-        ],
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    IconAssets.explore,
+                    color: _getItemColor(context, 1),
+                  ),
+                  label: AppStrings.explore.tr(),
+                ),
+                BottomNavigationBarItem(
+                  icon: BlocBuilder<CartBloc, CartState>(
+                    builder: (context, state) => badge.Badge(
+                      position: badge.BadgePosition.topEnd(top: -10, end: -10),
+                      showBadge: state.cartItemsNumber > 0,
+                      badgeContent: CustomText(
+                        data: state.cartItemsNumber > 9
+                            ? '9+'
+                            : '${state.cartItemsNumber}',
+                        fontSize: state.cartItemsNumber > 9 ? 14.sp : 17.sp,
+                      ),
+                      child: SvgPicture.asset(
+                        IconAssets.cart,
+                        color: _getItemColor(context, 2),
+                      ),
+                    ),
+                  ),
+                  label: AppStrings.cart.tr(),
+                ),
+                BottomNavigationBarItem(
+                  icon: BlocBuilder<FavouriteBloc, FavouriteState>(
+                    builder: (context, state) => badge.Badge(
+                      position: badge.BadgePosition.topEnd(top: -10, end: -10),
+                      showBadge: state.favProdsNumber > 0,
+                      badgeContent: CustomText(
+                        data: state.favProdsNumber > 9
+                            ? '9+'
+                            : '${state.favProdsNumber}',
+                        fontSize: state.favProdsNumber > 9 ? 14.sp : 17.sp,
+                      ),
+                      child: SvgPicture.asset(
+                        IconAssets.favourite,
+                        color: _getItemColor(context, 3),
+                      ),
+                    ),
+                  ),
+                  label: AppStrings.favourite.tr(),
+                ),
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    IconAssets.profile,
+                    color: _getItemColor(context, 4),
+                  ),
+                  label: AppStrings.profile.tr(),
+                ),
+              ],
       );
 
   Color? _getItemColor(BuildContext context, int itemIndex) {

@@ -151,4 +151,9 @@ class AppStrings {
   static const String orderSuccessDesc = 'order-success-desc';
   static const String viewOrder = 'View Order';
   static const String backHome = 'Back home';
+  static const String youMustSignIn = 'You must sign in';
+  static const String yes = 'Yes';
+  static const String no = 'No';
+  static const String skipNow = 'Skip Now';
+  static const String signInToExplore = 'Sign in to explore more';
 }

@@ -8,9 +8,11 @@ import '../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../app/common/widgets/image_builder.dart';
 import '../../../../../app/helper/helper_functions.dart';
 import '../../../../../app/helper/navigation_helper.dart';
+import '../../../../../app/helper/shared_helper.dart';
 import '../../../../../app/services/services_locator.dart';
 import '../../../../../app/utils/assets_manager.dart';
 import '../../../../../app/utils/color_manager.dart';
+import '../../../../../app/utils/constants_manager.dart';
 import '../../../../../app/utils/routes_manager.dart';
 import '../../../../../app/utils/strings_manager.dart';
 import '../../../../../app/utils/values_manager.dart';
@@ -18,7 +20,7 @@ import '../../../../main/cart/presentation/controller/cart_bloc.dart';
 import '../../domain/entities/product.dart';
 import '../controller/product_bloc.dart';
 
-class ProductWidget extends StatelessWidget {
+class ProductWidget extends StatefulWidget {
   final Product product;
   const ProductWidget({
     Key? key,
@@ -26,8 +28,20 @@ class ProductWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<ProductWidget> createState() => _ProductWidgetState();
+}
+
+class _ProductWidgetState extends State<ProductWidget> {
+  String mark = HelperFunctions.getCurrencyMark();
+  late bool isGuest;
+  @override
+  void initState() {
+    isGuest = sl<AppShared>().getVal(AppConstants.guestKey) ?? false;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    String mark = HelperFunctions.getCurrencyMark();
     return Card(
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
@@ -39,7 +53,7 @@ class ProductWidget extends StatelessWidget {
         onTap: () {
           context.read<ProductBloc>().add(
                 UpdateProductDetailsEvent(
-                  product: product,
+                  product: widget.product,
                 ),
               );
           NavigationHelper.pushNamed(
@@ -63,75 +77,80 @@ class ProductWidget extends StatelessWidget {
                         child: ImageBuilder(
                           height: AppSize.s205.h,
                           fit: BoxFit.contain,
-                          imageUrl: product.image,
+                          imageUrl: widget.product.image,
                         ),
                       ),
-                      BlocBuilder<CartBloc, CartState>(
-                        builder: (context, state) {
-                          int index = state.cartItems.indexWhere(
-                            (e) => e.prodId == product.id,
-                          );
-                          return Align(
-                            alignment: AlignmentDirectional.topEnd,
-                            child: index > -1
-                                ? IconButton(
-                                    padding: EdgeInsets.zero,
-                                    splashRadius: AppSize.s30.r,
-                                    onPressed: () => sl<CartBloc>().add(
-                                      DeleteItemEvent(
-                                        prodId: product.id,
-                                      ),
-                                    ),
-                                    icon: CircleAvatar(
-                                      radius: AppSize.s20.r,
-                                      backgroundColor: ColorManager.kBlack,
-                                      child: Padding(
-                                        padding: EdgeInsets.only(
-                                          top: AppPadding.p5.h,
+                      isGuest
+                          ? const SizedBox.shrink()
+                          : BlocBuilder<CartBloc, CartState>(
+                              builder: (context, state) {
+                                int index = state.cartItems.indexWhere(
+                                  (e) => e.prodId == widget.product.id,
+                                );
+                                return Align(
+                                  alignment: AlignmentDirectional.topEnd,
+                                  child: index > -1
+                                      ? IconButton(
+                                          padding: EdgeInsets.zero,
+                                          splashRadius: AppSize.s30.r,
+                                          onPressed: () => sl<CartBloc>().add(
+                                            DeleteItemEvent(
+                                              prodId: widget.product.id,
+                                            ),
+                                          ),
+                                          icon: CircleAvatar(
+                                            radius: AppSize.s20.r,
+                                            backgroundColor:
+                                                ColorManager.kBlack,
+                                            child: Padding(
+                                              padding: EdgeInsets.only(
+                                                top: AppPadding.p5.h,
+                                              ),
+                                              child: SvgPicture.asset(
+                                                IconAssets.cart,
+                                                width: AppSize.s20.w,
+                                                color: ColorManager.kRed,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : IconButton(
+                                          padding: EdgeInsets.zero,
+                                          splashRadius: AppSize.s30.r,
+                                          onPressed: () =>
+                                              HelperFunctions.handleFavFun(
+                                            context,
+                                            widget.product,
+                                          ),
+                                          icon: CircleAvatar(
+                                            radius: AppSize.s20.r,
+                                            backgroundColor:
+                                                ColorManager.kBlack,
+                                            child: Padding(
+                                              padding: EdgeInsets.only(
+                                                top: AppPadding.p5.h,
+                                              ),
+                                              child: SvgPicture.asset(
+                                                IconAssets.favourite,
+                                                width: AppSize.s20.w,
+                                                color:
+                                                    widget.product.isFavourite
+                                                        ? ColorManager.kRed
+                                                        : ColorManager.kWhite,
+                                              ),
+                                            ),
+                                          ),
                                         ),
-                                        child: SvgPicture.asset(
-                                          IconAssets.cart,
-                                          width: AppSize.s20.w,
-                                          color: ColorManager.kRed,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                : IconButton(
-                                    padding: EdgeInsets.zero,
-                                    splashRadius: AppSize.s30.r,
-                                    onPressed: () =>
-                                        HelperFunctions.handleFavFun(
-                                      context,
-                                      product,
-                                    ),
-                                    icon: CircleAvatar(
-                                      radius: AppSize.s20.r,
-                                      backgroundColor: ColorManager.kBlack,
-                                      child: Padding(
-                                        padding: EdgeInsets.only(
-                                          top: AppPadding.p5.h,
-                                        ),
-                                        child: SvgPicture.asset(
-                                          IconAssets.favourite,
-                                          width: AppSize.s20.w,
-                                          color: product.isFavourite
-                                              ? ColorManager.kRed
-                                              : ColorManager.kWhite,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                          );
-                        },
-                      ),
+                                );
+                              },
+                            ),
                     ],
                   ),
                 ),
               ),
               SizedBox(height: AppSize.s5.h),
               CustomText(
-                data: product.name,
+                data: widget.product.name,
                 maxLines: 2,
               ),
               SizedBox(height: AppSize.s5.h),
@@ -144,7 +163,7 @@ class ProductWidget extends StatelessWidget {
                     ),
                     SizedBox(width: AppSize.s10.w),
                     CustomText(
-                      data: product.avRateValue.toStringAsFixed(2),
+                      data: widget.product.avRateValue.toStringAsFixed(2),
                     ),
                     SizedBox(width: AppSize.s5.w),
                     VerticalDivider(
@@ -159,7 +178,7 @@ class ProductWidget extends StatelessWidget {
                             borderRadius: BorderRadius.circular(AppSize.s10.r),
                           ),
                           child: CustomText(
-                            data: product.soldNum.toString() +
+                            data: widget.product.soldNum.toString() +
                                 ' ' +
                                 AppStrings.sold.tr(),
                           ),
@@ -174,16 +193,16 @@ class ProductWidget extends StatelessWidget {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: product.price + ' ' + mark + '  ',
+                      text: widget.product.price + ' ' + mark + '  ',
                       style: TextStyle(
                         color: Theme.of(context).primaryColor,
                       ),
                     ),
-                    product.lastPrice.isNotEmpty
+                    widget.product.lastPrice.isNotEmpty
                         ? TextSpan(
                             children: [
                               TextSpan(
-                                text: product.lastPrice,
+                                text: widget.product.lastPrice,
                                 style: TextStyle(
                                   color: ColorManager.kRed,
                                   decoration: TextDecoration.lineThrough,

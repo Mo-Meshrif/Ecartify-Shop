@@ -6,7 +6,10 @@ import 'package:lottie/lottie.dart';
 
 import '../../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../../app/helper/enums.dart';
+import '../../../../../../app/helper/shared_helper.dart';
+import '../../../../../../app/services/services_locator.dart';
 import '../../../../../../app/utils/assets_manager.dart';
+import '../../../../../../app/utils/constants_manager.dart';
 import '../../../../../../app/utils/strings_manager.dart';
 import '../../../../../../app/utils/values_manager.dart';
 import '../../../../../main/shop/presentation/controller/shop_bloc.dart';
@@ -29,9 +32,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   String selectedColor = '', selectedSize = '';
   bool showTitle = false;
   double kExpandedHeight = 400.h;
+  late bool isGuest;
 
   @override
   void initState() {
+    isGuest = sl<AppShared>().getVal(AppConstants.guestKey) ?? false;
     super.initState();
     _scrollController = ScrollController()
       ..addListener(() {
@@ -95,6 +100,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         product: product,
                         kExpandedHeight: kExpandedHeight,
                         showTitle: showTitle,
+                        isGuest: isGuest,
                       ),
                     ],
                     body: StatefulBuilder(
@@ -117,6 +123,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ),
                           AddToCartWidget(
                             product: product,
+                            isGuest: isGuest,
                             selectedColor: product.color.isNotEmpty &&
                                     selectedColor.isEmpty
                                 ? product.color.first

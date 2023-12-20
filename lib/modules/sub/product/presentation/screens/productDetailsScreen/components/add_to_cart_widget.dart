@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:ecartify/app/common/models/alert_action_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,9 +8,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../../../../app/common/widgets/custom_elevated_button.dart';
 import '../../../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../../../app/helper/helper_functions.dart';
+import '../../../../../../../app/helper/navigation_helper.dart';
+import '../../../../../../../app/helper/shared_helper.dart';
 import '../../../../../../../app/services/services_locator.dart';
 import '../../../../../../../app/utils/assets_manager.dart';
 import '../../../../../../../app/utils/color_manager.dart';
+import '../../../../../../../app/utils/constants_manager.dart';
+import '../../../../../../../app/utils/routes_manager.dart';
 import '../../../../../../../app/utils/strings_manager.dart';
 import '../../../../../../../app/utils/values_manager.dart';
 import '../../../../../../main/cart/domain/entities/cart_item_statistics.dart';
@@ -18,13 +23,15 @@ import '../../../../domain/entities/product.dart';
 
 class AddToCartWidget extends StatelessWidget {
   final Product product;
+  final bool isGuest;
   final String selectedColor, selectedSize;
-  const AddToCartWidget(
-      {Key? key,
-      required this.product,
-      required this.selectedColor,
-      required this.selectedSize})
-      : super(key: key);
+  const AddToCartWidget({
+    Key? key,
+    required this.product,
+    required this.selectedColor,
+    required this.selectedSize,
+    this.isGuest = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -183,34 +190,65 @@ class AddToCartWidget extends StatelessWidget {
                       ),
                       padding: EdgeInsets.symmetric(vertical: AppPadding.p20.h),
                       onPressed: () {
-                        if (product.storeAmount > int.parse(quantity)) {
-                          if (product.isFavourite) {
-                            HelperFunctions.handleFavFun(
-                              context,
-                              product,
-                            );
-                          }
-                          sl<CartBloc>().add(
-                            AddItemToCartEvent(
-                              prodIsInCart: index > -1,
-                              product: product,
-                              statistics: CartItemStatistics(
-                                prodId: product.id,
-                                color: selectedColor,
-                                size: selectedSize,
-                                quantity: quantity,
-                              ),
+                        if (isGuest) {
+                          HelperFunctions.showAlert(
+                            context: context,
+                            content: CustomText(
+                              data: AppStrings.youMustSignIn.tr(),
                             ),
+                            actions: [
+                              AlertActionModel(
+                                title: AppStrings.yes.tr(),
+                                onPressed: () {
+                                  sl<AppShared>().removeVal(
+                                    AppConstants.authPassKey,
+                                  );
+                                  sl<AppShared>().removeVal(
+                                    AppConstants.guestKey,
+                                  );
+                                  NavigationHelper.pushNamedAndRemoveUntil(
+                                    context,
+                                    Routes.controlRoute,
+                                    (route) => false,
+                                  );
+                                },
+                              ),
+                              AlertActionModel(
+                                title: AppStrings.no.tr(),
+                                onPressed: () => NavigationHelper.pop(context),
+                              ),
+                            ],
                           );
                         } else {
-                          HelperFunctions.showSnackBar(
-                            context,
-                            AppStrings.productQuantity.tr() +
-                                ' ' +
-                                AppStrings.quantityCondition.tr() +
-                                ' '
-                                    '${product.storeAmount}',
-                          );
+                          if (product.storeAmount > int.parse(quantity)) {
+                            if (product.isFavourite) {
+                              HelperFunctions.handleFavFun(
+                                context,
+                                product,
+                              );
+                            }
+                            sl<CartBloc>().add(
+                              AddItemToCartEvent(
+                                prodIsInCart: index > -1,
+                                product: product,
+                                statistics: CartItemStatistics(
+                                  prodId: product.id,
+                                  color: selectedColor,
+                                  size: selectedSize,
+                                  quantity: quantity,
+                                ),
+                              ),
+                            );
+                          } else {
+                            HelperFunctions.showSnackBar(
+                              context,
+                              AppStrings.productQuantity.tr() +
+                                  ' ' +
+                                  AppStrings.quantityCondition.tr() +
+                                  ' '
+                                      '${product.storeAmount}',
+                            );
+                          }
                         }
                       },
                       child: CustomText(
