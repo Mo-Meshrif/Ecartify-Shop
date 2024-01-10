@@ -25,6 +25,7 @@ import '../../modules/main/cart/data/repositories/cart_repository_impl.dart';
 import '../../modules/main/cart/domain/repositories/base_cart_repository.dart';
 import '../../modules/main/cart/domain/usecases/add_item_to_cart_use_case.dart';
 import '../../modules/main/cart/domain/usecases/change_quantity_use_case.dart';
+import '../../modules/main/cart/domain/usecases/delete_all_items_use_case.dart';
 import '../../modules/main/cart/domain/usecases/delete_item_use_case.dart';
 import '../../modules/main/cart/domain/usecases/get_cart_items_use_case.dart';
 import '../../modules/main/cart/presentation/controller/cart_bloc.dart';
@@ -224,6 +225,7 @@ class ServicesLocator {
     sl.registerLazySingleton(() => AddItemToCartUseCase(sl()));
     sl.registerLazySingleton(() => ChangeQuantityUseCase(sl()));
     sl.registerLazySingleton(() => DeleteItemUseCase(sl()));
+    sl.registerLazySingleton(() => DeleteAllItemsUseCase(sl()));
     sl.registerLazySingleton(() => GetUserDataUseCase(sl()));
     sl.registerLazySingleton(() => GetAddressListUseCase(sl()));
     sl.registerLazySingleton(() => AddAddressUseCase(sl()));
@@ -293,6 +295,7 @@ class ServicesLocator {
         addItemToCartUseCase: sl(),
         changeQuantityUseCase: sl(),
         deleteItemUseCase: sl(),
+        deleteAllItemsUseCase: sl(),
       ),
     );
     sl.registerLazySingleton(

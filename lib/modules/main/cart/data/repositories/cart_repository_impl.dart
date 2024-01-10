@@ -60,4 +60,16 @@ class CartRepositoryImpl implements BaseCartRepository {
       return Left(LocalFailure(msg: failure.msg));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> deleteAllItems() async {
+    try {
+      final val = await baseCartLocalDataSource.deleteAllItems();
+      return val
+          ? const Right(true)
+          : const Left(LocalFailure(msg: AppStrings.operationFailed));
+    } on LocalExecption catch (failure) {
+      return Left(LocalFailure(msg: failure.msg));
+    }
+  }
 }

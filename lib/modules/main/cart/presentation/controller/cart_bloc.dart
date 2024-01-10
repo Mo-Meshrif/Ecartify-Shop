@@ -14,6 +14,7 @@ import '../../domain/entities/cart_item.dart';
 import '../../domain/entities/cart_item_statistics.dart';
 import '../../domain/usecases/add_item_to_cart_use_case.dart';
 import '../../domain/usecases/change_quantity_use_case.dart';
+import '../../domain/usecases/delete_all_items_use_case.dart';
 import '../../domain/usecases/delete_item_use_case.dart';
 import '../../domain/usecases/get_cart_items_use_case.dart';
 
@@ -26,23 +27,21 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   final AddItemToCartUseCase addItemToCartUseCase;
   final ChangeQuantityUseCase changeQuantityUseCase;
   final DeleteItemUseCase deleteItemUseCase;
+  final DeleteAllItemsUseCase deleteAllItemsUseCase;
   CartBloc({
     required this.getCartItemsUseCase,
     required this.getCustomProductsUseCase,
     required this.addItemToCartUseCase,
     required this.changeQuantityUseCase,
     required this.deleteItemUseCase,
+    required this.deleteAllItemsUseCase,
   }) : super(const CartState()) {
     on<GetCartItems>(_getCartItems);
     on<GetCartItemsProds>(_getCartProducts);
     on<AddItemToCartEvent>(_addItemToCart);
     on<ChangeQuantityEvent>(_changeQuantity);
     on<DeleteItemEvent>(_deleteItem);
-    on<ClearCartEvent>(
-      (event, emit) => emit(
-        const CartState(),
-      ),
-    );
+    on<ClearCartEvent>(_deleteAllItem);
   }
 
   FutureOr<void> _getCartItems(
@@ -195,5 +194,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         ),
       ),
     );
+  }
+
+  FutureOr<void> _deleteAllItem(
+      ClearCartEvent event, Emitter<CartState> emit) async {
+    await deleteAllItemsUseCase(const NoParameters());
+    emit(const CartState());
   }
 }

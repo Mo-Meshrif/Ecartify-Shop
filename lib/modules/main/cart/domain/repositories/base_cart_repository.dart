@@ -9,4 +9,5 @@ abstract class BaseCartRepository {
   Future<Either<Failure, bool>> addToCart(CartItemStatistics statistics);
   Future<Either<Failure, bool>> changeQuantity(CartItemStatistics statistics);
   Future<Either<Failure, bool>> deleteItem(String prodId);
+  Future<Either<Failure, bool>> deleteAllItems();
 }

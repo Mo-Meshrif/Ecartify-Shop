@@ -11,6 +11,7 @@ abstract class BaseCartLocalDataSource {
   Future<bool> addToCart(CartItemStatisticsModel statisticsModel);
   Future<bool> changeQuantity(CartItemStatisticsModel statisticsModel);
   Future<bool> deleteItem(String prodId);
+  Future<bool> deleteAllItems();
 }
 
 class CartLocalDataSource implements BaseCartLocalDataSource {
@@ -133,6 +134,22 @@ class CartLocalDataSource implements BaseCartLocalDataSource {
         'cart',
         where: 'uid=? AND prodId=?',
         whereArgs: [uid, prodId],
+      );
+      return val != 0;
+    } catch (e) {
+      throw LocalExecption(e.toString());
+    }
+  }
+
+  @override
+  Future<bool> deleteAllItems() async {
+    try {
+      String? uid = HelperFunctions.getSavedUser()?.id;
+      var dbClient = await database;
+      int val = await dbClient!.delete(
+        'cart',
+        where: 'uid=?',
+        whereArgs: [uid],
       );
       return val != 0;
     } catch (e) {
