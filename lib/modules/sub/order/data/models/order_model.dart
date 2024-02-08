@@ -20,6 +20,7 @@ class OrderModel extends OrderEntity {
     required super.status,
     required super.userAddress,
     super.orderNumber,
+    super.rate,
   });
 
   factory OrderModel.fromSnap(DocumentSnapshot snapshot) => OrderModel(
@@ -39,13 +40,18 @@ class OrderModel extends OrderEntity {
         itemsPrice: snapshot.get('items_price'),
         shippingType: snapshot.get('shipping_type'),
         status: snapshot.get('status'),
-        userAddress: AddressModel.fromJson(snapshot.get('address')),
+        userAddress: AddressModel.fromJson(
+          snapshot.get('address'),
+        ),
+        rate: (snapshot.data() as Map<String, dynamic>).containsKey('review')
+            ? snapshot.get('review')['rate']
+            : -1,
       );
 
-  factory OrderModel.fromJson(Map<String,dynamic> json) => OrderModel(
+  factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
         id: json['id'],
         transactionId: json['transaction_id'],
-         dateAdded: json['date_added'] is Timestamp
+        dateAdded: json['date_added'] is Timestamp
             ? (json['date_added'] as Timestamp).toDate()
             : DateTime.parse(json['date_added']),
         items: List.from(json['items'])
@@ -60,6 +66,7 @@ class OrderModel extends OrderEntity {
         shippingType: json['shipping_type'],
         status: json['status'],
         userAddress: AddressModel.fromJson(json['address']),
+        rate: json['review']['rate'] ?? -1,
       );
 
   Map<String, dynamic> toJson() => {

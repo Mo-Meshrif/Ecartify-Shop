@@ -153,7 +153,7 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
                                 AppStrings.exceededLimit.tr(),
                               );
                             } else {
-                              HelperFunctions.addReview(
+                              HelperFunctions.addProductReview(
                                 context,
                                 widget.product,
                                 user,

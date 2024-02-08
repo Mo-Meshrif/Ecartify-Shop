@@ -7,12 +7,14 @@ import '../../../../../app/errors/exception.dart';
 import '../../../../../app/helper/enums.dart';
 import '../../../../../app/helper/helper_functions.dart';
 import '../../../../../app/utils/strings_manager.dart';
+import '../../domain/usecases/add_order_review_use_case.dart';
 import '../../domain/usecases/get_orders_use_case.dart';
 import '../models/order_model.dart';
 
 abstract class BaseOrderRemoteDataSource {
   Future<OrderModel> addOrder(OrderModel orderModel);
   Future<List<OrderModel>> getOrders(OrderParmeters orderParmeters);
+  Future<bool> addOrderReview(OrderReviewParameters orderReviewParameters);
 }
 
 class OrderRemoteDataSource implements BaseOrderRemoteDataSource {
@@ -36,7 +38,7 @@ class OrderRemoteDataSource implements BaseOrderRemoteDataSource {
         Map<String, dynamic> json = orderModel.toJson()
           ..addAll(
             {
-              'user-id':uid,
+              'user-id': uid,
               'order_number': random.nextInt(500) + count,
               'date_added': dateAdded,
               'tracker': {
@@ -101,6 +103,34 @@ class OrderRemoteDataSource implements BaseOrderRemoteDataSource {
         return querySnapshot.docs.map((e) => OrderModel.fromSnap(e)).toList();
       } else {
         throw ServerExecption(AppStrings.operationFailed.tr());
+      }
+    } catch (e) {
+      throw ServerExecption(e.toString());
+    }
+  }
+
+  @override
+  Future<bool> addOrderReview(OrderReviewParameters orderReviewParameters) async {
+    try {
+      DocumentReference<Map<String, dynamic>> documentReference =
+          firebaseFirestore.collection('Orders').doc(orderReviewParameters.orderId);
+      DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+          await documentReference.get();
+      if (documentSnapshot.exists) {
+        await documentReference.update(
+          documentSnapshot.data()!
+            ..addAll(
+              {
+                'review': {
+                  'note': orderReviewParameters.note,
+                  'rate': orderReviewParameters.rate,
+                }
+              },
+            ),
+        );
+        return true;
+      } else {
+        return false;
       }
     } catch (e) {
       throw ServerExecption(e.toString());

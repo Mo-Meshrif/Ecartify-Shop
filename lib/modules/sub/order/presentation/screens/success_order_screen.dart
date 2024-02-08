@@ -46,11 +46,12 @@ class SuccessOrderScreen extends StatelessWidget {
                 CustomElevatedButton(
                   width: 1.sw / 2,
                   child: CustomText(
-                    data: AppStrings.viewOrder.tr(),
+                    data: AppStrings.viewOrders.tr(),
                   ),
-                  onPressed: () {
-                    //TODO order details
-                  },
+                  onPressed: () => NavigationHelper.pushNamed(
+                    context,
+                    Routes.orderRoute,
+                  ),
                 ),
                 CustomElevatedButton(
                   width: 1.sw / 2,

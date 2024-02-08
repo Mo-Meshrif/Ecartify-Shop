@@ -69,6 +69,7 @@ import '../../modules/sub/notification/presentation/controller/notification_bloc
 import '../../modules/sub/order/data/datasources/remote_data_source.dart';
 import '../../modules/sub/order/data/repositories/order_repository_impl.dart';
 import '../../modules/sub/order/domain/repositories/base_order_repository.dart';
+import '../../modules/sub/order/domain/usecases/add_order_review_use_case.dart';
 import '../../modules/sub/order/domain/usecases/add_order_use_case.dart';
 import '../../modules/sub/order/domain/usecases/get_orders_use_case.dart';
 import '../../modules/sub/order/presentation/controller/order_bloc.dart';
@@ -238,6 +239,7 @@ class ServicesLocator {
     sl.registerLazySingleton(() => GetPaymobIframeIdUseCase(sl()));
     sl.registerLazySingleton(() => AddOrderUseCase(sl()));
     sl.registerLazySingleton(() => GetOrdersUseCase(sl()));
+    sl.registerLazySingleton(() => AddOrderReviewUseCase(sl()));
     //blocs
     sl.registerLazySingleton(
       () => AppConfigBloc(
@@ -337,6 +339,7 @@ class ServicesLocator {
         addOrderUseCase: sl(),
         getOrdersUseCase: sl(),
         getCustomProductsUseCase: sl(),
+        addOrderReviewUseCase: sl(),
       ),
     );
   }

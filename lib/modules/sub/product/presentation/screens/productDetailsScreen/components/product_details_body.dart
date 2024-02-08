@@ -121,7 +121,7 @@ class ProductDetailsBody extends StatelessWidget {
                   onPressed: () {
                     AuthUser? user = HelperFunctions.getSavedUser();
                     if (user != null) {
-                      HelperFunctions.addReview(
+                      HelperFunctions.addProductReview(
                         context,
                         product,
                         user,

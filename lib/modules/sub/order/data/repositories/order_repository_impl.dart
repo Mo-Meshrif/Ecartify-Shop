@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import '../../domain/usecases/add_order_review_use_case.dart';
 import '../../domain/usecases/get_orders_use_case.dart';
 import '/app/services/network_services.dart';
 import '../../../../../app/errors/exception.dart';
@@ -40,6 +41,20 @@ class OrderRepositoryImpl implements BaseOrderRepository {
       try {
         final orders = await baseOrderRemoteDataSource.getOrders(orderParmeters);
         return Right(orders);
+      } on ServerExecption catch (_) {
+        return Left(ServerFailure(msg: AppStrings.operationFailed.tr()));
+      }
+    } else {
+      return Left(ServerFailure(msg: AppStrings.noConnection.tr()));
+    }
+  }
+  
+  @override
+  Future<Either<Failure, bool>> addOrderReview(OrderReviewParameters orderReviewParameters)async {
+   if (await networkServices.isConnected()) {
+      try {
+        final result = await baseOrderRemoteDataSource.addOrderReview(orderReviewParameters);
+        return Right(result);
       } on ServerExecption catch (_) {
         return Left(ServerFailure(msg: AppStrings.operationFailed.tr()));
       }

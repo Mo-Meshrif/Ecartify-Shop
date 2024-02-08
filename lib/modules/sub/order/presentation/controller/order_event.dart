@@ -21,3 +21,8 @@ class GetOrderItemsProds extends OrderEvent {
   final List<OrderEntity> orders;
   const GetOrderItemsProds(this.orders);
 }
+
+class AddOrderReviewEvent extends OrderEvent {
+  final OrderReviewParameters orderReviewParameters;
+  const AddOrderReviewEvent({required this.orderReviewParameters});
+}

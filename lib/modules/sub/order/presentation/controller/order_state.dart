@@ -1,7 +1,10 @@
 part of 'order_bloc.dart';
 
 class OrderState extends Equatable {
-  final Status addOrderStatus, tempOrderStatus, getOrderListStatus;
+  final Status addOrderStatus,
+      tempOrderStatus,
+      getOrderListStatus,
+      addOrderReviewStatus;
   final OrderEntity? tempOrder;
   final List<OrderEntity> orders;
   final bool isOrdersMax;
@@ -11,7 +14,8 @@ class OrderState extends Equatable {
     this.tempOrder,
     this.getOrderListStatus = Status.sleep,
     this.orders = const [],
-    this.isOrdersMax=false,
+    this.isOrdersMax = false,
+    this.addOrderReviewStatus = Status.sleep,
   });
 
   OrderState copyWith({
@@ -20,7 +24,8 @@ class OrderState extends Equatable {
     OrderEntity? tempOrder,
     Status? getOrderListStatus,
     List<OrderEntity>? orders,
-    bool ? isOrdersMax,
+    bool? isOrdersMax,
+    Status? addOrderReviewStatus,
   }) =>
       OrderState(
         addOrderStatus: addOrderStatus ?? this.addOrderStatus,
@@ -30,7 +35,8 @@ class OrderState extends Equatable {
             : tempOrder ?? this.tempOrder,
         getOrderListStatus: getOrderListStatus ?? this.getOrderListStatus,
         orders: orders ?? this.orders,
-        isOrdersMax: isOrdersMax??this.isOrdersMax,
+        isOrdersMax: isOrdersMax ?? this.isOrdersMax,
+        addOrderReviewStatus: addOrderReviewStatus ?? this.addOrderReviewStatus,
       );
 
   @override
@@ -41,5 +47,6 @@ class OrderState extends Equatable {
         getOrderListStatus,
         orders,
         isOrdersMax,
+        addOrderReviewStatus,
       ];
 }

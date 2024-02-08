@@ -10,6 +10,7 @@ import '../../../../../app/helper/enums.dart';
 import '../../../product/domain/entities/product.dart';
 import '../../../product/domain/usecases/get_products_by_parameter_use_case.dart';
 import '../../domain/entities/order.dart';
+import '../../domain/usecases/add_order_review_use_case.dart';
 import '../../domain/usecases/add_order_use_case.dart';
 import '../../domain/usecases/get_orders_use_case.dart';
 
@@ -20,10 +21,12 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   final AddOrderUseCase addOrderUseCase;
   final GetOrdersUseCase getOrdersUseCase;
   final GetCustomProductsUseCase getCustomProductsUseCase;
+  final AddOrderReviewUseCase addOrderReviewUseCase;
   OrderBloc({
     required this.addOrderUseCase,
     required this.getOrdersUseCase,
     required this.getCustomProductsUseCase,
+    required this.addOrderReviewUseCase,
   }) : super(const OrderState()) {
     on<AddOrderEvent>(
       _addOrder,
@@ -35,6 +38,10 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       transformer: droppable(),
     );
     on<GetOrderItemsProds>(_getOrderProducts);
+    on<AddOrderReviewEvent>(
+      _addOrderReview,
+      transformer: sequential(),
+    );
   }
 
   FutureOr<void> _addOrder(
@@ -120,6 +127,36 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
                 )
                 .toList(),
           ],
+        ),
+      ),
+    );
+  }
+
+  FutureOr<void> _addOrderReview(
+      AddOrderReviewEvent event, Emitter<OrderState> emit) async {
+    emit(
+      state.copyWith(
+        addOrderReviewStatus: Status.loading,
+      ),
+    );
+    Either<Failure, bool> result =
+        await addOrderReviewUseCase(event.orderReviewParameters);
+    result.fold(
+      (failure) => emit(
+        state.copyWith(
+          addOrderReviewStatus: Status.error,
+        ),
+      ),
+      (result) => emit(
+        state.copyWith(
+          addOrderReviewStatus: result ? Status.loaded : Status.error,
+          orders: result
+              ? state.orders
+                  .map((e) => e.id == event.orderReviewParameters.orderId
+                      ? e.copyWith(rate: event.orderReviewParameters.rate)
+                      : e)
+                  .toList()
+              : state.orders,
         ),
       ),
     );

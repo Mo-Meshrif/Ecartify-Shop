@@ -6,7 +6,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../modules/main/auth/data/models/user_model.dart';
@@ -14,6 +13,8 @@ import '../../modules/main/auth/domain/entities/user.dart';
 import '../../modules/main/cart/domain/entities/cart_item.dart';
 import '../../modules/main/favourite/presentation/controller/favourite_bloc.dart';
 import '../../modules/main/shop/presentation/controller/shop_bloc.dart';
+import '../../modules/sub/order/domain/usecases/add_order_review_use_case.dart';
+import '../../modules/sub/order/presentation/controller/order_bloc.dart';
 import '../../modules/sub/product/domain/entities/product.dart';
 import '../../modules/sub/product/domain/usecases/update_product_use_case.dart';
 import '../../modules/sub/product/presentation/controller/product_bloc.dart';
@@ -23,9 +24,9 @@ import '../../modules/sub/review/presentation/controller/review_bloc.dart';
 import '../common/models/alert_action_model.dart';
 import '../common/widgets/custom_text.dart';
 import '../common/widgets/digital_number.dart';
+import '../common/widgets/review_widget.dart';
 import '../services/services_locator.dart';
 import '../utils/constants_manager.dart';
-import '../utils/strings_manager.dart';
 import '../utils/values_manager.dart';
 import 'enums.dart';
 import 'extensions.dart';
@@ -163,10 +164,9 @@ class HelperFunctions {
   }
 
   //add review sheet
-  static addReview(BuildContext context, Product product, AuthUser user,
+  static addProductReview(BuildContext context, Product product, AuthUser user,
       {bool fromDetails = false}) {
     double rateVal = 0.0;
-    String title = '', review = '';
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -197,109 +197,65 @@ class HelperFunctions {
           height: 1.sh * 0.75,
           child: state.addreviewStatus == Status.loading
               ? const Center(child: CircularProgressIndicator.adaptive())
-              : StatefulBuilder(
-                  builder: (context, setState) => Column(
-                    children: [
-                      Row(
-                        children: [
-                          TextButton(
-                            onPressed: () => NavigationHelper.pop(context),
-                            child: CustomText(
-                              data: AppStrings.cancel.tr(),
-                              fontSize: 20.sp,
+              : ReviewWidget(
+                  onSend: (title, review, rate) {
+                    rateVal = rate;
+                    context.read<ReviewBloc>().add(
+                          AddReviewEvent(
+                            addReviewParameters: AddReviewParameters(
+                              productId: product.id,
+                              rateVal: rate,
+                              title: title,
+                              review: review,
+                              userId: user.id,
+                              userName: user.name,
                             ),
                           ),
-                          Expanded(
-                            child: Center(
-                              child: CustomText(
-                                data: AppStrings.writeReview.tr(),
-                                fontSize: 25.sp,
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () => context.read<ReviewBloc>().add(
-                                  AddReviewEvent(
-                                    addReviewParameters: AddReviewParameters(
-                                      productId: product.id,
-                                      rateVal: rateVal,
-                                      title: title,
-                                      review: review,
-                                      userId: user.id,
-                                      userName: user.name,
-                                    ),
-                                  ),
-                                ),
-                            child: CustomText(
-                              data: AppStrings.send.tr(),
-                              fontSize: 20.sp,
-                            ),
-                          ),
-                        ],
-                      ),
-                      RatingBar.builder(
-                        initialRating: 0,
-                        minRating: 1,
-                        direction: Axis.horizontal,
-                        itemCount: 5,
-                        itemSize: 20,
-                        itemPadding: EdgeInsets.symmetric(horizontal: 8.w),
-                        itemBuilder: (context, _) => const Icon(
-                          Icons.star,
-                          color: Colors.amber,
-                        ),
-                        onRatingUpdate: (rating) => setState(
-                          () => rateVal = rating,
-                        ),
-                      ),
-                      SizedBox(height: 5.h),
-                      CustomText(
-                        data: AppStrings.tapStar.tr(),
-                        fontSize: 15.sp,
-                      ),
-                      const Divider(),
-                      TextFormField(
-                        onChanged: (value) => setState(() => title = value),
-                        decoration: InputDecoration(
-                          hintText: AppStrings.title.tr(),
-                          isDense: true,
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 8.w, vertical: 5.h),
-                          border: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                        ),
-                      ),
-                      const Divider(),
-                      Expanded(
-                        child: TextFormField(
-                          maxLines: null,
-                          expands: true,
-                          keyboardType: TextInputType.multiline,
-                          onChanged: (value) => setState(() => review = value),
-                          decoration: InputDecoration(
-                            hintText: AppStrings.review.tr() +
-                                ' ' +
-                                '(' +
-                                AppStrings.optional.tr() +
-                                ')',
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 8.w, vertical: 5.h),
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                        );
+                  },
                 ),
         ),
       ),
     );
   }
+
+  static addOrderReview(BuildContext context, String orderId) =>
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10.r),
+            topRight: Radius.circular(10.r),
+          ),
+        ),
+        builder: (context) => BlocConsumer<OrderBloc, OrderState>(
+          listener: (context, state) {
+            if (state.addOrderReviewStatus == Status.loaded) {
+              NavigationHelper.pop(context);
+            }
+          },
+          builder: (context, state) => SizedBox(
+            height: 1.sh * 0.75,
+            child: state.addOrderReviewStatus == Status.loading
+                ? const Center(child: CircularProgressIndicator.adaptive())
+                : ReviewWidget(
+                    showTitle: false,
+                    onSend: (_, review, rate) {
+                      context.read<OrderBloc>().add(
+                            AddOrderReviewEvent(
+                              orderReviewParameters: OrderReviewParameters(
+                                orderId: orderId,
+                                note: review,
+                                rate: rate,
+                              ),
+                            ),
+                          );
+                    },
+                  ),
+          ),
+        ),
+      );
 
   //Get av rate
   static String getAvRate(List<Review> reviews) {

@@ -13,13 +13,15 @@ class OrderEntity extends Equatable {
       promoVal,
       shippingVal,
       itemsPrice,
-      shippingType,status;
+      shippingType,
+      status;
   final int orderNumber;
   final Address userAddress;
   final DateTime dateAdded;
   final List<CartItem> items;
+  final double rate;
 
-  const OrderEntity( {
+  const OrderEntity({
     this.id = '-1',
     this.transactionId = '',
     required this.dateAdded,
@@ -34,11 +36,13 @@ class OrderEntity extends Equatable {
     required this.status,
     required this.userAddress,
     this.orderNumber = -1,
+    this.rate = -1,
   });
 
   OrderEntity copyWith({
     String? id,
     List<CartItem>? items,
+    double? rate,
   }) =>
       OrderEntity(
         id: id ?? this.id,
@@ -55,6 +59,7 @@ class OrderEntity extends Equatable {
         status: status,
         userAddress: userAddress,
         orderNumber: orderNumber,
+        rate: rate ?? this.rate,
       );
 
   OrderModel toModel() => OrderModel(
@@ -69,8 +74,9 @@ class OrderEntity extends Equatable {
         shippingVal: shippingVal,
         itemsPrice: itemsPrice,
         shippingType: shippingType,
-        status:status,
+        status: status,
         userAddress: userAddress,
+        rate: rate,
       );
 
   @override
@@ -89,5 +95,6 @@ class OrderEntity extends Equatable {
         status,
         userAddress,
         orderNumber,
+        rate,
       ];
 }
