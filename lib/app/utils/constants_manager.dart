@@ -48,4 +48,6 @@ class AppConstants {
   static String paypalClientId =
       'AdQR71R7p8jk7z6F0WbPRIyPAIlEsZtzvY5OwDpzYUdT7QSUbAeHkeCvSO9CowWFnFywDZiHXUARd3Gi';
   static String paypalReturnUrl = 'com.ecartify.store://paypalpay';
+  static String privacyLink =
+      'https://www.app-privacy-policy.com/live.php?token=oUkMqWmen6KJRO9eNrFH1FMAu6foYWjV';
 }
