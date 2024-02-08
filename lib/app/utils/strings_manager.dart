@@ -157,4 +157,5 @@ class AppStrings {
   static const String skipNow = 'Skip Now';
   static const String signInToExplore = 'Sign in to explore more';
   static const String orderStatusDetails = 'Order Status Details';
+  static const String messageContent = "Message Content";
 }
