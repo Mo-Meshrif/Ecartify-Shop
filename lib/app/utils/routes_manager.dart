@@ -7,7 +7,7 @@ import '../../modules/main/auth/presentation/screens/sub/sign_in_screen.dart';
 import '../../modules/main/auth/presentation/screens/sub/sign_up_screen.dart';
 import '../../modules/main/explore/presentation/screens/explore_screen.dart';
 import '../../modules/sub/address/presentation/screens/address_screen.dart';
-import '../../modules/sub/help/presentation/screens/help_screen.dart';
+import '../../modules/main/profile/presentation/screens/help_screen.dart';
 import '../../modules/sub/notification/presentation/screens/notification_screen.dart';
 import '../../modules/sub/order/domain/entities/order.dart';
 import '../../modules/sub/order/presentation/screens/order_screen.dart';

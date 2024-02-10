@@ -7,7 +7,7 @@ import '../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../app/helper/helper_functions.dart';
 import '../../../../../app/utils/strings_manager.dart';
 import '../../../../../app/utils/values_manager.dart';
-import '../../../../main/auth/presentation/widgets/custom_or_divider.dart';
+import '../../../auth/presentation/widgets/custom_or_divider.dart';
 
 class HelpScreen extends StatefulWidget {
   const HelpScreen({Key? key}) : super(key: key);
