@@ -41,6 +41,7 @@ import '../../modules/main/profile/data/datasources/remote_data_source.dart';
 import '../../modules/main/profile/data/repositories/profile_repository_impl.dart';
 import '../../modules/main/profile/domain/repositories/base_profile_repository.dart';
 import '../../modules/main/profile/domain/usecases/get_user_data_use_case.dart';
+import '../../modules/main/profile/domain/usecases/send_help_message_use_case.dart';
 import '../../modules/main/profile/presentation/controller/profile_bloc.dart';
 import '../../modules/main/shop/data/datasources/remote_data_source.dart';
 import '../../modules/main/shop/data/repositories/product_repository_impl.dart';
@@ -240,6 +241,7 @@ class ServicesLocator {
     sl.registerLazySingleton(() => AddOrderUseCase(sl()));
     sl.registerLazySingleton(() => GetOrdersUseCase(sl()));
     sl.registerLazySingleton(() => AddOrderReviewUseCase(sl()));
+    sl.registerLazySingleton(() => SendHelpMessageUseCase(sl()));
     //blocs
     sl.registerLazySingleton(
       () => AppConfigBloc(
@@ -311,6 +313,7 @@ class ServicesLocator {
         getUserDataUseCase: sl(),
         logoutUseCase: sl(),
         deleteUseCase: sl(),
+        sendHelpMessageUseCase: sl(),
       ),
     );
     sl.registerLazySingleton(

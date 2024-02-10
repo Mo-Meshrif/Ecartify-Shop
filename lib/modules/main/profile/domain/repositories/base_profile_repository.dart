@@ -6,4 +6,5 @@ import '../../../auth/domain/entities/user.dart';
 
 abstract class BaseProfileRepository {
   Future<Either<Failure, AuthUser>> getUserData();
+  Future<Either<Failure,bool>> sendHelpMessage(String message);
 }

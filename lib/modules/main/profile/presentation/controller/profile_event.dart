@@ -12,3 +12,8 @@ class GetUserData extends ProfileEvent {}
 class LogoutEvent extends ProfileEvent {}
 
 class DeleteEvent extends ProfileEvent {}
+
+class SendHelpMessageEvent extends ProfileEvent {
+  final String message;
+  const SendHelpMessageEvent({required this.message});
+}

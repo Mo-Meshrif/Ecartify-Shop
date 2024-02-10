@@ -50,4 +50,7 @@ class AppConstants {
   static String paypalReturnUrl = 'com.ecartify.store://paypalpay';
   static String privacyLink =
       'https://www.app-privacy-policy.com/live.php?token=oUkMqWmen6KJRO9eNrFH1FMAu6foYWjV';
+  static String toFacebook="https://www.facebook.com/Moo7amed14";  
+  static String toLinkedin="https://www.linkedin.com/in/mohamed-meshrif-120133195/";  
+  static String toWhatsapp="201027106902";    
 }

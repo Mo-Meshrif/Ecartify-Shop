@@ -1,13 +1,20 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../app/common/widgets/custom_elevated_button.dart';
 import '../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../app/helper/helper_functions.dart';
+import '../../../../../app/services/services_locator.dart';
+import '../../../../../app/utils/constants_manager.dart';
 import '../../../../../app/utils/strings_manager.dart';
 import '../../../../../app/utils/values_manager.dart';
+import '../../../auth/domain/entities/user.dart';
 import '../../../auth/presentation/widgets/custom_or_divider.dart';
+import '../controller/profile_bloc.dart';
 
 class HelpScreen extends StatefulWidget {
   const HelpScreen({Key? key}) : super(key: key);
@@ -17,10 +24,9 @@ class HelpScreen extends StatefulWidget {
 }
 
 class _HelpScreenState extends State<HelpScreen> {
+  AuthUser? user = HelperFunctions.getSavedUser();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  TextEditingController name = TextEditingController(),
-      email = TextEditingController(),
-      message = TextEditingController();
+  TextEditingController message = TextEditingController();
 
   List<String> socialList = [
     'facebook',
@@ -31,7 +37,11 @@ class _HelpScreenState extends State<HelpScreen> {
   _sendMessage() {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
-      //TODO sendMessage 
+      sl<ProfileBloc>().add(
+        SendHelpMessageEvent(
+          message: message.text,
+        ),
+      );
     }
   }
 
@@ -51,7 +61,8 @@ class _HelpScreenState extends State<HelpScreen> {
             child: Column(
               children: [
                 TextFormField(
-                  controller: name,
+                  enabled: false,
+                  initialValue: user?.name,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) =>
                       value!.isEmpty ? AppStrings.enterName.tr() : null,
@@ -62,7 +73,8 @@ class _HelpScreenState extends State<HelpScreen> {
                 ),
                 SizedBox(height: 20.h),
                 TextFormField(
-                  controller: email,
+                  enabled: false,
+                  initialValue: user?.email,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) => value!.isEmpty
                       ? AppStrings.email.tr()
@@ -116,8 +128,21 @@ class _HelpScreenState extends State<HelpScreen> {
                     socialList.length,
                     (index) => InkWell(
                       customBorder: const CircleBorder(),
-                      onTap: () {
-                        //TODO toSocial
+                      onTap: () async {
+                        String url = index == 2
+                            ? 'https://wa.me/${AppConstants.toWhatsapp}'
+                            : index == 1
+                                ? AppConstants.toLinkedin
+                                : AppConstants.toFacebook;
+                        Uri uri = Uri.parse(url);
+                        if (await canLaunchUrl(uri)) {
+                          await launchUrl(
+                            uri,
+                            mode: Platform.isIOS
+                                ? LaunchMode.platformDefault
+                                : LaunchMode.externalNonBrowserApplication,
+                          );
+                        }
                       },
                       child: Image.asset(
                         'assets/images/${socialList[index]}.png',

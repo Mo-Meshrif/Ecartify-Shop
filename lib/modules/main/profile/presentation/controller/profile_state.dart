@@ -1,14 +1,17 @@
 part of 'profile_bloc.dart';
 
 class ProfileState extends Equatable {
-  final Status userStatus, logoutStatus, deleteUserStatus;
+  final Status userStatus, logoutStatus, deleteUserStatus, sendHelpStatus;
   final AuthUser? user;
+  final String msg;
 
   const ProfileState({
     this.userStatus = Status.sleep,
     this.user,
     this.logoutStatus = Status.sleep,
     this.deleteUserStatus = Status.sleep,
+    this.sendHelpStatus = Status.sleep,
+    this.msg = '',
   });
 
   ProfileState copyWith({
@@ -16,12 +19,16 @@ class ProfileState extends Equatable {
     AuthUser? user,
     Status? logoutStatus,
     Status? deleteUserStatus,
+    Status? sendHelpStatus,
+    String? msg,
   }) =>
       ProfileState(
         userStatus: userStatus ?? this.userStatus,
         user: userStatus == Status.error ? null : user ?? this.user,
         logoutStatus: logoutStatus ?? this.logoutStatus,
         deleteUserStatus: deleteUserStatus ?? this.deleteUserStatus,
+        sendHelpStatus: sendHelpStatus ?? this.sendHelpStatus,
+        msg: msg ?? this.msg,
       );
 
   @override
@@ -30,5 +37,7 @@ class ProfileState extends Equatable {
         user,
         logoutStatus,
         deleteUserStatus,
+        sendHelpStatus,
+        msg,
       ];
 }

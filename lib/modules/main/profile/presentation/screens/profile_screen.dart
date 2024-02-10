@@ -153,11 +153,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       loading = false;
                     }
                   } else if (state.logoutStatus == Status.loading ||
-                      state.deleteUserStatus == Status.loading) {
+                      state.deleteUserStatus == Status.loading ||
+                      state.sendHelpStatus == Status.loading) {
                     HelperFunctions.showPopUpLoading(context);
                   } else if (state.logoutStatus == Status.error ||
-                      state.deleteUserStatus == Status.error) {
+                      state.deleteUserStatus == Status.error ||
+                      state.sendHelpStatus == Status.error) {
                     NavigationHelper.pop(context);
+                    if (state.msg.isNotEmpty) {
+                      HelperFunctions.showSnackBar(context, state.msg);
+                    }
                   } else if (state.logoutStatus == Status.loaded ||
                       state.deleteUserStatus == Status.loaded) {
                     NavigationHelper.pop(context);
@@ -168,6 +173,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Routes.controlRoute,
                       (route) => false,
                     );
+                  } else if (state.sendHelpStatus == Status.loaded) {
+                    NavigationHelper.pop(context);
+                    NavigationHelper.pop(context);
                   }
                 },
                 builder: (context, state) => loading || state.user == null

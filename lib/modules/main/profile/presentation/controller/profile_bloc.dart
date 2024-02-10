@@ -11,6 +11,7 @@ import '../../../auth/domain/entities/user.dart';
 import '../../../auth/domain/usecases/delete_use_case.dart';
 import '../../../auth/domain/usecases/logout_use_case.dart';
 import '../../domain/usecases/get_user_data_use_case.dart';
+import '../../domain/usecases/send_help_message_use_case.dart';
 
 part 'profile_event.dart';
 part 'profile_state.dart';
@@ -19,14 +20,17 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final GetUserDataUseCase getUserDataUseCase;
   final LogoutUseCase logoutUseCase;
   final DeleteUseCase deleteUseCase;
+  final SendHelpMessageUseCase sendHelpMessageUseCase;
   ProfileBloc({
     required this.getUserDataUseCase,
     required this.logoutUseCase,
     required this.deleteUseCase,
+    required this.sendHelpMessageUseCase,
   }) : super(const ProfileState()) {
     on<GetUserData>(_getUserData);
     on<LogoutEvent>(_logout);
     on<DeleteEvent>(_delete);
+    on<SendHelpMessageEvent>(_sendHelpMessage);
   }
 
   FutureOr<void> _getUserData(
@@ -34,6 +38,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(
       state.copyWith(
         userStatus: Status.loading,
+        sendHelpStatus: Status.sleep,
+        deleteUserStatus: Status.sleep,
+        logoutStatus: Status.sleep,
+        msg: '',
       ),
     );
     Either<Failure, AuthUser> result =
@@ -56,6 +64,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         userStatus: Status.sleep,
         deleteUserStatus: Status.sleep,
         logoutStatus: Status.loading,
+        msg: '',
       ),
     );
     final Either<Failure, void> result = await logoutUseCase(state.user!.id);
@@ -79,6 +88,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         userStatus: Status.sleep,
         logoutStatus: Status.sleep,
         deleteUserStatus: Status.loading,
+        msg: '',
       ),
     );
     final Either<Failure, void> result = await deleteUseCase(state.user!);
@@ -91,6 +101,34 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       (_) => emit(
         state.copyWith(
           deleteUserStatus: Status.loaded,
+        ),
+      ),
+    );
+  }
+
+  FutureOr<void> _sendHelpMessage(
+      SendHelpMessageEvent event, Emitter<ProfileState> emit) async {
+    emit(
+      state.copyWith(
+        userStatus: Status.sleep,
+        deleteUserStatus: Status.sleep,
+        logoutStatus: Status.sleep,
+        sendHelpStatus: Status.loading,
+        msg: '',
+      ),
+    );
+    final Either<Failure, bool> result =
+        await sendHelpMessageUseCase(event.message);
+    result.fold(
+      (failure) => emit(
+        state.copyWith(
+          sendHelpStatus: Status.error,
+          msg: failure.msg,
+        ),
+      ),
+      (_) => emit(
+        state.copyWith(
+          sendHelpStatus: Status.loaded,
         ),
       ),
     );
