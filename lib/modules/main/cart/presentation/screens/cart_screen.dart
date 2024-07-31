@@ -7,6 +7,7 @@ import 'package:lottie/lottie.dart';
 import '../../../../../app/common/widgets/custom_elevated_button.dart';
 import '../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../app/helper/enums.dart';
+import '../../../../../app/helper/extensions.dart';
 import '../../../../../app/helper/helper_functions.dart';
 import '../../../../../app/helper/navigation_helper.dart';
 import '../../../../../app/services/services_locator.dart';
@@ -126,7 +127,9 @@ class _CartScreenState extends State<CartScreen> {
                                     color: ColorManager.kGrey,
                                   ),
                                   CustomText(
-                                    data: state.totalPrice.toStringAsFixed(2) +
+                                    data: state.totalPrice
+                                            .toString()
+                                            .reductionStringNumber(context) +
                                         ' ' +
                                         HelperFunctions.getCurrencyMark(),
                                     fontSize: AppSize.s20.sp,

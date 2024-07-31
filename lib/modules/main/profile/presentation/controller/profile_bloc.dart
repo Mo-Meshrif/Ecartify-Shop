@@ -9,6 +9,7 @@ import '../../../../../app/errors/failure.dart';
 import '../../../../../app/helper/enums.dart';
 import '../../../auth/domain/entities/user.dart';
 import '../../../auth/domain/usecases/delete_use_case.dart';
+import '../../../auth/domain/usecases/edit_user_use_case.dart';
 import '../../../auth/domain/usecases/logout_use_case.dart';
 import '../../domain/usecases/get_user_data_use_case.dart';
 import '../../domain/usecases/send_help_message_use_case.dart';
@@ -21,16 +22,19 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final LogoutUseCase logoutUseCase;
   final DeleteUseCase deleteUseCase;
   final SendHelpMessageUseCase sendHelpMessageUseCase;
+  final EditUserUseCase editUserUseCase;
   ProfileBloc({
     required this.getUserDataUseCase,
     required this.logoutUseCase,
     required this.deleteUseCase,
     required this.sendHelpMessageUseCase,
+    required this.editUserUseCase,
   }) : super(const ProfileState()) {
     on<GetUserData>(_getUserData);
     on<LogoutEvent>(_logout);
     on<DeleteEvent>(_delete);
     on<SendHelpMessageEvent>(_sendHelpMessage);
+    on<EditUserEvent>(_editUser);
   }
 
   FutureOr<void> _getUserData(
@@ -129,6 +133,34 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       (_) => emit(
         state.copyWith(
           sendHelpStatus: Status.loaded,
+        ),
+      ),
+    );
+  }
+
+  FutureOr<void> _editUser(
+      EditUserEvent event, Emitter<ProfileState> emit) async {
+    emit(
+      state.copyWith(
+        userStatus: Status.sleep,
+        logoutStatus: Status.sleep,
+        deleteUserStatus: Status.sleep,
+        sendHelpStatus: Status.sleep,
+        editUserStatus: Status.loading,
+        msg: '',
+      ),
+    );
+    final Either<Failure, void> result = await editUserUseCase(event.newUserData);
+    result.fold(
+      (failure) => emit(
+        state.copyWith(
+          editUserStatus: Status.error,
+          msg: failure.msg,
+        ),
+      ),
+      (_) => emit(
+        state.copyWith(
+          editUserStatus: Status.loaded,
         ),
       ),
     );

@@ -7,6 +7,7 @@ import '../../../../../app/common/widgets/color_selector_widget.dart';
 import '../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../app/common/widgets/image_builder.dart';
 import '../../../../../app/common/widgets/size_selector_widget.dart';
+import '../../../../../app/helper/extensions.dart';
 import '../../../../../app/helper/helper_functions.dart';
 import '../../../../../app/services/services_locator.dart';
 import '../../../../../app/utils/assets_manager.dart';
@@ -260,7 +261,8 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                                 : [
                                     SizedBox(width: AppSize.s25.w),
                                     CustomText(
-                                      data: widget.cartItem.product!.price,
+                                      data: widget.cartItem.product!.price
+                                          .reductionStringNumber(context),
                                       fontSize: AppSize.s20.sp,
                                       color: theme.canvasColor,
                                     ),

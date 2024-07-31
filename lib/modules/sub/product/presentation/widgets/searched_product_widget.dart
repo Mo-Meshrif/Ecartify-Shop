@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../app/common/widgets/image_builder.dart';
+import '../../../../../app/helper/extensions.dart';
 import '../../../../../app/helper/navigation_helper.dart';
 import '../../../../../app/utils/color_manager.dart';
 import '../../../../../app/utils/routes_manager.dart';
@@ -111,7 +112,7 @@ class SearchedProductWidget extends StatelessWidget {
                   Row(
                     children: [
                       CustomText(
-                        data: '\$' + product.price,
+                        data: '\$' + product.price.reductionStringNumber(context),
                         color: theme.canvasColor,
                       ),
                       Visibility(
@@ -120,7 +121,7 @@ class SearchedProductWidget extends StatelessWidget {
                           children: [
                             SizedBox(width: 10.w),
                             CustomText(
-                              data: '\$' + product.lastPrice,
+                              data: '\$' + product.lastPrice.reductionStringNumber(context),
                               color: ColorManager.kRed,
                               textDecoration: TextDecoration.lineThrough,
                               decorationColor: Theme.of(context).primaryColor,

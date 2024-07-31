@@ -6,6 +6,7 @@ import '../../../../../../../app/common/widgets/color_selector_widget.dart';
 import '../../../../../../../app/common/widgets/custom_elevated_button.dart';
 import '../../../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../../../app/common/widgets/size_selector_widget.dart';
+import '../../../../../../../app/helper/extensions.dart';
 import '../../../../../../../app/helper/helper_functions.dart';
 import '../../../../../../../app/helper/navigation_helper.dart';
 import '../../../../../../../app/utils/color_manager.dart';
@@ -42,7 +43,7 @@ class ProductDetailsBody extends StatelessWidget {
           Row(
             children: [
               CustomText(
-                data: product.price + ' ' + mark,
+                data: product.price.reductionStringNumber(context) + ' ' + mark,
               ),
               Visibility(
                 visible: product.lastPrice.isNotEmpty,
@@ -50,7 +51,7 @@ class ProductDetailsBody extends StatelessWidget {
                   children: [
                     SizedBox(width: AppSize.s10.w),
                     CustomText(
-                      data: product.lastPrice + ' ' + mark,
+                      data: product.lastPrice.reductionStringNumber(context) + ' ' + mark,
                       color: ColorManager.kRed,
                       textDecoration: TextDecoration.lineThrough,
                       decorationColor: Theme.of(context).primaryColor,

@@ -1,3 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+
 import '../utils/strings_manager.dart';
 
 extension StringCasingExtension on String {
@@ -7,7 +10,15 @@ extension StringCasingExtension on String {
       .split(' ')
       .map((str) => str._toCapitalized())
       .join(' ');
+
+  String reductionStringNumber(BuildContext context) {
+    double doubleNumber = double.tryParse(this) ?? 0;
+    NumberFormat numberFormat =
+        NumberFormat.compact(locale: context.locale.languageCode);
+    return numberFormat.format(doubleNumber);
+  }
 }
+
 extension DateConversion on DateTime {
   String toHourMark() {
     int hour = this.hour;

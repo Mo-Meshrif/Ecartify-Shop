@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../../app/common/widgets/custom_text.dart';
 import '../../../../../app/common/widgets/image_builder.dart';
+import '../../../../../app/helper/extensions.dart';
 import '../../../../../app/helper/helper_functions.dart';
 import '../../../../../app/helper/navigation_helper.dart';
 import '../../../../../app/helper/shared_helper.dart';
@@ -193,7 +194,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: widget.product.price + ' ' + mark + '  ',
+                      text: widget.product.price.reductionStringNumber(context) + ' ' + mark + '  ',
                       style: TextStyle(
                         color: Theme.of(context).primaryColor,
                       ),
@@ -202,7 +203,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                         ? TextSpan(
                             children: [
                               TextSpan(
-                                text: widget.product.lastPrice,
+                                text: widget.product.lastPrice.reductionStringNumber(context),
                                 style: TextStyle(
                                   color: ColorManager.kRed,
                                   decoration: TextDecoration.lineThrough,

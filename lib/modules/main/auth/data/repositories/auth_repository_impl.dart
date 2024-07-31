@@ -139,4 +139,27 @@ class AuthRepositoryImpl implements BaseAuthRepository {
       return const Left(ServerFailure(msg: AppConstants.noConnection));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> editUser(AuthUser user) async {
+    if (await networkServices.isConnected()) {
+      try {
+        return Right(
+          await baseAuthRemoteDataSource.editUser(
+            UserModel(
+              id: user.id,
+              name: user.name,
+              email: user.email,
+              password: user.password,
+              deviceToken: user.deviceToken,
+            ),
+          ),
+        );
+      } on ServerExecption catch (failure) {
+        return Left(ServerFailure(msg: failure.msg));
+      }
+    } else {
+      return const Left(ServerFailure(msg: AppConstants.noConnection));
+    }
+  }
 }

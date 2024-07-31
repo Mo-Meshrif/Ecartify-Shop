@@ -13,4 +13,5 @@ abstract class BaseAuthRepository {
   Future<Either<Failure, AuthUser>> apple();
   Future<Either<Failure, void>> logout(String uid);
   Future<Either<Failure, void>> delete(AuthUser user);
+  Future<Either<Failure, void>> editUser(AuthUser user);
 }

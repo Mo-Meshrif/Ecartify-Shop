@@ -17,3 +17,8 @@ class SendHelpMessageEvent extends ProfileEvent {
   final String message;
   const SendHelpMessageEvent({required this.message});
 }
+
+class EditUserEvent extends ProfileEvent {
+  final AuthUser newUserData;
+  const EditUserEvent({required this.newUserData});
+}

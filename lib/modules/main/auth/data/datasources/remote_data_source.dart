@@ -24,6 +24,7 @@ abstract class BaseAuthRemoteDataSource {
   Future<UserModel> apple();
   Future<void> logout(String uid);
   Future<void> delete(UserModel userModel);
+  Future<void> editUser(UserModel userModel);
 }
 
 class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
@@ -186,6 +187,35 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
         password: userModel.password!,
       );
       return await userCredential.user!.delete();
+    } catch (e) {
+      throw ServerExecption(e.toString());
+    }
+  }
+
+  @override
+  Future<void> editUser(UserModel userModel) async {
+    try {
+      final DocumentSnapshot<Map<String, dynamic>> querySnapshot =
+          await _getUserDataFromFireStore(userModel.id);
+      if (querySnapshot.exists) {
+        firebaseFirestore
+            .collection(AppConstants.usersCollection)
+            .doc(querySnapshot.id)
+            .update(userModel.toJson());
+      }
+      final UserCredential userCredential =
+          await firebaseAuth.signInWithEmailAndPassword(
+        email: userModel.email,
+        password: userModel.password!,
+      );
+      userCredential.user?.updateDisplayName(userModel.name);
+      userCredential.user?.updateEmail(userModel.email);
+      if (userModel.password != null) {
+        userCredential.user?.updatePassword(userModel.password!);
+      }
+      if (userModel.pic != null) {
+        userCredential.user?.updatePhotoURL(userModel.pic);
+      }
     } catch (e) {
       throw ServerExecption(e.toString());
     }

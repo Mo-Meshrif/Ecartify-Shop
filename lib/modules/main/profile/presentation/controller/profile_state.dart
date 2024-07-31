@@ -1,7 +1,11 @@
 part of 'profile_bloc.dart';
 
 class ProfileState extends Equatable {
-  final Status userStatus, logoutStatus, deleteUserStatus, sendHelpStatus;
+  final Status userStatus,
+      logoutStatus,
+      deleteUserStatus,
+      sendHelpStatus,
+      editUserStatus;
   final AuthUser? user;
   final String msg;
 
@@ -11,6 +15,7 @@ class ProfileState extends Equatable {
     this.logoutStatus = Status.sleep,
     this.deleteUserStatus = Status.sleep,
     this.sendHelpStatus = Status.sleep,
+    this.editUserStatus = Status.sleep,
     this.msg = '',
   });
 
@@ -20,6 +25,7 @@ class ProfileState extends Equatable {
     Status? logoutStatus,
     Status? deleteUserStatus,
     Status? sendHelpStatus,
+    Status? editUserStatus,
     String? msg,
   }) =>
       ProfileState(
@@ -28,6 +34,7 @@ class ProfileState extends Equatable {
         logoutStatus: logoutStatus ?? this.logoutStatus,
         deleteUserStatus: deleteUserStatus ?? this.deleteUserStatus,
         sendHelpStatus: sendHelpStatus ?? this.sendHelpStatus,
+        editUserStatus: editUserStatus ?? this.editUserStatus,
         msg: msg ?? this.msg,
       );
 
@@ -38,6 +45,7 @@ class ProfileState extends Equatable {
         logoutStatus,
         deleteUserStatus,
         sendHelpStatus,
+        editUserStatus,
         msg,
       ];
 }

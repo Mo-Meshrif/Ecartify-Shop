@@ -13,6 +13,7 @@ import '../../modules/main/auth/data/repositories/auth_repository_impl.dart';
 import '../../modules/main/auth/domain/repositories/base_auth_repository.dart';
 import '../../modules/main/auth/domain/usecases/apple_use_case.dart';
 import '../../modules/main/auth/domain/usecases/delete_use_case.dart';
+import '../../modules/main/auth/domain/usecases/edit_user_use_case.dart';
 import '../../modules/main/auth/domain/usecases/facebook_use_case.dart';
 import '../../modules/main/auth/domain/usecases/forget_passwod_use_case.dart';
 import '../../modules/main/auth/domain/usecases/google_use_case.dart';
@@ -242,6 +243,7 @@ class ServicesLocator {
     sl.registerLazySingleton(() => GetOrdersUseCase(sl()));
     sl.registerLazySingleton(() => AddOrderReviewUseCase(sl()));
     sl.registerLazySingleton(() => SendHelpMessageUseCase(sl()));
+    sl.registerLazySingleton(() => EditUserUseCase(sl()));
     //blocs
     sl.registerLazySingleton(
       () => AppConfigBloc(
@@ -314,6 +316,7 @@ class ServicesLocator {
         logoutUseCase: sl(),
         deleteUseCase: sl(),
         sendHelpMessageUseCase: sl(),
+        editUserUseCase: sl(),
       ),
     );
     sl.registerLazySingleton(

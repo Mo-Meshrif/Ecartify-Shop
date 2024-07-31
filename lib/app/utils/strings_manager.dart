@@ -158,4 +158,5 @@ class AppStrings {
   static const String signInToExplore = 'Sign in to explore more';
   static const String orderStatusDetails = 'Order Status Details';
   static const String messageContent = "Message Content";
+  static const String editProfile = "Edit profile";
 }
